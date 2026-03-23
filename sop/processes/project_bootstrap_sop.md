@@ -137,12 +137,12 @@
 - `README.md`
 - `AGENTS.md`
 - `rules/`
-- `docs/facts/`
-- `skill_policy.md`
-- `skill_registry.md`
-- `skill_template.md`
+- `facts/`
+- `skills/skill_policy.md`
+- `skills/skill_registry.md`
+- `skills/skill_template.md`
 
-当前标准产物清单以 `project_init_artifacts.md` 为准。
+当前标准产物清单以 `sop/processes/project_init_artifacts.md` 为准。
 
 ### 4.7 明确 `AGENTS.md` 的最小内容
 
@@ -207,12 +207,12 @@
 ## 7. 与其他文档的关系
 
 - 总体结构由 `ai_project_sop.md` 定义。
-- 标准初始化产物以 `project_init_artifacts.md` 为准。
+- 标准初始化产物以 `sop/processes/project_init_artifacts.md` 为准。
 - 若项目已进入执行层，则进一步进入：
-  - `phase_layer.md`
-  - `plan_layer.md`
-  - `task_layer.md`
-  - `workflow_transition_rules.md`
+  - `sop/core/phase_layer.md`
+  - `sop/core/plan_layer.md`
+  - `sop/core/task_layer.md`
+  - `sop/core/workflow_transition_rules.md`
 
 ---
 

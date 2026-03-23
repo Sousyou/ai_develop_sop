@@ -1,7 +1,9 @@
 # 边界规则
 
-- **版本**：v2.0-draft
+- **版本**：v2.0
+- **状态**：正式规则
 - **定位**：固定 `project / phase / plan / task` 四层边界要求，防止 AI 在边界不清时扩散执行。
+- **适用范围**：适用于所有基于 `project / phase / plan / task` 模型的边界识别与边界锁定判断。
 
 ---
 
@@ -39,4 +41,18 @@
 
 1. 不得在边界未明确时展开大规模实现。
 2. 不得用“顺手一起做掉”代替边界判断。
-3. 若执行中发现边界失真，应转入 `maintenance_recovery_sop.md`。
+3. 若执行中发现边界失真，应转入 `sop/processes/maintenance_recovery_sop.md`。
+
+---
+
+## 7. 与其他文档的关系
+
+- scope 控制细则见 `rules/scope_control_rules.md`。
+- `phase` 与 `plan` 的边界定义见 `sop/core/phase_layer.md` 与 `sop/core/plan_layer.md`。
+- 边界失真后的处理见 `sop/processes/maintenance_recovery_sop.md`。
+
+---
+
+## 8. 当前结论
+
+默认情况下，边界应先被识别和锁定，再允许进入执行；一旦边界失真，应优先纠偏而不是继续推进。

@@ -261,7 +261,17 @@ AI 不应频繁主动改写 `project` 层，但在以下情况出现时，应明
 
 ---
 
-## 12. 当前结论
+## 12. 与其他文档的关系
+
+- 当前阶段控制与阶段纠错见 `sop/core/phase_layer.md`。
+- 执行编排层定义见 `sop/core/plan_layer.md`。
+- 最小执行单元定义见 `sop/core/task_layer.md`。
+- 跨层流转关系见 `sop/core/workflow_transition_rules.md`。
+- 项目范围事实入口见 `facts/project_scope.md`。
+
+---
+
+## 13. 当前结论
 
 `project` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
 
@@ -270,9 +280,4 @@ AI 不应频繁主动改写 `project` 层，但在以下情况出现时，应明
 - 它既要稳定，又必须保留全局调整入口。
 - 它的首要治理价值是让 AI 始终对齐最终目标，并避免跨阶段重复犯同类错误。
 
-本版本先作为讨论基线，后续可继续细化：
-
-1. `project` 与 `phase` 的边界。
-2. `project facts` 与 `phase facts` 的边界。
-3. `plan` 层的职责和状态流转。
-4. `task` 如何强制回到 `plan` 而不是继续沿局部深入。
+后续若需演进，应在不破坏当前四类核心信息与单入口原则的前提下继续细化。

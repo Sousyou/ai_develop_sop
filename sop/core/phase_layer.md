@@ -331,7 +331,7 @@
 
 这一步是 `phase` 作为阶段治理层的核心动作。
 
-正式标注格式见：`phase_review_template.md`
+正式标注格式见：`sop/templates/phase_review_template.md`
 
 ### 13.1 `Phase Review` 至少回答什么
 
@@ -619,7 +619,7 @@
 
 这是为了兼顾自动推进与流程可控。
 
-正式标注格式见：`next_phase_request_template.md`
+正式标注格式见：`sop/templates/next_phase_request_template.md`
 
 ### 20.1 自动发起请求
 
@@ -795,7 +795,17 @@
 
 ---
 
-## 26. 当前结论
+## 26. 与其他文档的关系
+
+- `project` 层定义见 `sop/core/project_layer.md`。
+- 执行编排层定义见 `sop/core/plan_layer.md`。
+- 四层跨层流转规则见 `sop/core/workflow_transition_rules.md`。
+- 阶段审查模板见 `sop/templates/phase_review_template.md`。
+- 下一阶段请求模板见 `sop/templates/next_phase_request_template.md`。
+
+---
+
+## 27. 当前结论
 
 `phase` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
 
@@ -808,9 +818,4 @@
 - 它通过完整但克制的生命周期设计，承担边界锁定、执行监管、阶段审查、完成交接和下一阶段请求生成。
 - 它的核心价值是把“最终目标”转化为可逐阶段推进、可逐阶段验收、可逐阶段治理的路径，并在不增加新层级的前提下承担当前阶段的大部分决策责任。
 
-本版本先作为讨论基线，后续可继续细化：
-
-1. `phase` 与现有文档体系的映射方式
-2. `phase` 事实与 `project` 事实的边界
-3. `Phase Review` 与 `next_phase_request` 的字段映射
-4. `phase` 状态记录与现有 facts 文档体系的映射
+后续若需演进，应在不破坏“唯一当前 `phase`、阶段治理归 `phase`、并行仅留在执行层”这三条基础原则的前提下继续细化。

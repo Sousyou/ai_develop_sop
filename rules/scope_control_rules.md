@@ -1,7 +1,9 @@
 # Scope 控制规则
 
-- **版本**：v2.0-draft
+- **版本**：v2.0
+- **状态**：正式规则
 - **定位**：约束 AI 在 `project / phase / plan / task` 工作流中不扩 scope、不顺手重构、不越层决策。
+- **适用范围**：适用于执行过程中对范围漂移、顺手扩展与越层决策的默认限制。
 
 ---
 
@@ -26,7 +28,7 @@
 
 - 发现相邻问题但不属于当前边界时，记录为候选后续项。
 - 发现结构性问题但当前层级不适合处理时，返回上一级决策。
-- 发现阶段边界失真时，转入 `maintenance_recovery_sop.md`。
+- 发现阶段边界失真时，转入 `sop/processes/maintenance_recovery_sop.md`。
 
 ## 4. 例外条件
 
@@ -41,3 +43,17 @@
 1. `task` 完成后必须先回到所属 `plan`。
 2. `plan` 不能直接改写 `phase` 边界。
 3. `phase` 进入 `active` 后，边界默认锁定。
+
+---
+
+## 6. 与其他文档的关系
+
+- 总体边界定义见 `rules/boundaries_rules.md`。
+- 默认执行顺序见 `rules/workflow_rules.md`。
+- 若 scope 已明显失控，转入 `sop/processes/maintenance_recovery_sop.md`。
+
+---
+
+## 7. 当前结论
+
+默认情况下，AI 应优先保持当前层级范围稳定，所有新增问题都应先回到上层判断，而不是在当前执行对象内自然蔓延。

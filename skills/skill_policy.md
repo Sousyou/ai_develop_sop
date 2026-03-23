@@ -1,7 +1,9 @@
 # Skill 沉淀规则
 
 - **版本**：v1.0
+- **状态**：正式规则
 - **定位**：定义什么情况下允许将重复流程沉淀为 skill，以及 skill 文档应如何进入项目体系。
+- **适用范围**：适用于 skill 的识别、判断、登记与新增文档动作。
 
 ---
 
@@ -30,6 +32,20 @@
 
 达到条件后，应至少：
 
-1. 在 `skill_registry.md` 中登记
-2. 按 `skill_template.md` 创建或更新 skill 文档
+1. 在 `skills/skill_registry.md` 中登记
+2. 按 `skills/skill_template.md` 创建或更新 skill 文档
 3. 明确该 skill 的适用场景与边界
+
+---
+
+## 5. 与其他文档的关系
+
+- skill 登记入口见 `skills/skill_registry.md`。
+- skill 文档骨架见 `skills/skill_template.md`。
+- 执行结束后的回写判断见 `rules/writeback_rules.md`。
+
+---
+
+## 6. 当前结论
+
+只有当某类流程已重复出现、边界稳定、步骤稳定且可验证时，才应升级为 skill，而不是过早沉淀探索性流程。

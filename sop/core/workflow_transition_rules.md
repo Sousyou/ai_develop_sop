@@ -237,7 +237,7 @@
 
 `phase` 在进入 `completed` 后，必须进入 `transition_pending`，并自动生成 `next_phase_request`。
 
-标准标注格式见：`next_phase_request_template.md`
+标准标注格式见：`sop/templates/next_phase_request_template.md`
 
 ### 9.1 自动生成要求
 
@@ -334,7 +334,7 @@
 
 每轮 `main plan` 收口后，`phase` 必须执行一次 `Phase Review`。
 
-标准标注格式见：`phase_review_template.md`
+标准标注格式见：`sop/templates/phase_review_template.md`
 
 `Phase Review` 至少要回答以下问题：
 
@@ -448,7 +448,16 @@
 
 ---
 
-## 19. 当前结论
+## 19. 与其他文档的关系
+
+- 四层对象定义分别见 `sop/core/project_layer.md`、`sop/core/phase_layer.md`、`sop/core/plan_layer.md`、`sop/core/task_layer.md`。
+- 阶段审查与交接模板见 `sop/templates/phase_review_template.md` 与 `sop/templates/next_phase_request_template.md`。
+- 执行护栏见 `rules/workflow_rules.md`、`rules/boundaries_rules.md`、`rules/scope_control_rules.md`。
+- 恢复流程见 `sop/processes/maintenance_recovery_sop.md`。
+
+---
+
+## 20. 当前结论
 
 这套跨层流转规则可以先按如下方式确定：
 
@@ -460,9 +469,4 @@
 - `task` 完成后的回流，必须先由 `main plan` 做一次显式主线决策，才能进入下一步。
 - `phase` 是知识审查与上报的基础层，负责判断是否需要上报 `project` 事实、登记 `skill candidate` 或 `SOP candidate`。
 
-本版本先作为讨论基线，后续可继续细化：
-
-1. `main plan` 与 `plan item` 的状态机
-2. `Phase Review` 与 `next_phase_request` 的字段映射
-3. `sub plan` 的最小记录模板
-4. 四层工作流与现有 SOP 文档体系的映射方式
+后续若需演进，应在不破坏“方向自上而下、结果自下而上、并行只在执行层、变化不打穿中间层”这组总原则的前提下继续细化。

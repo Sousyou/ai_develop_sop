@@ -251,7 +251,17 @@
 
 ---
 
-## 17. 当前结论
+## 17. 与其他文档的关系
+
+- 当前阶段控制与 `main plan` 生命周期上层见 `sop/core/phase_layer.md`。
+- 最小执行单元定义见 `sop/core/task_layer.md`。
+- 跨层流转规则见 `sop/core/workflow_transition_rules.md`。
+- 执行层状态辅助设计见 `sop/design/main_plan_state_design.md`。
+- 步骤与任务模板见 `sop/templates/plan_item_template.md` 与 `sop/templates/task_template.md`。
+
+---
+
+## 18. 当前结论
 
 `plan` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
 
@@ -261,15 +271,4 @@
 - `sub plan` 的派生必须满足可拆分、可比较或可汇总、收益明确且整合成本可控的条件。
 - `sub plan` 必须遵守边界受控、先申请后执行和结果回到 `main plan` 审核整合的原则。
 
-辅助设计与模板见：
-
-- `main_plan_state_design.md`
-- `plan_item_template.md`
-- `task_template.md`
-
-本版本先作为讨论基线，后续可继续细化：
-
-1. `plan item` 与 `task` 的粒度边界。
-2. `plan` 的状态模型与更新方式。
-3. `task` 结束后如何强制回到 `main plan`。
-4. `plan` 层应如何记录执行历史而不退化为流水账。
+后续若需演进，应在不破坏“单一 `main plan` 主线、`sub plan` 仅为手段、整合责任归 `main plan`”这组原则的前提下继续细化。

@@ -193,7 +193,7 @@
 
 每个 `task` 至少应具备以下字段：
 
-正式标注格式见：`task_template.md`
+正式标注格式见：`sop/templates/task_template.md`
 
 1. `task id`
 2. `task 类型`
@@ -413,7 +413,17 @@
 
 ---
 
-## 18. 当前结论
+## 18. 与其他文档的关系
+
+- 执行编排层定义见 `sop/core/plan_layer.md`。
+- 跨层回流规则见 `sop/core/workflow_transition_rules.md`。
+- 默认执行顺序与回写规则见 `rules/workflow_rules.md` 与 `rules/writeback_rules.md`。
+- 验证要求见 `rules/validation_rules.md`。
+- 标准任务模板见 `sop/templates/task_template.md`。
+
+---
+
+## 19. 当前结论
 
 `task` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
 
@@ -422,9 +432,4 @@
 - 它不负责路径编排、阶段边界和全局目标，只负责把当前一步做完并安全交回所属 `plan`。
 - 它的核心治理价值不是把工作切得更细，而是通过明确边界、完成标准和退出门，阻止执行在局部上下文中持续失控。
 
-本版本先作为讨论基线，后续可继续细化：
-
-1. `review_pending` 到 `done` 的具体判定规则。
-2. `task` 结果与 facts 回写之间的关系。
-3. `task` 与 `plan item` 字段的映射方式。
-4. `task` 在不同工具形态下的最小记录方式。
+后续若需演进，应在不破坏“单目标、强边界、强验证、强回主线”这组原则的前提下继续细化。

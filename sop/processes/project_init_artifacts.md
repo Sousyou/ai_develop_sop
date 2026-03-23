@@ -3,7 +3,7 @@
 - **版本**：v2.0
 - **状态**：正式版
 - **定位**：定义项目完成初始化时，建议具备的最小治理产物与文档入口。
-- **适用范围**：配套 `project_bootstrap_sop.md` 使用。
+- **适用范围**：配套 `sop/processes/project_bootstrap_sop.md` 使用。
 
 ---
 
@@ -71,7 +71,7 @@
 
 必须具备：
 
-- `docs/facts/`
+- `facts/`
 
 用途：
 
@@ -81,9 +81,9 @@
 
 必须具备：
 
-- `skill_policy.md`
-- `skill_registry.md`
-- `skill_template.md`
+- `skills/skill_policy.md`
+- `skills/skill_registry.md`
+- `skills/skill_template.md`
 
 用途：
 
@@ -97,9 +97,9 @@
 
 在 facts 层尚未完全重写前，初始化阶段建议至少准备以下入口：
 
-- `docs/facts/project_scope.md`
-- `docs/facts/facts_index.md`
-- `docs/facts/golden_cases.md`
+- `facts/project_scope.md`
+- `facts/facts_index.md`
+- `facts/golden_cases.md`
 
 用途：
 
@@ -107,7 +107,7 @@
 - `facts_index.md`：作为 facts 索引和回写导航
 - `golden_cases.md`：记录高价值案例、标准行为或验证样本
 
-若当前项目尚处极早期，也可只先创建 `docs/facts/` 目录和最小索引入口，再在首次阶段执行后补齐。
+若当前项目尚处极早期，也可只先创建 `facts/` 目录和最小索引入口，再在首次阶段执行后补齐。
 
 ---
 
@@ -176,16 +176,16 @@
 1. `README.md`
 2. `AGENTS.md`
 3. `rules/`
-4. `docs/facts/`
-5. `skill_policy.md`
-6. `skill_registry.md`
-7. `skill_template.md`
+4. `facts/`
+5. `skills/skill_policy.md`
+6. `skills/skill_registry.md`
+7. `skills/skill_template.md`
 
 建议补齐但允许稍后创建的包括：
 
-8. `docs/facts/project_scope.md`
-9. `docs/facts/facts_index.md`
-10. `docs/facts/golden_cases.md`
+8. `facts/project_scope.md`
+9. `facts/facts_index.md`
+10. `facts/golden_cases.md`
 
 ---
 

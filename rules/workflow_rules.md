@@ -1,7 +1,9 @@
 # 执行顺序规则
 
-- **版本**：v2.0-draft
+- **版本**：v2.0
+- **状态**：正式规则
 - **定位**：固定新版工作流中的默认推进顺序，避免跳步、倒序或边做边漂移。
+- **适用范围**：适用于 `project / phase / plan / task` 工作流中的默认执行顺序控制。
 
 ---
 
@@ -31,6 +33,12 @@ AI 执行时，应默认遵循以下顺序：
 
 ## 4. 与其他文档的关系
 
-- 任务最小执行单元定义见 `task_layer.md`。
-- 跨层回流关系见 `workflow_transition_rules.md`。
-- 若当前执行存在明显偏移，转入 `maintenance_recovery_sop.md`。
+- 任务最小执行单元定义见 `sop/core/task_layer.md`。
+- 跨层回流关系见 `sop/core/workflow_transition_rules.md`。
+- 若当前执行存在明显偏移，转入 `sop/processes/maintenance_recovery_sop.md`。
+
+---
+
+## 5. 当前结论
+
+默认情况下，AI 应按“先对齐目标与边界，再执行与验证，最后回流与回写”的顺序推进，而不是在局部实现中持续下钻。

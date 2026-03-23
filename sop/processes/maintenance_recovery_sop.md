@@ -221,10 +221,10 @@
 
 ## 8. 与其他文档的关系
 
-- 执行层状态设计见 `main_plan_state_design.md`。
-- 跨层恢复与回流规则见 `workflow_transition_rules.md`。
-- 当前阶段治理与纠错动作见 `phase_layer.md`。
-- 事实修正与回写关系见 `fact_writeback_sop.md`。
+- 执行层状态设计见 `sop/design/main_plan_state_design.md`。
+- 跨层恢复与回流规则见 `sop/core/workflow_transition_rules.md`。
+- 当前阶段治理与纠错动作见 `sop/core/phase_layer.md`。
+- 事实修正与回写关系见 `sop/processes/fact_writeback_sop.md`。
 
 ---
 

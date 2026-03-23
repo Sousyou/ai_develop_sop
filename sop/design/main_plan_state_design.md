@@ -195,7 +195,7 @@
 
 `plan item` 是 `main plan` 中的可推进步骤。
 
-正式标注格式见：`plan_item_template.md`
+正式标注格式见：`sop/templates/plan_item_template.md`
 
 它的作用不是承载完整执行细节，而是明确：
 
@@ -337,7 +337,16 @@
 
 ---
 
-## 13. 当前结论
+## 13. 与其他文档的关系
+
+- `plan` 层正式定义见 `sop/core/plan_layer.md`。
+- `task` 层正式定义见 `sop/core/task_layer.md`。
+- 跨层流转规则见 `sop/core/workflow_transition_rules.md`。
+- 步骤与任务模板见 `sop/templates/plan_item_template.md` 与 `sop/templates/task_template.md`。
+
+---
+
+## 14. 当前结论
 
 执行层状态设计可以先按如下方式确定：
 
@@ -346,9 +355,4 @@
 - 执行层同时支持 `task` 级、`plan item` 级和 `main plan` 级恢复动作
 - 通过有限的标准决策动作，保证步骤明确、结果明确、恢复路径明确
 
-后续可继续细化：
-
-1. 与 `plan_layer.md` 的正式映射
-2. 与 `task` 回滚语义的字段映射
-3. 与 `task_template.md` 的字段映射
-4. 与现有 facts / rules 体系的映射方式
+后续若需演进，应在不破坏“主线唯一、状态有限、恢复语义清晰”这组设计原则的前提下继续细化。

@@ -1,7 +1,9 @@
 # 回写规则
 
-- **版本**：v2.0-draft
+- **版本**：v2.0
+- **状态**：正式规则
 - **定位**：固定执行结束后的回写检查动作，避免稳定结论停留在对话中而不进入正式入口。
+- **适用范围**：适用于 `task`、`plan`、`phase` 与 `project` 的执行收口和沉淀判断。
 
 ---
 
@@ -24,7 +26,7 @@
 ## 3. facts 回写规则
 
 - 已确认且会持续影响后续判断的结论，应进入 facts 体系。
-- 新增或调整 facts 入口时，必须同步更新 `docs/facts/facts_index.md`。
+- 新增或调整 facts 入口时，必须同步更新 `facts/facts_index.md`。
 - 只对当前一步有价值的内容，不应直接进入正式 facts。
 
 ## 4. SOP / 规则层更新
@@ -36,11 +38,25 @@
 
 当某类流程已重复出现、边界稳定且可验证时，应进入 skill 判断：
 
-- 参考 `skill_policy.md`
-- 需要时更新 `skill_registry.md`
+- 参考 `skills/skill_policy.md`
+- 需要时更新 `skills/skill_registry.md`
 - 必要时新增 skill 文档
 
 ## 6. 硬规则
 
 1. 不得只在总结中模糊提及“后续再看”。
 2. 若当前轮不适合顺手更新文档，必须明确记录目标文档和原因。
+
+---
+
+## 7. 与其他文档的关系
+
+- facts 体系入口见 `facts/facts_index.md`。
+- skill 沉淀规则见 `skills/skill_policy.md`。
+- 若需要正式回写流程说明，见 `sop/processes/fact_writeback_sop.md`。
+
+---
+
+## 8. 当前结论
+
+默认情况下，每轮执行结束后都应完成一次正式回写判断，避免稳定结论只停留在对话结果里。
