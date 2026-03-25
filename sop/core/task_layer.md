@@ -1,435 +1,94 @@
-# Task 层定义
+# Task Layer Definition
 
-- **版本**：v1.0
-- **状态**：正式定义
-- **所属层级**：执行层
-- **定位**：定义 `Project - phase - plan - task` 分层中的 `task` 层职责、粒度、状态流转与收口规则。
-- **适用范围**：作为当前新版 SOP 中 `task` 层的正式定义骨架。
-
----
-
-## 1. 文档目标
-
-本文件用于回答以下问题：
-
-1. `task` 层在 `Project - phase - plan - task` 结构中到底负责什么。
-2. 为什么 `task` 是执行层的最小单元，但不能只是一个“小任务”。
-3. `task` 与 `plan item` 的边界应如何划分。
-4. 一个 `task` 从启动到完成，应经过怎样的状态流转与收口过程。
-5. 如何通过 `task` 层设计，防止执行在局部上下文中持续深入而不回主线。
-
-本文件当前只定义 `task` 层本身，不展开正式 SOP 中更细的实现模板与规则文件设计。
+- **Version**: `v2.0`
+- **Status**: official definition
+- **Layer**: execution layer
+- **Role**: defines the smallest controllable execution unit
 
 ---
 
-## 2. `task` 层的定位
+## Purpose
 
-`task` 层是执行层的最小单元，但它不只是最小工作项，而是最小可控执行单元。
+This file answers:
 
-它的作用是把 `plan` 中的一步落成一次可启动、可执行、可验证、可 review、可回滚、可收口的最小工作闭环。
-
-可以将其理解为：
-
-> **`plan` 决定接下来做哪一步，`task` 负责把这一步做完并安全收口。**
+1. what a `task` is
+2. what a task must contain to stay controllable
+3. how a task closes and returns to plan
 
 ---
 
-## 3. `task` 层的核心原则
+## Position In The Model
 
-`task` 层遵循以下原则：
-
-1. 单目标：一个 `task` 只允许有一个核心目标。
-2. 可执行：AI 可以直接开始做，而不是还要继续拆很久。
-3. 可验证：完成与否必须可以判断，不能靠感觉。
-4. 可 review：结果必须能在一次 review 中被完整审查。
-5. 可回滚：影响范围必须受控，出错时能回退或修正。
-6. 可收口：达成完成标准后必须结束当前 `task`，并返回所属 `plan`。
+A task is the smallest controllable execution unit under a plan.
+It is not a phase, not a plan, and not a review document.
 
 ---
 
-## 4. `task` 层负责什么
+## What Task Owns
 
-`task` 层负责以下内容：
+A task owns:
 
-1. 明确当前这一小步要完成什么。
-2. 明确当前这一小步不做什么。
-3. 明确当前执行的输入前提、允许范围和完成标准。
-4. 完成一次具体实现、分析、验证、review 或修正闭环。
-5. 输出结果、异常和必要记录。
-6. 在结束时将状态与结果返回所属 `plan`。
-
----
-
-## 5. `task` 层不负责什么
-
-`task` 层不负责以下内容：
-
-1. 重定义 `project` 目标、边界或约束。
-2. 重定义当前 `phase` 的目标、非目标与交付边界。
-3. 自行改变 `main plan` 顺序或执行主线。
-4. 自行决定派生新的 `sub plan`。
-5. 将新发现的后续问题自动并入当前 `task` 持续扩展。
-
-如果某项内容已经涉及路径编排、顺序调整、并行拆分或主线变更，它更属于 `plan` 层。  
-如果某项内容只是在回答最终方向或阶段边界，它更属于 `project` 或 `phase` 层。
+1. one concrete goal
+2. explicit non-goals
+3. explicit boundary
+4. completion criteria
+5. validation method
+6. current result summary
+7. rollback guidance when needed
+8. explicit return-to-plan action
 
 ---
 
-## 6. `task` 的正式定义
+## What Task Does Not Own
 
-`task` 是 `plan` 下最小的可执行、可验证、可 review、可回滚、可收口的工作单元。
+A task does not own:
 
-这一定义意味着：
-
-- 不是所有小动作都值得单独成为 `task`
-- 也不是所有执行工作都应继续拆分成更小单位
-- 只有当一个单元已经足够独立、足够清晰、足够可检查时，才适合作为 `task`
-
----
-
-## 7. `task` 与 `plan item` 的边界
-
-这是 `task` 层设计中最关键的问题之一。
-
-### 7.1 `plan item` 回答什么
-
-`plan item` 回答的是：
-
-- 当前阶段下一步要推进什么
-- 这一步在主线中处于什么顺序
-- 它与前后项的依赖关系是什么
-- 它当前是什么状态
-
-### 7.2 `task` 回答什么
-
-`task` 回答的是：
-
-- 当前这一小步具体做什么
-- 允许改什么，不允许改什么
-- 完成标准是什么
-- 如何验证
-- 做完后如何收口并返回 `plan`
-
-### 7.3 关系总结
-
-`plan item` 是主线编排中的一步。  
-`task` 是把这一步真正做完的最小闭环。
-
-一个 `plan item` 可以对应：
-
-- 一个 `task`
-- 多个顺序执行的 `task`
-- 在 `main plan` 批准后派生出的 `sub plan`
-
-但无论如何，`task` 都不能反向取代 `plan item` 的编排职责。
+1. phase boundary
+2. main-plan ordering
+3. long-term strategy
+4. silent expansion into neighboring work
 
 ---
 
-## 8. 一个健康的 `task` 应具备什么
+## Closure Rule
 
-一个健康的 `task` 应至少具备以下特征：
+A task is not complete merely because code changed.
+It closes only when:
 
-### 8.1 只有一个核心目标
-
-如果一个 `task` 同时承担多个不相干目标，它通常已经过大。
-
-### 8.2 可以直接开始
-
-如果开始前还需要大量进一步拆解，它通常还不是一个成熟的 `task`。
-
-### 8.3 可以明确验收
-
-必须能回答：
-
-- 什么算完成
-- 怎么证明完成
-
-### 8.4 影响面受控
-
-必须能说明：
-
-- 允许改哪些对象
-- 不允许碰哪些对象
-
-### 8.5 结果能一次 review 完
-
-如果一个 `task` 的结果需要跨很多模块、很多上下文、很多链路才能看完，它通常已经太大。
-
-### 8.6 做完后必须能停下
-
-完成后应能明确结束，而不是自然延伸到下一步。
+1. the concrete goal is addressed
+2. validation has run or the missing validation is stated explicitly
+3. remaining gaps are stated explicitly
+4. the result is returned to the owning plan
 
 ---
 
-## 9. `task` 的推荐类型
+## Minimum Task Contract
 
-为避免 `task` 语义漂移，建议优先将 `task` 收敛为以下几类：
+Every task should make the following visible:
 
-### 9.1 实现类 `task`
+- what it is trying to achieve
+- what it will not do
+- what it may touch
+- how completion will be judged
+- how validation will be performed
+- what happened
+- what remains out of scope or unfinished
+- how control returns to plan
 
-用于完成一个明确范围内的实现动作。
-
-### 9.2 分析类 `task`
-
-用于定位问题、收集证据、比较方案或整理候选结论。
-
-### 9.3 验证类 `task`
-
-用于运行验证、补测试、确认行为或核对结果。
-
-### 9.4 review 类 `task`
-
-用于对既有变更或候选结果做集中审查。
-
-### 9.5 修正 / 回滚类 `task`
-
-用于撤销、修正、收敛错误结果或把执行拉回边界。
-
-这几类已经足以覆盖大多数工程执行场景，不建议在早期引入过多 `task` 子类型。
+Use `sop/templates/task_template.md`.
 
 ---
 
-## 10. `task` 的最小字段
+## Main Risks
 
-每个 `task` 至少应具备以下字段：
-
-正式标注格式见：`sop/templates/task_template.md`
-
-1. `task id`
-2. `task 类型`
-3. `所属 plan`
-4. `关联 plan item`
-5. `任务目标`
-6. `任务非目标`
-7. `输入前提`
-8. `执行边界`
-9. `完成标准`
-10. `验证方式`
-11. `当前状态`
-12. `输出结果`
-13. `未做事项`
-14. `异常 / 阻塞`
-15. `回主线动作`
-
-其中最关键的字段是：
-
-- `执行边界`
-- `完成标准`
-- `回主线动作`
-
-这三项直接决定 `task` 是否可控。
+1. tasks without non-goals drift in scope
+2. tasks without validation become pseudo-complete
+3. tasks without return-flow stay isolated from the mainline
+4. tasks without explicit unfinished items hide real gaps
 
 ---
 
-## 11. `task` 的状态模型
+## Conclusion
 
-建议 `task` 使用以下最小状态流转：
-
-1. `draft`：已识别，但尚未准备好执行。
-2. `ready`：边界、目标和完成标准已明确，可以开始执行。
-3. `in_progress`：正在执行。
-4. `blocked`：因缺少前提、冲突或异常而暂停。
-5. `review_pending`：执行已完成，等待 review 或结果确认。
-6. `done`：已完成且已确认结果。
-7. `cancelled`：被取消，不再继续。
-8. `rolled_back`：已撤销或已回滚。
-
-要求：
-
-- `draft` 不应直接进入长期执行
-- `done` 不等于自动开始下一个 `task`
-- 从 `review_pending` 到 `done` 后，必须触发回主线动作
-
----
-
-## 12. `task` 的标准生命周期
-
-一个标准 `task` 应按以下顺序推进：
-
-### 12.1 创建
-
-明确：
-
-- 它属于哪个 `plan`
-- 它服务哪个 `plan item`
-- 为什么现在做它
-
-### 12.2 就绪化
-
-补齐以下信息：
-
-- 单一目标
-- 非目标
-- 输入前提
-- 边界
-- 完成标准
-- 验证方式
-
-只有在这些信息足够清楚后，`task` 才应进入 `ready`。
-
-### 12.3 执行
-
-按边界完成当前目标，不得顺手扩展到下一问题。
-
-### 12.4 验证 / review
-
-确认：
-
-- 是否满足完成标准
-- 结果是否可信
-- 是否有明显遗漏或副作用
-
-### 12.5 收口
-
-输出：
-
-- 已完成结果
-- 明确未做事项
-- 新发现的问题或候选后续项
-
-然后返回所属 `plan`。
-
----
-
-## 13. `task` 退出门
-
-`task` 设计中的最高优先级机制之一，是“退出门”。
-
-`task` 结束时必须明确回答以下问题：
-
-1. 当前 `task` 的完成标准是否满足？
-2. 当前 `task` 明确没有做什么？
-3. 是否发现了新问题、风险或候选后续项？
-4. 这些新发现应返回哪个 `plan` 处理？
-5. 当前 `task` 是否已经结束，而不是继续自然扩展？
-
-要求：
-
-- 新发现的问题默认不自动并入当前 `task`
-- 完成标准一旦满足，默认应结束当前 `task`
-- 下一步由所属 `plan` 决定，而不是由当前 `task` 顺势决定
-
-这套机制用于强制阻断“做完一个点后继续沿局部深入”的失控模式。
-
----
-
-## 14. `task` 与 `plan` 的回流关系
-
-`task` 与 `plan` 的关系必须是单向执行、双向状态回流：
-
-1. `plan` 决定当前做哪个 `task`
-2. `task` 执行并产出结果
-3. `task` 将结果、异常、未做事项和候选后续项返回 `plan`
-4. `plan` 再决定下一步是继续、重排、暂停、派生 `sub plan` 还是结束当前项
-
-如果在 `sub plan` 内执行，则流程为：
-
-1. `sub plan` 决定当前 `task`
-2. `task` 完成后先返回 `sub plan`
-3. `sub plan` 收口后再返回 `main plan`
-
----
-
-## 15. 如何判断一项内容是否应该成为 `task`
-
-当考虑创建一个新 `task` 时，可以用以下问题判断：
-
-1. 它是否只有一个清晰核心目标？
-2. 它是否可以直接开始执行，而不需要继续大量拆解？
-3. 它是否能明确完成标准与验证方式？
-4. 它的影响面是否足够受控？
-5. 它的结果是否能在一次 review 中被完整审查？
-6. 它做完后是否应该返回 `plan` 而不是继续扩展？
-
-如果答案大多为“是”，它可以考虑成为一个 `task`。
-
----
-
-## 16. 什么样的内容不适合作为 `task`
-
-以下内容通常不适合作为 `task`：
-
-### 16.1 仍然过大的工作包
-
-例如：
-
-- 完成整个 MVP
-- 补齐全部产品体验
-- 全面重构系统
-
-这类内容更像 `phase`、`plan` 或大的 `plan item`。
-
-### 16.2 仍然过于抽象的主题
-
-例如：
-
-- 把代码质量提高
-- 优化一下体验
-- 做完善
-
-这类内容缺少可执行和可验证性。
-
-### 16.3 过于微小、拆分成本高于收益的动作
-
-例如：
-
-- 只改单个常量名
-- 只补一句注释
-
-如果单独建 `task` 的成本明显高于执行成本，也不值得单独成 `task`。
-
-### 16.4 自带扩张倾向的组合目标
-
-例如：
-
-- 修 bug 并顺手重构相关模块
-- 补验证同时把周边问题一起优化
-
-这种写法会天然导致边界失控。
-
----
-
-## 17. `task` 层的风险点
-
-### 17.1 `task` 太大
-
-如果一个 `task` 包含多个目标、多个验证点或过大影响面，它会退化为小号 `plan`。
-
-### 17.2 `task` 太小
-
-如果一个 `task` 细碎到管理成本高于执行收益，系统会陷入碎片化。
-
-### 17.3 没有完成标准
-
-如果没有明确完成标准，执行会变成“差不多就行”。
-
-### 17.4 没有边界
-
-如果没有明确边界，AI 会顺手扩展改动面。
-
-### 17.5 没有退出门
-
-如果 `task` 结束后不强制回 `plan`，它将重新滑回局部连续深入的模式。
-
----
-
-## 18. 与其他文档的关系
-
-- 执行编排层定义见 `sop/core/plan_layer.md`。
-- 跨层回流规则见 `sop/core/workflow_transition_rules.md`。
-- 默认执行顺序与回写规则见 `rules/workflow_rules.md` 与 `rules/writeback_rules.md`。
-- 验证要求见 `rules/validation_rules.md`。
-- 标准任务模板见 `sop/templates/task_template.md`。
-
----
-
-## 19. 当前结论
-
-`task` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
-
-- 它是执行层的最小单元，但本质上是最小可控执行单元，而不是最小工作碎片。
-- 它必须具备单目标、可执行、可验证、可 review、可回滚和可收口六项特征。
-- 它不负责路径编排、阶段边界和全局目标，只负责把当前一步做完并安全交回所属 `plan`。
-- 它的核心治理价值不是把工作切得更细，而是通过明确边界、完成标准和退出门，阻止执行在局部上下文中持续失控。
-
-后续若需演进，应在不破坏“单目标、强边界、强验证、强回主线”这组原则的前提下继续细化。
+A task is the smallest closed execution loop.
+It must keep one goal, one boundary, one validation story, and one clear return path back to the plan.

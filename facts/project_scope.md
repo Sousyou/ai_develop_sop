@@ -1,63 +1,21 @@
-# 项目与阶段范围事实
+# Project Scope Facts
 
-- **版本**：v2.0
-- **状态**：正式事实文档
-- **定位**：记录当前项目的高层范围摘要，以及当前生效 `phase` 的范围摘要。
-- **适用范围**：适用于当前项目与当前生效 `phase` 的范围事实沉淀。
-
----
-
-## 1. 项目名称
-
-待填写
-
-## 2. `project` 摘要
-
-### 2.1 最终目标
-
-- 待填写
-
-### 2.2 长期边界
-
-- 待填写
-
-### 2.3 顶层约束
-
-- 待填写
-
-## 3. 当前 `phase` 摘要
-
-### 3.1 阶段名称
-
-待填写
-
-### 3.2 阶段目标
-
-- 待填写
-
-### 3.3 阶段非目标
-
-- 待填写
-
-### 3.4 阶段交付边界
-
-- 待填写
-
-## 4. 使用要求
-
-- 这里只记录已确认的范围摘要，不记录执行指令。
-- 若 `project` 或当前 `phase` 发生纠错，应同步更新本文件。
+- **Version**: `v2.0`
+- **Status**: active fact entry
+- **Role**: records stable project-scope facts that remain useful across multiple phases
 
 ---
 
-## 5. 与其他文档的关系
+## Current State
 
-- facts 层入口见 `facts/facts_index.md`。
-- 边界判断规则见 `rules/boundaries_rules.md`。
-- 若范围发生纠偏，处理流程见 `sop/processes/maintenance_recovery_sop.md`。
+- none
 
 ---
 
-## 6. 当前结论
+## Intake Rule
 
-本文件只承载已确认的项目与阶段范围事实，不承载执行动作、临时讨论或未定结论。
+Write a scope fact here only when it is:
+
+1. already confirmed
+2. stable across more than one phase or one task
+3. important enough that losing it would cause repeated wrong decisions

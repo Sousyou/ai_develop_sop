@@ -1,274 +1,118 @@
-# Plan 层定义
+# Plan Layer Definition
 
-- **版本**：v1.0
-- **状态**：正式定义
-- **所属层级**：执行层
-- **定位**：定义 `Project - phase - plan - task` 分层中的 `plan` 层职责、主从关系、并行规则与治理边界。
-- **适用范围**：作为当前新版 SOP 中 `plan` 层的正式定义骨架。
-
----
-
-## 1. 文档目标
-
-本文件用于回答以下问题：
-
-1. `plan` 层在 `Project - phase - plan - task` 结构中负责什么。
-2. `plan` 为什么属于执行层入口，而不是目标层或事实层。
-3. `main plan` 与 `sub plan` 的关系应如何定义。
-4. 什么情况下可以拆分 `sub plan`，什么情况下不应拆分。
-5. `plan` 如何既支持并行，又不破坏主线治理。
-
-本文件当前只定义 `plan` 层本身，不展开 `task` 的完整执行细则。
+- **Version**: `v2.0`
+- **Status**: official definition
+- **Layer**: execution layer
+- **Role**: defines the orchestration behavior of the `plan` layer
 
 ---
 
-## 2. `plan` 层的定位
+## Purpose
 
-`plan` 层是当前 `phase` 下的执行编排层。
+This file answers:
 
-它的作用是把阶段目标转化为 AI 可以直接推进的一组执行路径，并维护执行顺序、状态、纠错和整合逻辑。
-
-可以将其理解为：
-
-> **`phase` 定义阶段目标，`plan` 定义当前阶段如何稳定推进。**
-
----
-
-## 3. `plan` 层的核心原则
-
-`plan` 层遵循以下原则：
-
-1. 有序：明确执行顺序、依赖关系与主线推进方向。
-2. 可执行：内容能够直接作为 AI 的工作入口，而不是停留在抽象描述。
-3. 可修正：在发现阻塞、偏差或错误时，可以调整、暂停、回退或重排。
-4. 可记录：执行状态、问题、结果与整合结论能够被持续记录。
+1. what a `plan` owns and does not own
+2. how `main plan` and `sub plan` relate
+3. how external plans are accepted
+4. how plan state controls execution order and return flow
 
 ---
 
-## 4. `plan` 层负责什么
+## Position In The Model
 
-`plan` 层负责以下内容：
-
-1. 将当前 `phase` 的目标拆解为一组可持续推进的执行项。
-2. 维护这些执行项的顺序、依赖、状态和下一步。
-3. 在必要时决定是否派生 `sub plan` 以提升效率或处理可并行子问题。
-4. 对并行结果进行统一审查、整合、接纳、退回或放弃。
+`plan` is the execution orchestration layer under the current `phase`.
+It does not define long-term direction or phase boundary.
+It arranges execution inside the current stage.
 
 ---
 
-## 5. `plan` 层不负责什么
+## What Plan Owns
 
-`plan` 层不负责以下内容：
+The `plan` layer owns:
 
-1. 定义项目最终产品目标与长期边界。
-2. 定义当前 `phase` 的目标、非目标与交付边界。
-3. 直接替代 `task` 的完整执行、验证、review 与回滚细节。
-4. 将所有过程性信息无差别写成项目级事实。
-
-如果某项内容是在回答“最终要做成什么”或“当前阶段做什么、不做什么”，它更属于 `project` 或 `phase` 层。  
-如果某项内容已经细到单步实现、验证、review 和收口，它更属于 `task` 层。
-
----
-
-## 6. `main plan` 的定义
-
-在任一时刻，一个 `phase` 只能有一个当前生效的 `main plan`。
-
-`main plan` 是当前阶段唯一主执行编排单元，负责：
-
-- 维持主线推进
-- 维护顺序与状态
-- 决定是否派生 `sub plan`
-- 审核 `sub plan` 结果
-- 对最终整合结果负责
-
-`main plan` 的核心职责不是亲自完成所有工作，而是对当前阶段执行主线负责。
-
-`main plan` 的来源可以是：
-
-1. 由 `phase` 自发发起
-2. 由外部直接输入后，经 `phase` 审查接纳
-
-无论来源如何，只有被当前 `phase` 正式接纳后，它才可以成为当前唯一生效的 `main plan`。
+1. the active `main plan`
+2. plan-item ordering and state
+3. acceptance and review of external plans
+4. plan-level reordering and replanning
+5. creation of `sub plan` when useful
+6. collecting task return flow and deciding the next execution step
 
 ---
 
-## 7. `sub plan` 的定义
+## What Plan Does Not Own
 
-`sub plan` 不是必需对象，也不是与 `main plan` 并列的主线。
+The `plan` layer does not own:
 
-`sub plan` 是由 `main plan` 按需派生出的辅助执行手段，用于处理某个相对独立、适合并行推进的子问题。
-
-`sub plan` 的特点是：
-
-- 服务于 `main plan`
-- 不独立承担阶段推进责任
-- 不自动成为事实或主线结论来源
-- 完成后必须返回 `main plan` 做整合
+1. long-term project goals
+2. phase boundary definition
+3. single-task implementation details
 
 ---
 
-## 8. `main plan` 与 `sub plan` 的关系
+## External-Plan Preference
 
-二者关系如下：
+The default mode is `external_plan_preferred`.
+That means:
 
-1. `main plan` 是主线，`sub plan` 是手段。
-2. 只有 `main plan` 可以决定是否创建 `sub plan`。
-3. `sub plan` 不能自行升级为新的 `main plan`。
-4. `sub plan` 不能自行改变 `phase` 边界或 `project` 目标。
-5. `main plan` 必须对子 plan 的创建、边界、结果整合与最终影响负责。
+1. if a useful external plan exists, review it first
+2. trim, patch, and adapt it before generating a new plan
+3. generate a new plan only when the external plan is missing or insufficient
 
----
-
-## 9. 何时适合派生 `sub plan`
-
-仅当以下条件成立时，`main plan` 才应考虑派生 `sub plan`：
-
-1. 问题可以拆分为多个相对独立的子部分。
-2. 各子部分的输出可比较、可汇总或可并列审查。
-3. 并行处理能够带来明确收益，例如提速、扩大探索面或隔离风险。
-4. 并行后的整合成本仍然可控。
-
-适合 `sub plan` 的典型场景包括：
-
-- 多方案探索
-- 多维度数据计算
-- 多模块现状扫描
-- 风险隔离型试验
-- 支撑性分析与候选结果整理
+This rule exists to reduce token cost and match real collaborative workflows.
 
 ---
 
-## 10. 何时不应派生 `sub plan`
+## Main Plan And Sub Plan
 
-以下情况通常不应派生 `sub plan`：
+### Main Plan
 
-1. 问题高度耦合，子结果难以独立推进。
-2. 各子结果无法比较、无法汇总或无法统一裁决。
-3. 派生后整合成本高于并行收益。
-4. 子问题会直接扩大当前主线边界。
-5. 当前问题本质上只需要一个普通 `task` 即可解决。
+The active primary execution line under the current phase.
+There may be only one active `main plan`.
 
----
+### Sub Plan
 
-## 11. `sub plan` 的边界约束
-
-`sub plan` 必须遵守以下边界规则：
-
-1. 影响面必须绝对受控且尽量最小。
-2. 只允许处理 `main plan` 明确授权的对象和范围。
-3. 默认不得修改未被 `main plan` 规划修改的代码、文档或事实内容。
-4. 不得擅自扩展问题范围，不得沿子问题继续生成新的主线。
-
-`sub plan` 的本质是受控探索、受控处理和受控产出，而不是独立执行自治体。
+A bounded local execution branch created only when it helps control complexity.
+A sub plan must still return to the main plan and must not silently become a second mainline.
 
 ---
 
-## 12. 先申请后执行原则
+## Plan Item Expectations
 
-`sub plan` 启动前必须遵守先申请后执行原则。
+A plan item should be:
 
-### 12.1 对 `main plan` 的申请
+1. ordered
+2. stateful
+3. bounded enough to produce one or more tasks
+4. able to return clear progress or blockage back to the plan
 
-所有 `sub plan` 都必须先经 `main plan` 批准，才能进入执行。
-
-批准时至少应明确：
-
-- 为什么需要派生 `sub plan`
-- `sub plan` 的边界是什么
-- 预期输出是什么
-- 完成后返回哪里
-
-### 12.2 对用户的申请
-
-当 `sub plan` 会显著增加成本、扩大探索范围、引入较高不确定性或可能造成较大影响面时，还应先获得用户同意。
+Use `sop/templates/plan_item_template.md` when needed.
 
 ---
 
-## 13. `sub plan` 的输入与输出要求
+## Return-Flow Rule
 
-每个 `sub plan` 在启动前都应明确：
+After a task closes, the result must return to the owning plan.
+The plan then decides whether to:
 
-- 输入问题是什么
-- 允许处理的边界是什么
-- 输出格式是什么
-- 输出交回给谁
-- 完成后的收口点是什么
-
-`sub plan` 的输出默认只是候选输入，而不是自动生效的主线结论。
-
-只有当 `main plan` 审核并接纳后，`sub plan` 结果才可以影响主线推进。
+1. mark the plan item complete
+2. schedule a follow-up task
+3. reorder the plan
+4. create a sub plan
+5. escalate to phase review or correction
 
 ---
 
-## 14. `main plan` 的责任制
+## Main Risks
 
-`main plan` 必须对子 plan 的以下事项负责：
-
-1. 是否真的需要派生。
-2. 派生边界是否合理。
-3. 结果是否可信。
-4. 结果是否与其他结果冲突。
-5. 是否接纳、部分接纳、退回重做或放弃。
-6. 最终整合后是否需要调整主线。
-
-`sub plan` 可以提供候选结果，但不能替代 `main plan` 的最终责任。
+1. plan tries to redefine phase boundary
+2. plan becomes a task log instead of an execution controller
+3. external plans are ignored even when good enough
+4. sub plans become silent competing mainlines
+5. tasks do not return to plan, so execution fragments
 
 ---
 
-## 15. `plan` 层的治理价值
+## Conclusion
 
-引入 `plan` 层的目标不是简单增加任务列表，而是解决以下问题：
-
-1. `phase` 太大，无法直接驱动 AI 稳定执行。
-2. `task` 太细，容易变成一个个临时抛出的局部动作。
-3. 执行过程中缺少统一主线，做完一个 task 后容易继续沿局部深入。
-4. 并行能力无法受控使用，导致效率低下或边界失控。
-
----
-
-## 16. `plan` 层的风险点
-
-### 16.1 退化为普通 checklist
-
-如果 `plan` 只罗列待办项，不维护顺序、状态、纠错和整合逻辑，它就失去了执行编排层的价值。
-
-### 16.2 退化为大号 `phase`
-
-如果 `plan` 开始承载阶段目标、非目标和交付边界，它会侵占 `phase` 的职责。
-
-### 16.3 退化为大号 `task`
-
-如果 `plan` 直接写满单步实现、验证、review 和回滚细节，它会侵占 `task` 的职责。
-
-### 16.4 `sub plan` 失控扩张
-
-如果 `sub plan` 可以随意派生、随意扩边界、随意修改未授权内容，主线将很快失控。
-
-### 16.5 并行收益低于整合成本
-
-如果并行拆分只是增加管理成本而没有明确收益，则 `sub plan` 不应被滥用。
-
----
-
-## 17. 与其他文档的关系
-
-- 当前阶段控制与 `main plan` 生命周期上层见 `sop/core/phase_layer.md`。
-- 最小执行单元定义见 `sop/core/task_layer.md`。
-- 跨层流转规则见 `sop/core/workflow_transition_rules.md`。
-- 执行层状态辅助设计见 `sop/design/main_plan_state_design.md`。
-- 步骤与任务模板见 `sop/templates/plan_item_template.md` 与 `sop/templates/task_template.md`。
-
----
-
-## 18. 当前结论
-
-`plan` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
-
-- 它是当前 `phase` 下的执行编排层，是 AI 的直接执行入口。
-- 每个 `phase` 在任一时刻只能有一个当前生效的 `main plan`。
-- `sub plan` 不是必需对象，只是 `main plan` 为完成主线而采用的受控手段。
-- `sub plan` 的派生必须满足可拆分、可比较或可汇总、收益明确且整合成本可控的条件。
-- `sub plan` 必须遵守边界受控、先申请后执行和结果回到 `main plan` 审核整合的原则。
-
-后续若需演进，应在不破坏“单一 `main plan` 主线、`sub plan` 仅为手段、整合责任归 `main plan`”这组原则的前提下继续细化。
+`plan` is the execution orchestrator.
+It accepts or shapes the mainline, prefers external plans when possible, controls ordering and state, and absorbs task return flow into the next execution decision.

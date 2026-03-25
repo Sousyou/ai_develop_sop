@@ -1,62 +1,62 @@
-# 回写规则
+# Writeback Rules
 
-- **版本**：v2.0
-- **状态**：正式规则
-- **定位**：固定执行结束后的回写检查动作，避免稳定结论停留在对话中而不进入正式入口。
-- **适用范围**：适用于 `task`、`plan`、`phase` 与 `project` 的执行收口和沉淀判断。
-
----
-
-## 1. 默认要求
-
-每轮执行收口后，必须检查：
-
-1. 是否需要回写 facts。
-2. 是否需要登记 `skill candidate`。
-3. 是否需要登记 `SOP candidate`。
-4. 是否需要更新规则层。
-
-## 2. 分层要求
-
-- `task`：返回结果、未做事项、异常和候选后续项。
-- `plan`：汇总执行结果并决定是否上浮。
-- `phase`：判断是否形成稳定沉淀项。
-- `project`：只接收跨阶段稳定事实。
-
-## 3. facts 回写规则
-
-- 已确认且会持续影响后续判断的结论，应进入 facts 体系。
-- 新增或调整 facts 入口时，必须同步更新 `facts/facts_index.md`。
-- 只对当前一步有价值的内容，不应直接进入正式 facts。
-
-## 4. SOP / 规则层更新
-
-- 若执行暴露出稳定流程缺口，应更新对应 SOP。
-- 若执行暴露出长期护栏缺口，应更新 `rules/` 下相关规则。
-
-## 5. Skill 沉淀
-
-当某类流程已重复出现、边界稳定且可验证时，应进入 skill 判断：
-
-- 参考 `skills/skill_policy.md`
-- 需要时更新 `skills/skill_registry.md`
-- 必要时新增 skill 文档
-
-## 6. 硬规则
-
-1. 不得只在总结中模糊提及“后续再看”。
-2. 若当前轮不适合顺手更新文档，必须明确记录目标文档和原因。
+- **Version**: `v2.1`
+- **Status**: official rule
+- **Role**: forces post-execution writeback checks so stable conclusions do not stay only in conversation
 
 ---
 
-## 7. 与其他文档的关系
+## Default Checks
 
-- facts 体系入口见 `facts/facts_index.md`。
-- skill 沉淀规则见 `skills/skill_policy.md`。
-- 若需要正式回写流程说明，见 `sop/processes/fact_writeback_sop.md`。
+After each closure, check:
+
+1. whether facts must be written back
+2. whether a `skill candidate` must be registered
+3. whether an `SOP candidate` must be registered
+4. whether rules or standards need updates
 
 ---
 
-## 8. 当前结论
+## Layer Expectations
 
-默认情况下，每轮执行结束后都应完成一次正式回写判断，避免稳定结论只停留在对话结果里。
+- `task`: return result, unfinished work, exceptions, and candidate follow-ups
+- `plan`: summarize results and decide whether they must rise upward
+- `phase`: decide whether stable items have formed
+- `project`: receive only cross-phase stable facts
+
+---
+
+## Fact Writeback Rules
+
+1. confirmed conclusions that will keep affecting later judgment belong in `facts/*`
+2. when adding or changing facts, update `facts/facts_index.md`
+3. one-step-only notes should not be promoted into formal facts
+
+---
+
+## Goal Alignment Check
+
+After each closure, also check:
+
+1. does the change only affect the current high-frequency target
+2. if yes, update `runtime/current_target.md` first
+3. only update `runtime/project_charter.md` when the long-term goal, boundary, or top-level constraints have changed
+
+---
+
+## Runtime Digest Sync
+
+If any of these changes in the current turn:
+
+- `runtime/entry_state.md`
+- `runtime/project_mount.md`
+- `runtime/project_charter.md`
+- `runtime/current_target.md`
+- `ai_runtime_sop.md`
+- `ai_runtime_standards.md`
+
+then the same turn must also update:
+
+- `runtime/session_brief.md`
+
+`runtime/session_brief.md` is a derived digest. It must not depend on a separate refresh command and must not lag behind its source documents.

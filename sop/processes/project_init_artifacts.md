@@ -1,200 +1,63 @@
-# 项目初始化标准产物
+# Project Init Artifacts
 
-- **版本**：v2.0
-- **状态**：正式版
-- **定位**：定义项目完成初始化时，建议具备的最小治理产物与文档入口。
-- **适用范围**：配套 `sop/processes/project_bootstrap_sop.md` 使用。
-
----
-
-## 1. 文档目标
-
-本文件用于回答以下问题：
-
-1. 一个按新版 SOP 初始化的项目，至少应有哪些标准产物。
-2. 这些产物分别服务 `project`、`phase`、执行治理、facts 与 skill 的哪个入口。
-3. 什么是必须产物，什么是按需产物。
+- **Version**: `v2.1`
+- **Status**: official
+- **Role**: defines the minimum artifacts a project should have after initialization
 
 ---
 
-## 2. 产物分层原则
+## Required Artifacts
 
-初始化产物不应只是“把文件建出来”，而应能明确承担治理职责。
-
-建议按以下五类理解：
-
-1. 项目入口产物
-2. 决策层入口产物
-3. 规则入口产物
-4. facts 入口产物
-5. skill 入口产物
-
----
-
-## 3. 必须产物
-
-### 3.1 项目入口
-
-必须具备：
+### Host-project entry artifacts
 
 - `README.md`
-
-用途：
-
-- 说明项目是什么
-- 说明项目如何运行或如何开始阅读
-- 作为人类和 AI 的外层入口
-
-### 3.2 项目级规则入口
-
-必须具备：
-
 - `AGENTS.md`
 
-用途：
+Rules:
 
-- 作为项目级长期规则入口
-- 固定当前项目目标、阶段目标、边界、执行风格和 facts 入口
+1. `AGENTS.md` must exist and stay thin
+2. if the host project already has a `README.md`, init preserves it
+3. if the host project has no `README.md`, init generates a thin bootstrap placeholder
 
-### 3.3 规则目录
+### Runtime instance artifacts
 
-必须具备：
+- `runtime/entry_state.md`
+- `runtime/project_mount.md`
+- `runtime/project_charter.md`
+- `runtime/current_target.md`
+- `runtime/session_brief.md`
+
+Rules:
+
+1. these are host-project runtime artifacts generated from `runtime/templates/*`
+2. `session_brief.md` is derived and must be co-updated with its source runtime documents
+
+### Governance artifacts
 
 - `rules/`
-
-用途：
-
-- 存放项目中长期有效的规则文件
-- 承接后续从执行中沉淀出来的规则约束
-
-### 3.4 facts 目录
-
-必须具备：
-
 - `facts/`
-
-用途：
-
-- 承接稳定事实、验证结果、关键案例与后续 facts 体系
-
-### 3.5 skill 入口
-
-必须具备：
-
 - `skills/skill_policy.md`
 - `skills/skill_registry.md`
 - `skills/skill_template.md`
 
-用途：
-
-- 定义 skill 的准入方式
-- 记录已正式登记的 skill
-- 提供 skill 的标准模板
-
 ---
 
-## 4. 建议的最小 facts 产物
+## Recommended Early Fact Artifacts
 
-在 facts 层尚未完全重写前，初始化阶段建议至少准备以下入口：
+These may exist immediately or be added in the first real execution loop:
 
 - `facts/project_scope.md`
 - `facts/facts_index.md`
 - `facts/golden_cases.md`
 
-用途：
-
-- `project_scope.md`：记录项目边界与阶段边界的最低摘要
-- `facts_index.md`：作为 facts 索引和回写导航
-- `golden_cases.md`：记录高价值案例、标准行为或验证样本
-
-若当前项目尚处极早期，也可只先创建 `facts/` 目录和最小索引入口，再在首次阶段执行后补齐。
-
 ---
 
-## 5. 按需产物
+## Minimal Completion Standard
 
-以下内容是否初始化创建，取决于当前项目形态和初始 `phase`：
+Initialization is minimally complete when the host project has:
 
-- 代码目录
-- 运行入口目录
-- 测试目录
-- 资源目录
-- 脚本目录
-
-原则：
-
-- 当前不用就不建
-- 当前阶段明确需要就建
-- 不因“以后可能有用”提前铺满结构
-
----
-
-## 6. 产物与四层工作流的关系
-
-### 6.1 对 `project`
-
-初始化产物应保证项目有稳定入口来承接：
-
-- 项目目标
-- 项目边界
-- 项目约束
-- 项目事实
-
-### 6.2 对 `phase`
-
-初始化产物应保证当前阶段有稳定入口来承接：
-
-- 当前阶段目标
-- 当前阶段非目标
-- 当前阶段边界
-- 当前阶段执行审查结果
-
-### 6.3 对执行层
-
-初始化产物应保证后续执行层可以稳定接入：
-
-- `main plan`
-- `task`
-- review
-- 回流
-
-### 6.4 对沉淀层
-
-初始化产物应保证后续可沉淀：
-
-- facts
-- rules
-- skill
-- SOP 改进候选项
-
----
-
-## 7. 最小完成标准
-
-当以下产物都已具备时，可认为初始化产物最低标准达成：
-
-1. `README.md`
-2. `AGENTS.md`
-3. `rules/`
-4. `facts/`
-5. `skills/skill_policy.md`
-6. `skills/skill_registry.md`
-7. `skills/skill_template.md`
-
-建议补齐但允许稍后创建的包括：
-
-8. `facts/project_scope.md`
-9. `facts/facts_index.md`
-10. `facts/golden_cases.md`
-
----
-
-## 8. 当前结论
-
-初始化产物的目标不是看起来完整，而是确保项目一开始就具备：
-
-- 可读入口
-- 可治理入口
-- 可沉淀入口
-
-这样后续的 `project / phase / plan / task` 工作流才有稳定落点。
+1. a readable outer entry
+2. a bootstrap `AGENTS.md`
+3. the runtime instance files
+4. the governance directories
+5. enough default content to enter the first concrete task without extra manual setup

@@ -1,97 +1,90 @@
 # ai_develop_sop
 
-> A structured SOP framework for AI-driven project development, governance, review, recovery, and knowledge writeback.
+> A portable SOP engine for long-running AI-assisted software development.
 
 ## Overview
 
-`ai_develop_sop` is a documentation-first framework for building and governing AI-assisted engineering workflows.
+`ai_develop_sop` is a documentation-first governance framework for projects where AI participates in:
 
-It is designed to solve the real problems that appear when AI participates deeply in project work:
+- long-running implementation
+- staged planning and review
+- fact writeback
+- recovery and correction
+- rule and standard accumulation
 
-- scope drift
-- execution losing the main line
-- unstable task boundaries
-- poor review and handoff quality
-- facts not being written back
-- difficult recovery after workflow instability
+The core model is:
 
-The framework is built around a four-layer model:
+- Decision layer: `project -> phase`
+- Execution layer: `plan -> task`
 
-- **Decision Layer**: `project -> phase`
-- **Execution Layer**: `plan -> task`
+## Injection Model
 
-This separation is used to keep long-term goals, current-stage goals, execution orchestration, and minimal execution units clearly separated.
+This repository can be used in two ways:
 
----
+1. as the SOP design repository itself
+2. as a complete SOP engine injected into another project
 
-## Core Model
+When injected into another project, the expected structure is:
 
-### `project`
-Defines the final product goal, long-term boundaries, top-level constraints, and cross-phase stable facts.
+```text
+<host-project>/
+|- AGENTS.md
+|- ai_develop_sop/
+|  |- project_entry.md
+|  |- ai_project_quickstart.md
+|  |- ai_project_sop.md
+|  |- ai_project_type.md
+|  |- ai_runtime_sop.md
+|  |- ai_runtime_standards.md
+|  |- ai_sop_init.bat
+|  |- ai_sop_init.ps1
+|  |- runtime/
+|  |- sop/
+|  |- rules/
+|  |- facts/
+|  |- skills/
+|  `- standards/
+`- product code / docs
+```
 
-### `phase`
-Acts as the current stage controller. It defines stage goals, non-goals, delivery boundaries, and governs the lifecycle of the current `main plan`.
+The host-project `AGENTS.md` stays intentionally thin.
+It only bootstraps AI into `ai_develop_sop/project_entry.md`.
 
-### `plan`
-Acts as the execution orchestration layer under the current `phase`. It maintains the current main line, sequencing, ordering, and execution integration.
+All SOP governance assets stay under `ai_develop_sop/`.
+The source-repository entry remains `ai_develop_sop/AGENTS.md`.
 
-### `task`
-Acts as the smallest controllable execution unit. It must have a single goal, explicit boundary, explicit validation, and explicit return-to-plan behavior.
+## Quick Start For Injection
 
----
+1. Copy `ai_develop_sop/` into the target project root.
+2. Run `ai_develop_sop/ai_sop_init.bat`.
+3. Let the script generate the host-project `AGENTS.md`.
+4. If the host project has no `README.md`, let the script generate a thin bootstrap README.
+5. Enter through the generated host-project `AGENTS.md`.
+
+Re-running `ai_sop_init.bat` resets the init-generated host bootstrap `AGENTS.md` and runtime files back to template state.
+It does not reset `ai_develop_sop/AGENTS.md` itself.
+For a brand-new injected project, `ai_sop_init.bat` creates a usable default `common` runtime immediately.
 
 ## What This Repository Provides
 
-This repository is not a prompt collection.
+This is not a prompt collection.
+It is a complete SOP engine that provides:
 
-It is a complete SOP framework that includes:
-
-- top-level workflow governance
-- layer definitions
-- transition rules
-- execution templates
-- initialization processes
-- recovery processes
-- fact writeback processes
-- runtime supplements for real projects
+- workflow governance
+- project-type routing
+- injected-project entry
+- low-token startup entry
+- initialization bootstrap scripts
 - rules and standards systems
+- runtime supplements for real projects
+- templates and recovery processes
+- fact writeback processes
 - skill accumulation structure
 
----
+## Default Startup Path
 
-## Repository Structure
+For injected `common` projects, the default low-token startup path is:
 
-```text
-.
-├── ai_project_sop.md                 # Main project SOP entry
-├── ai_runtime_sop.md                 # Runtime process supplement for real projects
-├── ai_runtime_standards.md           # Runtime standards supplement for real projects
-├── AGENTS.md                         # Project entry gate
-│
-├── sop/
-│   ├── core/
-│   │   ├── project_layer.md
-│   │   ├── phase_layer.md
-│   │   ├── plan_layer.md
-│   │   ├── task_layer.md
-│   │   └── workflow_transition_rules.md
-│   │
-│   ├── templates/
-│   │   ├── phase_review_template.md
-│   │   ├── next_phase_request_template.md
-│   │   ├── plan_item_template.md
-│   │   └── task_template.md
-│   │
-│   ├── design/
-│   │   └── main_plan_state_design.md
-│   │
-│   └── processes/
-│       ├── project_bootstrap_sop.md
-│       ├── project_init_artifacts.md
-│       ├── fact_writeback_sop.md
-│       └── maintenance_recovery_sop.md
-│
-├── rules/                            # Execution guardrails
-├── facts/                            # Stable facts and writeback layer
-├── skills/                           # Skill policy / registry / template
-└── standards/                        # Cross-project formal standards
+`host AGENTS.md -> project_entry.md -> runtime/entry_state.md -> runtime/session_brief.md -> ai_project_quickstart.md`
+
+`runtime/session_brief.md` is a derived runtime digest. During normal operation it should be co-updated whenever its source runtime documents change.

@@ -1,229 +1,64 @@
-# 项目初始化 SOP
+# Project Bootstrap SOP
 
-- **版本**：v2.0
-- **状态**：正式版
-- **定位**：定义项目在进入新版工作流前，如何完成 `project` 与初始 `phase` 的建立、治理入口的落地以及最小运行骨架的准备。
-- **适用范围**：后续所有按新版 SOP 启动、重启或进入新阶段的工程项目。
-
----
-
-## 1. 文档目标
-
-本 SOP 用于回答以下问题：
-
-1. 新项目开始时，如何先建立 `project` 与初始 `phase`。
-2. 初始化阶段必须明确哪些高层边界与阶段边界。
-3. 初始化阶段应创建哪些最小治理入口与文档入口。
-4. 什么情况下可认为项目已经完成初始化，进入阶段执行。
-
-本文件只负责项目初始化，不负责 `main plan` 细化、`task` 细化、事实回写细则和恢复流程细则。
+- **Version**: `v2.1`
+- **Status**: official
+- **Role**: defines how a project becomes ready to enter the SOP workflow
 
 ---
 
-## 2. 初始化原则
+## Purpose
 
-### 2.1 先建立决策层，再进入执行层
-
-项目初始化的首要目标不是开始实现，而是先明确：
-
-- `project`
-- 当前 `phase`
-- 当前阶段最小治理入口
-
-### 2.2 先明确边界，再初始化结构
-
-在边界未清晰前，不应先铺目录、先搭抽象、先补完整模板。
-
-### 2.3 初始化即建立治理入口
-
-初始化不仅是创建目录，更要建立后续运行所需的最低入口：
-
-- 项目入口
-- 决策入口
-- facts 入口
-- 规则入口
-- skill 入口
-
-### 2.4 最小骨架优先
-
-初始化只创建当前项目和当前阶段真正需要的最小骨架，不为未来能力提前铺设完整结构。
-
-### 2.5 初始化不等于自动开始执行
-
-当 `project` 与初始 `phase` 已建立后，项目才具备进入执行层的条件；初始化本身不等于已经进入 `main plan` 和 `task` 推进。
+Bootstrap is the step that makes a project operational under this SOP.
+It must leave the project ready to accept the first concrete development task.
 
 ---
 
-## 3. 初始化触发条件
+## Bootstrap Principles
 
-以下场景应进入初始化流程：
-
-1. 全新项目启动。
-2. 现有项目切换到一个新的独立阶段，且需要重建阶段边界与治理入口。
-3. 现有项目发生大范围重构，已接近重新开项目。
-
-以下场景通常不进入初始化流程：
-
-1. 普通阶段内执行。
-2. 小范围 bug 修复。
-3. 单个 `task` 的实现、验证或回滚。
+1. establish project direction before execution detail
+2. create only the minimum skeleton needed now
+3. keep the host-project root bootstrap thin
+4. make initialization zero-touch for a newly injected project
 
 ---
 
-## 4. 初始化标准流程
+## Standard Bootstrap Result
 
-### 4.1 明确 `project`
+After bootstrap, the project should have:
 
-初始化时必须先明确：
+1. a host-project bootstrap `AGENTS.md`
+2. a usable runtime instance state
+3. a short `session_brief`
+4. governance directories for `rules`, `facts`, and `skills`
+5. a readable `README.md`
 
-- 项目最终要做成什么
-- 项目长期做什么 / 不做什么
-- 顶层决策偏好是什么
-- 当前高层路径大致如何分段
-
-要求：
-
-- `project` 必须稳定
-- 不把当前阶段目标误写成最终目标
-
-### 4.2 明确初始 `phase`
-
-必须明确当前处于哪个阶段，例如：
-
-- 原型验证
-- MVP 构建
-- 第一版可用工程
-- 重构阶段
-
-要求：
-
-- `phase` 必须有明确目标、非目标与交付边界
-- 不允许用一个 `phase` 承载多个不相干的大目标
-
-### 4.3 明确当前阶段非目标
-
-初始化阶段必须明确当前阶段明确不做什么。
-
-要求：
-
-- 非目标要能用于阻断 scope 漂移
-- 若某能力不在当前阶段内，应显式标记为 out-of-scope
-
-### 4.4 判断项目形态
-
-应判断项目属于哪类形态，以便选择最小骨架。
-
-至少要识别：
-
-- 是否为全新项目
-- 是否需要工程化目录
-- 是否需要运行入口
-- 是否只是最小验证型项目
-
-### 4.5 选择最小骨架
-
-根据 `project`、初始 `phase` 和项目形态，选择当前真正需要的最小目录与文档结构。
-
-要求：
-
-- 只创建当前真正需要的内容
-- 不为未来能力预铺完整平台化结构
-- 骨架必须足以支撑后续阶段治理与执行
-
-### 4.6 初始化基础文档入口
-
-初始化阶段至少应建立：
-
-- `README.md`
-- `AGENTS.md`
-- `rules/`
-- `facts/`
-- `skills/skill_policy.md`
-- `skills/skill_registry.md`
-- `skills/skill_template.md`
-
-当前标准产物清单以 `sop/processes/project_init_artifacts.md` 为准。
-
-### 4.7 明确 `AGENTS.md` 的最小内容
-
-`AGENTS.md` 至少应明确：
-
-- 当前项目目标
-- 当前阶段目标
-- 当前阶段非目标
-- 项目边界与改动边界
-- 默认执行风格与约束重点
-- 当前验证预期
-- facts 入口
-- 是否需要在任务结束后检查 SOP / rules / skill 更新
-
-要求：
-
-- `AGENTS.md` 只承载长期有效或跨任务有效规则
-- 不承载单个 `task` 细节
-
-### 4.8 判断是否立即进入执行层
-
-当初始化完成后，应进一步判断：
-
-- 当前是否需要立即进入 `main plan`
-- 还是先只停留在 `project + phase` 已定义状态
-
-初始化本身不强制要求立即生成 `main plan`，但若项目已准备进入执行，则应确保当前 `phase` 有能力发起或接收第一个 `main plan`
+If the host project already has a `README.md`, preserve it.
+If it does not, `ai_sop_init.bat` must generate a thin bootstrap README.
 
 ---
 
-## 5. 初始化完成判定
+## Runtime Requirements
 
-当以下条件全部满足时，可认为项目已完成初始化：
+Bootstrap must produce a runtime state that is immediately usable:
 
-1. `project` 已明确。
-2. 当前 `phase` 已明确。
-3. 当前阶段非目标已明确。
-4. 当前最小骨架已选择。
-5. 最低治理入口已建立。
-6. `AGENTS.md` 已具备最小必要内容。
+- `project_type = common`
+- `runtime_mode = active`
+- `current_phase = bootstrap_ready`
+- `default_plan_source = external_plan_preferred`
 
-若项目准备立刻进入执行，还应进一步满足：
+It must also create:
 
-7. 当前 `phase` 已具备发起或接收 `main plan` 的前提。
-
----
-
-## 6. 初始化产物与后续关系
-
-初始化阶段主要建立的是治理骨架，而不是完整业务结构。
-
-它应为后续层级提供以下条件：
-
-- `project` 可作为最高判断入口
-- 当前 `phase` 可作为唯一阶段控制器
-- rules 层可作为执行护栏入口
-- facts 层可作为稳定结论沉淀入口
-- skill 层可作为候选沉淀与正式登记入口
+- `runtime/project_mount.md`
+- `runtime/project_charter.md`
+- `runtime/current_target.md`
+- `runtime/session_brief.md`
 
 ---
 
-## 7. 与其他文档的关系
+## Completion Rule
 
-- 总体结构由 `ai_project_sop.md` 定义。
-- 标准初始化产物以 `sop/processes/project_init_artifacts.md` 为准。
-- 若项目已进入执行层，则进一步进入：
-  - `sop/core/phase_layer.md`
-  - `sop/core/plan_layer.md`
-  - `sop/core/task_layer.md`
-  - `sop/core/workflow_transition_rules.md`
+Bootstrap is complete only when the injected project can enter:
 
----
+`host AGENTS.md -> project_entry.md -> runtime/entry_state.md -> runtime/session_brief.md -> ai_project_quickstart.md`
 
-## 8. 当前结论
-
-项目初始化的核心，不是尽快开始写代码，而是先把：
-
-- `project`
-- 当前 `phase`
-- 最小治理入口
-
-建立起来。
-
-只有这样，后续的 `main plan` 与 `task` 执行才会真正有稳定主线与边界可循。
+without extra manual setup.

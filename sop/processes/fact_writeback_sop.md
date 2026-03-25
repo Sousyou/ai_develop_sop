@@ -1,219 +1,54 @@
-# 事实回写 SOP
+# Fact Writeback SOP
 
-- **版本**：v2.0
-- **状态**：正式版
-- **定位**：定义执行结果在何时、以什么粒度、通过哪一层判断后回写到 facts 体系。
-- **适用范围**：后续所有使用新版工作流推进的工程项目。
-
----
-
-## 1. 文档目标
-
-本 SOP 用于回答以下问题：
-
-1. 哪些执行结果值得回写为稳定事实。
-2. `task`、`plan`、`phase`、`project` 在事实回写上分别承担什么责任。
-3. 如何避免 facts 退化为流水账、任务日志或一次性讨论集合。
+- **Version**: `v2.0`
+- **Status**: official
+- **Role**: defines how stable conclusions are promoted into formal facts
 
 ---
 
-## 2. 回写总原则
+## Purpose
 
-### 2.1 事实不是过程日志
+This SOP answers:
 
-facts 只记录对后续判断仍然有价值的稳定结论，不记录完整过程流水。
-
-### 2.2 先在执行层产出，再由阶段层审查
-
-`task` 和 `plan` 负责产出结果与证据。  
-`phase` 负责判断这些结果是否值得沉淀、上报或登记候选项。
-
-### 2.3 不是所有结果都上浮到 `project`
-
-只有跨多个阶段持续有效的稳定结论，才应上浮为 `project` 级事实。
-
-### 2.4 回写必须可追溯
-
-每条事实都应尽量能追溯到：
-
-- 来源任务或来源计划
-- 结论依据
-- 生效范围
+1. when a conclusion is stable enough to become a fact
+2. where that fact should be written
+3. how to avoid promoting temporary execution noise into long-term knowledge
 
 ---
 
-## 3. 四层责任分工
+## Basic Rule
 
-### 3.1 `task` 的责任
+A conclusion should be written back as a fact only when it is:
 
-`task` 不直接定义项目级事实，但应在收口时返回：
-
-- 输出结果
-- 明确未做事项
-- 异常与阻塞
-- 新发现问题
-- 候选后续项
-
-### 3.2 `plan` 的责任
-
-`plan` 负责：
-
-- 汇总多个 `task` 的结果
-- 形成当前执行项的阶段性结论
-- 判断哪些结论应上浮给 `phase`
-
-### 3.3 `phase` 的责任
-
-`phase` 是事实回写的主要审查层，负责判断：
-
-- 是否形成当前阶段稳定事实
-- 是否需要上报 `project` 级事实
-- 是否应登记为 `skill candidate`
-- 是否应登记为 `SOP candidate`
-
-### 3.4 `project` 的责任
-
-`project` 只接收高价值、跨多个阶段持续有效的稳定事实。
+1. confirmed
+2. stable enough to matter beyond the current step
+3. likely to affect future judgment or future execution
 
 ---
 
-## 4. 哪些内容值得回写
+## Writeback Order
 
-以下内容通常值得回写：
-
-1. 已被验证成立的稳定技术结论。
-2. 已确认不可行的关键路径。
-3. 会长期影响后续判断的外部限制。
-4. 已验证可重复复用的标准案例。
-5. 会反复影响执行策略的重要边界信息。
-
-以下内容通常不应直接回写：
-
-1. 临时讨论。
-2. 一次性试验过程。
-3. 普通任务日志。
-4. 尚未确认的猜测。
-5. 只对当前一步有价值的局部中间状态。
+1. decide whether the conclusion is truly stable
+2. route it using `standards/document_routing_matrix.md`
+3. if it is a fact, write it into the correct `facts/*` document
+4. update `facts/facts_index.md`
+5. if runtime source documents changed, co-update `runtime/session_brief.md` in the same turn
 
 ---
 
-## 5. 标准回写触发点
+## Do Not Promote
 
-### 5.1 `task` 收口后
+Do not promote these into facts:
 
-允许产生候选事实，但默认不直接写成正式事实。
-
-### 5.2 `plan item` 收口后
-
-可形成当前执行项的阶段性结论，作为 `phase` 审查输入。
-
-### 5.3 `main plan` 收口后的 `Phase Review`
-
-这是事实回写的主触发点。
-
-`Phase Review` 后应判断：
-
-- 是否形成新的阶段稳定事实
-- 是否有结果应上报 `project`
-- 是否出现值得沉淀的可复用流程
-- 是否暴露值得固化的 SOP 缺口
-
-### 5.4 `phase` 完成时
-
-当前阶段完成后，应再次审查：
-
-- 哪些事实需要进入下一阶段交接
-- 哪些事实需要上浮到 `project`
-- 哪些事实已过期、需标记失效或需纠正
+- one-off temporary plans
+- raw process chatter
+- implementation noise
+- unstable hypotheses
+- current-only urgency notes
 
 ---
 
-## 6. 建议的回写分类
+## Conclusion
 
-### 6.1 项目级事实
-
-适用于：
-
-- 跨多个阶段持续有效
-- 会长期影响方向判断
-- 会显著减少重复试错
-
-### 6.2 阶段级事实
-
-适用于：
-
-- 当前阶段内已稳定成立
-- 会影响当前阶段后续执行
-- 尚不足以上升为 `project`
-
-### 6.3 标准案例
-
-适用于：
-
-- 可作为行为基准
-- 可作为验证样本
-- 可重复参考的高价值案例
-
-### 6.4 候选沉淀项
-
-适用于：
-
-- `skill candidate`
-- `SOP candidate`
-- 尚需进一步确认的准稳定结论
-
----
-
-## 7. 回写最小要求
-
-一条进入 facts 的结论至少应说明：
-
-1. 结论内容是什么。
-2. 结论依据是什么。
-3. 适用范围是什么。
-4. 来源于哪个阶段或哪轮执行。
-5. 是否为稳定结论。
-
-若这些信息说不清，通常不应立即回写为正式事实。
-
----
-
-## 8. 回写质量控制
-
-### 8.1 防止写太多
-
-若某条内容只会被看一次，就不应进入 facts。
-
-### 8.2 防止写太早
-
-若某条内容尚未验证完成，应先作为候选项保留，而不是直接固化。
-
-### 8.3 防止写错层级
-
-局部结论不应直接写成 `project` 级事实。
-
-### 8.4 防止写完不维护
-
-当 `project` 或 `phase` 纠错时，应同步审查既有事实是否过期。
-
----
-
-## 9. 与其他文档的关系
-
-- 总体结构由 `ai_project_sop.md` 定义。
-- 跨层回流关系见 `sop/core/workflow_transition_rules.md`。
-- `phase` 的标准审查动作见 `sop/core/phase_layer.md`。
-- 初始化阶段的 facts 入口建立见 `sop/processes/project_bootstrap_sop.md` 与 `sop/processes/project_init_artifacts.md`。
-
----
-
-## 10. 当前结论
-
-事实回写的核心不是“记录更多”，而是让执行结果在合适层级沉淀成后续还能持续使用的稳定判断。
-
-在新版工作流中：
-
-- `task` 负责产出结果
-- `plan` 负责汇总结果
-- `phase` 负责审查是否沉淀
-- `project` 只接收跨阶段稳定事实
+Write back only stable conclusions that will keep helping future judgment.
+Everything else should stay in execution-layer records or temporary notes.

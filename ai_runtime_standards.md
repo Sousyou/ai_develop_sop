@@ -1,141 +1,111 @@
 # AI Runtime Standards
 
-- **版本**：v1.0
-- **状态**：正式运行时标准
-- **定位**：定义当前非 `sop_develop` 项目在运行时的标准增量，并存档真实项目暴露出的标准调整项。
-- **适用范围**：对当前非 `sop_develop` 项目在运行时生效。
+- **Version**: `v2.0`
+- **Status**: official runtime standards supplement
+- **Role**: records project-specific hard standards added on top of formal standards
+- **Scope**: only non-`sop_develop` projects
 
 ---
 
-## 1. 文档目标
+## Purpose
 
-本文件用于回答以下问题：
+This file answers:
 
-1. 当前真实项目相对正式标准新增了哪些项目级标准增量。
-2. 当前项目继承了哪些正式跨项目标准。
-3. 当前真实项目运行过程中暴露了哪些标准调整项。
-4. 哪些项目级标准经验后续值得回流升级进入正式 `standards/` 层。
-
----
-
-## 2. 使用原则
-
-### 2.1 当前强制标准摘要
-
-为减少执行过程中的重复读取成本，建议先维护以下短摘要，并在进入正式执行时优先读取本节：
-
-1. 当前项目类型：
-   - `common`
-2. 当前继承的正式标准：
-   - `standards/standards_index.md`
-   - `standards/naming_conventions.md`
-   - `standards/path_conventions.md`
-   - `standards/document_writing_conventions.md`
-3. 当前额外必须立即遵守的标准增量：
-   - `当前暂无`
-
-若本节与正文不一致，应以正文为准，并在确认后优先更新本节。
-
-### 2.2 当前项目立即生效
-
-写入本文件的标准，默认对当前项目立即生效。
-
-### 2.3 先继承正式标准，再补充项目级标准增量
-
-当前项目应优先继承 `standards/` 中已经存在的正式标准；只有当正式标准不足以覆盖当前项目时，才在本文件中补充项目级标准增量。
-
-### 2.4 标准与流程分离
-
-本文件只承载标准，不承载流程。
-
-流程型要求应进入：
-
-- `ai_runtime_sop.md`
-
-### 2.5 标准与事实分离
-
-本文件只承载“应遵循什么标准”，不承载“当前项目已经发生了什么事实”。
-
-事实应进入：
-
-- `facts/*`
+1. which hard standards must take effect immediately in the current project
+2. which formal standards are inherited by default
+3. which standard gaps or upgrade candidates were exposed in runtime
 
 ---
 
-## 3. 当前项目继承的正式标准
+## Usage Principles
 
-当前项目默认应审查并按需继承以下正式标准：
+1. inherit formal `standards/*` first, then add project-only stricter standards
+2. record standard content only, not process flow
+3. items written here take effect immediately in the current project
+4. this file may tighten the baseline, but must not relax formal standards
+5. on conflict, follow: host `AGENTS.md` -> `project_entry.md` -> `standards/*` -> this file
+
+---
+
+## Formal Standards Inherited By Default
+
+Current baseline:
 
 1. `standards/standards_index.md`
 2. `standards/naming_conventions.md`
 3. `standards/path_conventions.md`
 4. `standards/document_writing_conventions.md`
-
-后续若有更多正式标准，应在本节继续追加。
-
----
-
-## 4. 当前项目相对正式标准的增量
-
-当前暂无。
-
-当项目运行过程中出现以下情况时，应在本节补充：
-
-- 正式标准不足以覆盖当前项目
-- 当前项目需要额外增加立即生效的标准
-- 当前项目需要对正式标准做项目级收缩或补充
+5. `standards/document_routing_matrix.md`
 
 ---
 
-## 5. 真实项目的标准反馈与待升级项
+## Allowed Content
 
-当前暂无。
+This file may record current-project hard constraints such as:
 
-当某项项目级标准或标准调整经验同时满足以下条件时，可进入本节：
-
-1. 已在当前项目中稳定执行。
-2. 边界清晰。
-3. 具有跨项目复用价值。
-4. 适合后续审核后升级进入 `standards/`。
+- stricter naming or path rules
+- stricter structure or interface contracts
+- project-specific directory or artifact boundaries
 
 ---
 
-## 6. 最小记录格式
+## Forbidden Content
 
-每条运行时标准建议至少包含：
+Do not write these here:
 
-1. 标准名称
-2. 标准内容
-3. 生效范围
-4. 来源
-5. 是否候选升级
+- process flow or review order
+- current phase plans or task lists
+- stable facts or product status summaries
+- long-term goals or current targets
+- product docs
 
-参考格式：
+Route them instead to:
+
+- `ai_runtime_sop.md`
+- `facts/*`
+- `runtime/project_charter.md`
+- `runtime/current_target.md`
+- product docs
+
+---
+
+## Runtime Standard Deltas
+
+Current state:
+
+- none
+
+Recommended format:
 
 ```md
 ### <standard_name>
 
-- 内容：
-- 生效范围：
-- 来源：`standards/...` 或 `runtime-only`
-- 是否候选升级：`yes / no`
+- content:
+- effective scope:
+- source: `runtime-only` / `derived-from-standards/...`
+- candidate for upgrade: `yes / no`
 ```
 
 ---
 
-## 7. 与其他文档的边界
+## Standard Feedback And Upgrade Candidates
 
-- 主规范见 `ai_project_sop.md`
-- 运行时流程见 `ai_runtime_sop.md`
-- 正式跨项目标准入口见 `standards/standards_index.md`
-- 正式跨项目标准正文见 `standards/*`
-- 事实沉淀见 `facts/*`
-- 执行护栏见 `rules/*`
+Current state:
+
+- none
+
+Promote a runtime standard only when it is:
+
+1. stable in the current project
+2. clear in boundary
+3. reusable across projects
+4. suitable for formal review into `standards/*`
 
 ---
 
-## 8. 当前结论
+## Conclusion
 
-本文件是当前非 `sop_develop` 项目运行时的标准增量与标准反馈文档。
+This file records only:
 
-它主要负责两件事：一是记录当前真实项目相对正式标准的项目级增量，二是存档真实项目暴露出的标准调整项，以便后续回流改善正式标准层；它不替代 `standards/`，也不替代流程型运行时文档。
+1. current-project hard standard deltas
+2. runtime-exposed standard upgrade candidates

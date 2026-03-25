@@ -1,174 +1,66 @@
 # Path Conventions Standard
 
-- **版本**：v1.0
-- **状态**：正式标准
-- **定位**：定义跨项目通用的目录分层、文档归位与路径引用基线。
-- **适用范围**：所有采用本 SOP 的项目；若项目存在更严格路径要求，可在 `ai_runtime_standards.md` 中补充，但不得破坏本层级职责。
+- **Version**: `v2.0`
+- **Status**: official standard
+- **Role**: defines default path and directory conventions for the SOP system
 
 ---
 
-## 1. 标准目标
+## Principles
 
-本标准用于统一以下内容：
-
-1. 目录职责划分
-2. 文档应落在哪一层
-3. 路径引用的默认写法
-4. 新增文档时的归位原则
+1. product space and SOP governance space must be distinguishable
+2. entry files must be stable and easy to locate
+3. runtime host-project state must live under `runtime/`
+4. cross-project governance assets must stay under their dedicated top-level directories
 
 ---
 
-## 2. 总体原则
+## Top-Level Governance Paths
 
-### 2.1 按职责分层，不按临时习惯堆放
+Recommended top-level paths:
 
-目录应体现职责边界，而不是仅体现“当前方便放哪里”。
-
-### 2.2 单一文档单一主归属
-
-一份文档应有明确主归属目录，不应在多个层级重复保存近似副本。
-
-### 2.3 入口少而清晰
-
-只有真正承担入口职责的文件应放在根目录，其余文档应按职责归位到对应目录。
-
-### 2.4 优先稳定引用路径
-
-一旦目录结构正式化，后续新增文档应优先复用既有路径模式，避免反复迁移。
+- `sop/`
+- `rules/`
+- `facts/`
+- `skills/`
+- `standards/`
+- `runtime/`
 
 ---
 
-## 3. 目录基线
+## Entry Paths
 
-默认目录职责如下：
-
-- 根目录：项目入口文档与极少数顶层 AI 主文档
-- `sop/core/`：层级对象定义与跨层主规则
-- `sop/processes/`：流程型 SOP
-- `sop/templates/`：模板
-- `sop/design/`：辅助设计文档
-- `rules/`：执行护栏
-- `facts/`：稳定事实
-- `skills/`：skill 相关文档
-- `standards/`：跨项目正式标准
-
----
-
-## 4. 根目录放置规则
-
-根目录只建议保留真正需要作为高频入口的文档，例如：
+Source repository entry:
 
 - `AGENTS.md`
-- `ai_project_sop.md`
-- `ai_project_type.md`
-- `ai_runtime_standards.md`
-- `ai_runtime_sop.md`
 
-除非某文件承担入口、总导航或运行时顶层实例职责，否则不应直接放在根目录。
+Injected host-project entry path:
 
-### 4.1 runtime 实例文件不默认抽目录
-
-默认情况下，不单独创建 `runtime/` 目录来放置：
-
-- `ai_runtime_sop.md`
-- `ai_runtime_standards.md`
-
-原因如下：
-
-1. 这两份文件是项目运行时实例入口，而不是普通正文附件。
-2. 它们需要被 `AGENTS.md` 与主规范直接检查与引用。
-3. 将它们保留在根目录，更符合“入口少而清晰”的原则。
-
-只有当未来 runtime 实例文件扩展为一组明显超过入口规模的运行时资产时，才考虑评估是否引入单独目录。
+- host root `AGENTS.md`
+- `project_entry.md`
+- `runtime/entry_state.md`
+- `runtime/session_brief.md`
 
 ---
 
-## 5. 文档归位规则
+## Runtime Paths
 
-### 5.1 流程型内容
+Host-project runtime instance files belong under `runtime/`.
 
-若文档回答的是“应该按什么步骤做”，应进入：
+Required runtime paths:
 
-- `sop/processes/`
+- `runtime/entry_state.md`
+- `runtime/project_mount.md`
+- `runtime/project_charter.md`
+- `runtime/current_target.md`
+- `runtime/session_brief.md`
 
-### 5.2 对象定义内容
+Templates belong under:
 
-若文档回答的是“对象是什么、状态是什么、边界是什么”，应进入：
-
-- `sop/core/`
-
-### 5.3 模板内容
-
-若文档回答的是“标准输入输出格式是什么”，应进入：
-
-- `sop/templates/`
-
-### 5.4 护栏内容
-
-若文档回答的是“执行时不能越过什么限制”，应进入：
-
-- `rules/`
-
-### 5.5 事实内容
-
-若文档回答的是“已经确认了什么稳定事实”，应进入：
-
-- `facts/`
-
-### 5.6 标准内容
-
-若文档回答的是“长期应统一遵循什么标准”，应进入：
-
-- `standards/`
-
-当前项目特有且立即生效的标准，应进入：
-
-- `ai_runtime_standards.md`
+- `runtime/templates/`
 
 ---
 
-## 6. 路径引用规则
+## Boundary Rule
 
-### 6.1 默认使用仓库相对路径
-
-在文档中引用其他文档时，默认直接写仓库内稳定相对路径，例如：
-
-- `sop/core/project_layer.md`
-- `facts/facts_index.md`
-- `standards/naming_conventions.md`
-
-### 6.2 引用时保持精确
-
-引用路径应尽量指向具体文件，而不是模糊描述某个目录。
-
-推荐：
-
-- `rules/writeback_rules.md`
-
-不推荐：
-
-- `rules/ 下相关文档`
-
-除非明确表达的是目录层级本身。
-
-### 6.3 避免历史路径残留
-
-当目录结构已经调整完成后，应同步修正文档中的旧路径引用，避免保留历史路径别名。
-
----
-
-## 7. 新增文档时的判断顺序
-
-新增文档前，建议按以下顺序判断归位：
-
-1. 这是入口文档，还是普通文档。
-2. 这是流程、定义、模板、规则、事实、标准中的哪一类。
-3. 当前已有目录是否已能承载该职责。
-4. 若已有目录可承载，则优先放入现有目录。
-5. 只有当现有目录无法表达其职责时，才考虑增加新目录。
-
----
-
-## 8. 当前结论
-
-默认情况下，项目应按“根目录少入口、正文按职责分层归位、文档间使用稳定相对路径引用”的方式组织路径体系。
+Product code and product docs should stay outside the SOP governance root unless they are intentionally SOP assets.

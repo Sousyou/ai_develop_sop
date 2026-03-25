@@ -1,57 +1,33 @@
-# Skill 文档模板
+# Skill Template
 
-- **版本**：v1.0
-- **状态**：正式模板
-- **定位**：提供统一的 skill 文档骨架。
-- **适用范围**：适用于新建或更新单个 skill 文档时的标准结构。
+Use this structure when creating a new skill document.
 
----
+```md
+# <skill_name>
 
-## 1. Skill 名称
+- version:
+- status:
+- role:
 
-待填写
+## Trigger
 
-## 2. 适用场景
+- when should this skill be used
 
-待填写
+## Inputs
 
-## 3. 输入边界
+- required inputs
 
-待填写
+## Procedure
 
-## 4. 输出边界
+1. step one
+2. step two
+3. step three
 
-待填写
+## Outputs
 
-## 5. 标准步骤
+- expected outputs
 
-1. 待填写
+## Boundaries
 
-## 6. 验证方式
-
-待填写
-
-## 7. 不适用场景
-
-- 待填写
-
----
-
-## 8. 使用要求
-
-1. 仅对已经通过 `skills/skill_policy.md` 判断的 skill 使用本模板。
-2. 模板中的输入边界、输出边界与验证方式应尽量写清晰，不应留成模糊口号。
-3. 若某项流程仍处于探索期，不应因为模板存在就提前沉淀为正式 skill。
-
----
-
-## 9. 与其他文档的关系
-
-- skill 沉淀规则见 `skills/skill_policy.md`。
-- skill 条目登记见 `skills/skill_registry.md`。
-
----
-
-## 10. 当前结论
-
-本模板用于承载已具备复用条件的 skill，而不是为所有临时做法预留模板壳子。
+- what this skill does not handle
+```

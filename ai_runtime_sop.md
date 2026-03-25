@@ -1,141 +1,113 @@
 # AI Runtime SOP
 
-- **版本**：v1.0
-- **状态**：正式运行时规范
-- **定位**：定义当前非 `sop_develop` 项目在运行时对主 SOP 的流程微调，以及存档真实项目暴露出的 SOP 调整项。
-- **适用范围**：对当前非 `sop_develop` 项目在运行时生效。
+- **Version**: `v2.0`
+- **Status**: official runtime flow supplement
+- **Role**: records project-specific runtime flow deltas relative to the master SOP
+- **Scope**: only non-`sop_develop` projects
 
 ---
 
-## 1. 文档目标
+## Purpose
 
-本文件用于回答以下问题：
+This file answers:
 
-1. 当前真实项目对主 SOP 流程做了哪些项目级微调。
-2. 这些微调为什么需要在当前项目中生效。
-3. 当前真实项目运行过程中暴露了哪些 SOP 缺口与待修订项。
-4. 哪些项目级流程经验后续值得回流以改善正式 SOP。
+1. which project-specific flow deltas are active now
+2. why those deltas must take effect immediately in the current project
+3. which SOP gaps or upgrade candidates were exposed in runtime
 
 ---
 
-## 2. 使用原则
+## Usage Principles
 
-### 2.1 当前项目运行时摘要
+1. inherit the master SOP first, then add project runtime deltas
+2. record flow-only content here, not standards
+3. record current-project runtime deltas here, not cross-project policy
+4. verify in the project first, then decide whether to upgrade into the formal SOP
+5. on conflict, follow: host `AGENTS.md` -> `project_entry.md` -> `ai_project_sop.md` -> this file
 
-为减少执行过程中的重复读取成本，建议先维护以下短摘要，并在进入正式执行时优先读取本节：
+---
 
-1. 当前项目类型：
-   - `common`
-2. 当前阶段：
-   - `当前暂无`
-3. 当前生效的流程微调：
-   - `当前暂无`
-4. 当前执行时需要额外注意的运行时限制：
-   - `当前暂无`
+## Allowed Content
 
-若本节与正文不一致，应以正文为准，并在确认后优先更新本节。
+This file may record:
 
-### 2.2 只承载流程，不承载标准
+- how external plans are accepted by default in the current project
+- extra review, validation, writeback, or closure steps required in the current project
+- temporary narrowing or supplementation of a formal flow for the current project
+- confirmed SOP gaps and runtime upgrade candidates
 
-本文件只承载流程型要求，不承载标准型要求。
+---
 
-标准型要求应进入：
+## Forbidden Content
+
+Do not write these here:
+
+- hard standards, naming rules, path rules, or format contracts
+- stable facts
+- long-term project goals or current targets
+- product architecture, API, or runtime instructions
+
+Route them instead to:
 
 - `ai_runtime_standards.md`
-
-### 2.3 只承载项目级流程微调
-
-本文件记录的是当前非 `sop_develop` 项目在运行时相对主 SOP 的项目级流程微调，而不是全局主流程定义。
-
-全局主流程仍以：
-
-- `ai_project_sop.md`
-
-为准。
-
-### 2.4 当前项目立即生效
-
-写入本文件的运行流程，默认对当前项目立即生效。
-
-### 2.5 先在项目内验证，再决定是否升级
-
-本文件中的流程要求，默认先在当前项目内验证；只有在重复验证稳定后，才进一步考虑是否升级进入正式 SOP 体系。
+- `facts/*`
+- `runtime/project_charter.md`
+- `runtime/current_target.md`
+- product docs
 
 ---
 
-## 3. 当前项目对主 SOP 的流程微调
+## Intake Rule
 
-### 3.1 微调项清单
+A flow item belongs here only when all are true:
 
-当前暂无。
-
-若后续需要补充，应至少写明：
-
-- 微调点是什么
-- 微调作用于哪一段主 SOP
-- 为什么当前项目需要这项微调
-- 微调后的执行方式
-- 退出或升级条件是什么
-
-建议每条至少包含：
-
-1. 微调名称
-2. 作用范围
-3. 触发条件
-4. 微调内容
-5. 当前项目采用原因
-6. 是否候选回流到正式 SOP
+1. it is a process rule, not a standard
+2. it is currently valid for this project
+3. it changes execution order, review order, or writeback behavior now
+4. without writing it down, the project workflow would drift or become unstable
 
 ---
 
-## 4. 真实项目的 SOP 反馈与待修订项
+## Runtime Flow Deltas
 
-### 4.1 已确认的 SOP 缺口
+Current state:
 
-当前暂无。
+- none
 
-### 4.2 候选修订项
+Recommended delta format:
 
-当前暂无。
+```md
+### <delta_name>
 
-建议每条至少包含：
-
-1. 问题描述
-2. 暴露场景
-3. 当前临时处置方式
-4. 是否具备跨项目价值
-
----
-
-## 5. 建议最小骨架
-
-为保证本文件可以稳定承担“流程微调记录”和“SOP 反馈存档”这两类职责，建议至少具备以下内容：
-
-1. 明确的文档定位与适用范围。
-2. “当前项目对主 SOP 的流程微调”章节。
-3. “真实项目的 SOP 反馈与待修订项”章节。
-4. 与 `ai_project_sop.md`、`ai_runtime_standards.md` 的边界说明。
-
-若当前项目暂时没有额外流程，也必须显式写出：
-
-- `当前暂无`
-
-而不是留空。
+- scope:
+- trigger:
+- flow change:
+- why this project uses it:
+- exit or upgrade condition:
+- candidate for formal SOP: `yes / no`
+```
 
 ---
 
-## 6. 与其他文档的关系
+## SOP Feedback And Upgrade Candidates
 
-- 主工作流总导航见 `ai_project_sop.md`。
-- 项目运行时标准见 `ai_runtime_standards.md`。
-- 正式跨项目标准见 `standards/standards_index.md`。
-- 稳定事实沉淀见 `facts/*`。
-- 执行护栏见 `rules/*`。
+Current state:
+
+- confirmed SOP gaps: none
+- candidate upgrade items: none
+
+Suggested fields:
+
+1. issue description
+2. exposure scenario
+3. current temporary handling
+4. whether it has cross-project value
 
 ---
 
-## 7. 当前结论
+## Conclusion
 
-本文件是当前非 `sop_develop` 项目的流程型运行时补充入口。
+This file records only two things:
 
-它主要负责两件事：一是记录当前真实项目对主 SOP 的流程微调，二是存档当前真实项目暴露出的 SOP 调整项，以便后续回流改善正式 SOP；它不是全局主 SOP，也不替代运行时标准文档。
+1. current-project flow deltas
+2. runtime-exposed SOP upgrade candidates

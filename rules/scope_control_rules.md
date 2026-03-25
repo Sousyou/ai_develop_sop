@@ -1,59 +1,15 @@
-# Scope 控制规则
+# Scope Control Rules
 
-- **版本**：v2.0
-- **状态**：正式规则
-- **定位**：约束 AI 在 `project / phase / plan / task` 工作流中不扩 scope、不顺手重构、不越层决策。
-- **适用范围**：适用于执行过程中对范围漂移、顺手扩展与越层决策的默认限制。
-
----
-
-## 1. 核心原则
-
-1. 不在当前 `task` 内顺手扩展到下一问题。
-2. 不在当前 `plan` 未批准时私自改变执行主线。
-3. 不在当前 `phase` 未审查时私自扩大阶段边界。
-4. 不因“以后可能有用”而提前平台化、抽象化。
-
-## 2. 默认禁止事项
-
-以下行为默认禁止：
-
-1. 在当前目标外顺手新增不相关目标。
-2. 因“更优雅”引入额外重构。
-3. 为未来可能需求预埋复杂抽象。
-4. 让 `task` 在完成后继续沿局部自然深入。
-5. 让 `sub plan` 修改未授权对象或扩大影响面。
-
-## 3. 默认处理方式
-
-- 发现相邻问题但不属于当前边界时，记录为候选后续项。
-- 发现结构性问题但当前层级不适合处理时，返回上一级决策。
-- 发现阶段边界失真时，转入 `sop/processes/maintenance_recovery_sop.md`。
-
-## 4. 例外条件
-
-只有在以下情况下可以突破默认 scope：
-
-1. 用户明确要求扩大范围。
-2. 当前问题与核心目标存在直接阻塞关系。
-3. 当前 `phase` 或 `main plan` 已正式重定义边界。
-
-## 5. 硬规则
-
-1. `task` 完成后必须先回到所属 `plan`。
-2. `plan` 不能直接改写 `phase` 边界。
-3. `phase` 进入 `active` 后，边界默认锁定。
+- **Version**: `v2.0`
+- **Status**: official rule
+- **Role**: prevents silent scope expansion during execution
 
 ---
 
-## 6. 与其他文档的关系
+## Default Rules
 
-- 总体边界定义见 `rules/boundaries_rules.md`。
-- 默认执行顺序见 `rules/workflow_rules.md`。
-- 若 scope 已明显失控，转入 `sop/processes/maintenance_recovery_sop.md`。
-
----
-
-## 7. 当前结论
-
-默认情况下，AI 应优先保持当前层级范围稳定，所有新增问题都应先回到上层判断，而不是在当前执行对象内自然蔓延。
+1. every concrete task must have explicit non-goals
+2. if a request exceeds the current phase, plan, or task boundary, do not absorb it silently
+3. phase-level changes must go through phase control, not task-level improvisation
+4. long-term goal changes belong to `project_charter`, not to ad-hoc execution notes
+5. if scope drift is discovered, correct it before continuing deeper execution

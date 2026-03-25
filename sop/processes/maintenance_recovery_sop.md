@@ -1,240 +1,47 @@
-# 维护与恢复 SOP
+# Maintenance Recovery SOP
 
-- **版本**：v2.0
-- **状态**：正式版
-- **定位**：定义项目在执行失稳、结论失效、边界漂移或事实错误时，如何进行纠错、冻结、恢复和重新进入主线。
-- **适用范围**：后续所有使用新版工作流推进的工程项目。
-
----
-
-## 1. 文档目标
-
-本 SOP 用于回答以下问题：
-
-1. 哪些情况属于需要恢复或纠错的信号。
-2. 应在 `task`、`plan`、`phase`、`project` 哪一层处理问题。
-3. 如何在不扩大损害面的前提下恢复主线。
+- **Version**: `v2.0`
+- **Status**: official
+- **Role**: defines how to recover when execution or governance drifts
 
 ---
 
-## 2. 维护与恢复总原则
+## Trigger Conditions
 
-### 2.1 先止损，再继续推进
+Enter recovery when any of these happen:
 
-发现异常后，优先停止错误扩散，而不是继续顺手做更多事情。
-
-### 2.2 在最小必要层级处理
-
-优先在最低可控层级修复：
-
-- 能在 `task` 修，就不要上升到 `plan`
-- 能在 `plan` 修，就不要直接改 `phase`
-- 能在 `phase` 修，就不要直接改 `project`
-
-### 2.3 恢复不是重新开始一切
-
-恢复的目标是把系统拉回可控主线，而不是默认推翻全部历史。
-
-### 2.4 恢复后必须重新收口
-
-任何恢复动作完成后，都必须明确当前状态、当前边界和下一步归属。
+1. scope drift becomes obvious
+2. the current mainline no longer makes sense
+3. facts and implementation conflict
+4. the entry understanding is stale or wrong
+5. runtime deltas or standards are no longer aligned with reality
 
 ---
 
-## 3. 常见恢复触发器
+## Recovery Order
 
-以下情况通常应进入维护或恢复流程：
-
-1. 当前 `task` 已超出原边界。
-2. 当前 `main plan` 已不再适配当前阶段目标。
-3. 当前阶段定义被后续信息证明失真。
-4. 已沉淀的事实被证明错误、过期或不再适用。
-5. `project` 修改后，现有阶段和执行主线不再成立。
-6. 执行陷入重复返工、重复试错或持续 blocked。
+1. identify the drift type
+2. stop silent forward expansion
+3. correct the highest wrong layer first
+4. re-establish the active current phase and active main plan
+5. update facts, runtime docs, rules, or standards if needed
+6. return to normal execution only after alignment is restored
 
 ---
 
-## 4. 四层恢复责任
+## Layer Priority
 
-### 4.1 `task` 层恢复
+Correct from higher authority to lower authority:
 
-适用于：
-
-- 单次实现出错
-- 单次验证失败
-- 单次改动需要回滚或修正
-
-标准动作包括：
-
-- `blocked`
-- `review_pending`
-- `rolled_back`
-- `cancelled`
-
-### 4.2 `plan` 层恢复
-
-适用于：
-
-- 当前 `plan item` 顺序失效
-- 当前项需要改为 review、阻塞、延期或回滚
-- 当前 `main plan` 需要冻结、取消或重建
-
-### 4.3 `phase` 层恢复
-
-适用于：
-
-- 当前阶段边界失真
-- `project` 修改已影响当前阶段
-- 执行结果显示当前阶段目标或退出条件需要纠错
-
-标准动作包括：
-
-- `correct phase`
-- `retry current path`
-- `rebuild main plan`
-- `pause phase`
-- `raise to project`
-
-### 4.4 `project` 层恢复
-
-适用于：
-
-- 最终目标变化
-- 长期边界变化
-- 顶层约束变化
-- 原有全局事实失效
+1. source or host entry understanding
+2. project / project charter
+3. current phase / current target
+4. main plan
+5. task
 
 ---
 
-## 5. 标准恢复流程
+## Conclusion
 
-### 5.1 识别问题
-
-先明确问题属于哪类：
-
-- 结果错误
-- 边界漂移
-- 主线失效
-- 事实失效
-- 上层目标变化
-
-### 5.2 确定处置层级
-
-根据影响面判断应在：
-
-- `task`
-- `plan`
-- `phase`
-- `project`
-
-哪一层处理。
-
-### 5.3 执行止损动作
-
-例如：
-
-- 停止当前 `task`
-- 阻塞当前 `plan item`
-- 冻结当前 `main plan`
-- 将当前 `phase` 置为 `blocked` 或 `correcting`
-
-### 5.4 进行纠错或重建
-
-根据问题类型选择：
-
-- 回滚单次结果
-- 修正执行顺序
-- 重建 `main plan`
-- 纠正当前 `phase`
-- 上升到 `project`
-
-### 5.5 重新确认主线
-
-恢复完成后，必须明确：
-
-- 当前生效的边界是什么
-- 当前状态是什么
-- 下一步由哪一层继续推进
-
----
-
-## 6. 典型场景
-
-### 6.1 `task` 越界
-
-处置：
-
-- 当前 `task` 立即收口
-- 将新发现内容标记为候选后续项
-- 返回 `plan` 决定下一步
-
-### 6.2 `main plan` 失效
-
-处置：
-
-- 冻结或取消当前 `main plan`
-- 由 `phase` 判断是否重建主线
-- 不允许旧主线继续惯性推进
-
-### 6.3 当前阶段定义失真
-
-处置：
-
-- 当前 `phase` 进入 `correcting`
-- 修正阶段目标、边界、退出条件或阶段结论
-- 再决定是否重回 `ready` 或 `active`
-
-### 6.4 已沉淀事实错误
-
-处置：
-
-- 标记事实需纠正、失效或替代
-- 记录纠正依据
-- 如影响跨阶段判断，则同步上浮
-
-### 6.5 `project` 修改打穿当前阶段
-
-处置：
-
-- 当前 `phase` 必须先审阅
-- 若需要调整，则先做阶段纠错
-- 必要时重建 `main plan`
-
----
-
-## 7. 恢复后的最小记录要求
-
-每次维护或恢复至少应记录：
-
-1. 出现了什么问题。
-2. 问题影响到哪一层。
-3. 采取了什么止损动作。
-4. 当前状态如何变化。
-5. 后续由谁继续推进。
-
-若存在事实纠错，还应补充：
-
-6. 原结论为何失效。
-7. 新结论是否已稳定成立。
-
----
-
-## 8. 与其他文档的关系
-
-- 执行层状态设计见 `sop/design/main_plan_state_design.md`。
-- 跨层恢复与回流规则见 `sop/core/workflow_transition_rules.md`。
-- 当前阶段治理与纠错动作见 `sop/core/phase_layer.md`。
-- 事实修正与回写关系见 `sop/processes/fact_writeback_sop.md`。
-
----
-
-## 9. 当前结论
-
-维护与恢复的核心不是“继续把事情做下去”，而是在发现失稳时，把问题拉回到正确层级，用最小必要动作重新建立可控主线。
-
-在新版工作流中：
-
-- `task` 负责最小回滚和最小收口
-- `plan` 负责主线修复和重排
-- `phase` 负责阶段纠错与主线重建
-- `project` 负责最终方向与长期事实修正
+Recovery is not a side note.
+When drift is real, correction comes before further execution.

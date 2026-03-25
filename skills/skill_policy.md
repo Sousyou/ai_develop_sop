@@ -1,51 +1,28 @@
-# Skill 沉淀规则
+# Skill Policy
 
-- **版本**：v1.0
-- **状态**：正式规则
-- **定位**：定义什么情况下允许将重复流程沉淀为 skill，以及 skill 文档应如何进入项目体系。
-- **适用范围**：适用于 skill 的识别、判断、登记与新增文档动作。
-
----
-
-## 1. 沉淀目标
-
-将重复出现、输入输出边界稳定、验证方式清晰的流程，升级为可复用的 skill。
-
-## 2. 允许沉淀的条件
-
-以下条件应尽量同时满足：
-
-1. 同类任务重复出现
-2. 输入输出边界稳定
-3. 执行步骤稳定
-4. 验证方式清晰
-5. 已具有明确复用价值
-
-## 3. 不宜沉淀的情况
-
-- 仍处于探索期
-- 仅出现一次
-- 依赖过多临时上下文
-- 验证标准不清晰
-
-## 4. 沉淀动作
-
-达到条件后，应至少：
-
-1. 在 `skills/skill_registry.md` 中登记
-2. 按 `skills/skill_template.md` 创建或更新 skill 文档
-3. 明确该 skill 的适用场景与边界
+- **Version**: `v2.0`
+- **Status**: official policy
+- **Role**: defines when a repeated workflow should be promoted into a skill
 
 ---
 
-## 5. 与其他文档的关系
+## Promotion Criteria
 
-- skill 登记入口见 `skills/skill_registry.md`。
-- skill 文档骨架见 `skills/skill_template.md`。
-- 执行结束后的回写判断见 `rules/writeback_rules.md`。
+A workflow should be considered for skill promotion only when it is:
+
+1. repeated
+2. stable in boundary
+3. clear in inputs and outputs
+4. testable or reviewable
+5. valuable across multiple future uses
 
 ---
 
-## 6. 当前结论
+## Non-Criteria
 
-只有当某类流程已重复出现、边界稳定、步骤稳定且可验证时，才应升级为 skill，而不是过早沉淀探索性流程。
+Do not promote a workflow into a skill when it is:
+
+- still changing heavily
+- project-specific with no reuse value
+- vague in trigger or closure conditions
+- only a one-off convenience pattern

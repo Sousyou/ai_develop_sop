@@ -1,54 +1,21 @@
 # Golden Cases
 
-- **版本**：v2.0
-- **状态**：正式事实文档
-- **定位**：记录可复用的关键验证样例、关键行为判断标准和典型输入输出。
-- **适用范围**：适用于需要长期复用的关键验证样例和行为判断基线。
+- **Version**: `v2.0`
+- **Status**: active fact entry
+- **Role**: stores stable high-value examples, reference cases, or validated patterns
 
 ---
 
-## 1. 使用原则
+## Current State
 
-- 仅记录稳定、可复用、能支撑后续验证的关键样例。
-- 不记录一次性调试样例或未确认结果。
-- 优先记录会长期影响验证判断的样例。
-
-## 2. 样例模板
-
-### 2.1 样例名称
-
-待填写
-
-### 2.2 适用场景
-
-待填写
-
-### 2.3 输入
-
-待填写
-
-### 2.4 期望输出
-
-待填写
-
-### 2.5 判断标准
-
-待填写
-
-### 2.6 来源
-
-待填写
+- none
 
 ---
 
-## 3. 与其他文档的关系
+## Intake Rule
 
-- 验证规则见 `rules/validation_rules.md`。
-- facts 层入口见 `facts/facts_index.md`。
-- 若样例已成为阶段或项目级稳定事实，也应同步审查是否影响其他 facts 文档。
+A case belongs here only when it is:
 
----
-
-## 4. 当前结论
-
-本文件只记录稳定、可复用、可支撑后续验证判断的关键样例，不记录一次性调试输入或未确认结果。
+1. stable enough to reuse
+2. concrete enough to teach a pattern
+3. likely to matter again in later judgment or execution

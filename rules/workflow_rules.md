@@ -1,44 +1,25 @@
-# 执行顺序规则
+# Workflow Rules
 
-- **版本**：v2.0
-- **状态**：正式规则
-- **定位**：固定新版工作流中的默认推进顺序，避免跳步、倒序或边做边漂移。
-- **适用范围**：适用于 `project / phase / plan / task` 工作流中的默认执行顺序控制。
-
----
-
-## 1. 适用范围
-
-本规则适用于项目初始化后的所有阶段执行、文档更新、维护和纠偏任务。
-
-## 2. 默认推进顺序
-
-AI 执行时，应默认遵循以下顺序：
-
-1. 对齐当前 `project` 与当前 `phase`。
-2. 明确当前 `plan item` 或当前 `task` 目标。
-3. 明确 in-scope / out-of-scope。
-4. 明确完成标准与验证方式。
-5. 在边界内完成最小执行。
-6. 执行验证与 review。
-7. 将结果回流到所属 `plan`。
-8. 由 `plan` 或 `phase` 决定下一步。
-9. 检查是否需要 facts / rules / SOP / skill 回写。
-
-## 3. 规则要求
-
-1. 不得在目标、范围和验证方式未清晰前直接进入实现。
-2. `task` 完成后不得自动开始下一个 `task`。
-3. 若执行中发现当前顺序不足以支撑问题，应显式进入恢复或流程改进判断。
-
-## 4. 与其他文档的关系
-
-- 任务最小执行单元定义见 `sop/core/task_layer.md`。
-- 跨层回流关系见 `sop/core/workflow_transition_rules.md`。
-- 若当前执行存在明显偏移，转入 `sop/processes/maintenance_recovery_sop.md`。
+- **Version**: `v2.0`
+- **Status**: official rule
+- **Role**: fixes the default execution order of the SOP workflow
 
 ---
 
-## 5. 当前结论
+## Default Order
 
-默认情况下，AI 应按“先对齐目标与边界，再执行与验证，最后回流与回写”的顺序推进，而不是在局部实现中持续下钻。
+1. align the current `project` and `phase`
+2. define the current `plan item` or `task` goal
+3. define in-scope and out-of-scope
+4. define completion and validation
+5. execute the minimum closed loop
+6. run validation or review
+7. return the result to the owning `plan`
+8. let `plan` or `phase` decide the next step
+9. check writeback for facts, rules, SOP, standards, and skills
+
+## Rules
+
+1. do not start implementation before goal, boundary, and validation are clear
+2. do not auto-start the next task after finishing one task
+3. if this order no longer fits the real problem, enter recovery or process-improvement handling explicitly

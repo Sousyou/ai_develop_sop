@@ -1,214 +1,76 @@
-# Project Type 定义与参考
+# Project Type Registry
 
-- **版本**：v1.0
-- **状态**：正式参考
-- **定位**：定义当前项目支持的项目类型、入口行为差异与后续可扩展的基础配置参考。
-- **适用范围**：配合 `AGENTS.md` 使用，作为项目入口分流依据。
-
----
-
-## 1. 文档目标
-
-本文件用于回答以下问题：
-
-1. 当前项目支持哪些 `project_type`。
-2. 不同项目类型分别意味着什么。
-3. AI 在不同项目类型下应进入哪条工作流。
-4. 后续若扩展更多项目类型，应参考什么结构。
+- **Version**: `v2.0`
+- **Status**: official
+- **Role**: defines supported `project_type` values only
 
 ---
 
-## 2. 当前支持的项目类型
+## Purpose
 
-当前第一版支持以下类型：
+This file is the registry for valid `project_type` values.
+It answers only:
 
-1. `sop_develop`
-2. `common`
+1. which values are supported
+2. what each value means
+3. which entry contract each value should follow by default
 
----
+It does not define:
 
-## 3. `sop_develop`
+- how project type is selected
+- where project type is written back
+- which file is authoritative in a concrete project instance
 
-### 3.1 含义
+Those responsibilities belong to:
 
-表示当前项目主要用于：
-
-- 制定 SOP
-- 修改 SOP
-- 维护规则层
-- 维护模板层
-- 维护 facts / skill 体系定义
-
-### 3.2 AI 的默认行为
-
-在该类型下，AI 应：
-
-1. 将当前项目视为方法论和治理体系工程。
-2. 以 `ai_project_sop.md` 作为总导航。
-3. 进入对应的定义文档、模板文档、规则文档和 facts 文档进行维护。
-4. 不要求存在 `ai_runtime_sop.md`。
-
-### 3.3 适用示例
-
-- 当前 `f:\ai_develop_sop` 仓库
-- 新 SOP 设计项目
-- 规则和模板体系维护项目
+- `AGENTS.md` for the SOP engine source repository
+- `project_entry.md` for injected host projects
 
 ---
 
-## 4. `common`
+## Supported Values
 
-### 4.1 含义
+### `sop_develop`
 
-表示当前项目已经开始使用这套 SOP 推进通用工程开发。
+Meaning:
 
-### 4.2 AI 的默认行为
+- the repository primarily designs, revises, or maintains the SOP itself
+- the repository works on rules, templates, facts, skills, and governance evolution
 
-在该类型下，AI 应：
+Default entry contract:
 
-1. 先以 `ai_project_sop.md` 建立工作流理解。
-2. 先读取 `ai_runtime_sop.md` 与 `ai_runtime_standards.md`，理解当前项目运行时补充。
-3. 然后进入 `project / phase / plan / task` 的正式执行。
+- use `AGENTS.md`
+- continue into `ai_project_sop.md`
 
-### 4.3 适用示例
+### `common`
 
-- 正在开发中的产品项目
-- 正在按阶段推进的工程项目
-- 已经进入正式执行和回写循环的仓库
+Meaning:
 
----
+- the repository is a normal product or engineering project using this SOP for execution
 
-## 5. 项目类型选择规则
+Default entry contract:
 
-当 `AGENTS.md` 中：
+- use `project_entry.md`
+- use `ai_project_quickstart.md` as the low-token runtime contract
 
-- `project_type == None`
+Initialization note:
 
-表示当前项目尚未完成类型判定。
-
-此时 AI 只能：
-
-1. 请求用户选择项目类型。
-2. 解释各类型的区别。
-3. 等待用户确认后再进入正式工作流。
-4. 在用户确认后，自动改写 `AGENTS.md` 中的 `project_type` 字段。
-
-此时 AI 不应：
-
-1. 直接进入开发。
-2. 直接进入正式分析。
-3. 直接进入 `common` 项目的正式工作流，除非用户明确选择 `common`。
-
-### 5.1 自动回写要求
-
-当用户完成项目类型选择后：
-
-1. AI 必须立即将选择结果写回 `AGENTS.md`。
-2. AI 必须同步写回最小入口审计字段：
-   - `project_type_selected_at`
-3. 若用户确认的项目类型不是 `sop_develop`，且仓库根目录存在 `README.md`，AI 必须在写回完成后立即删除该文件。
-4. 写回完成前，项目类型判定不视为真正完成。
-5. 后续正式工作流必须以写回后的 `AGENTS.md` 为基准。
-
-### 5.2 最小入口审计建议
-
-项目类型选择建议至少记录以下信息：
-
-1. 当前 `project_type`
-2. 选择时间戳
-
-这组字段的目标不是记录完整日志，而是记录入口判定的最小可追溯信息。
-
-`project_type_selected_at` 应统一使用 `ISO 8601 with timezone` 时间戳格式，例如：
-
-- `2026-03-23T12:58:24+08:00`
+- for a newly injected project, `ai_sop_init.bat` initializes the host project directly as `common`
 
 ---
 
-## 6. 新增类型的标准格式
+## Extension Rule
 
-后续如需扩展新的 `project_type`，每个新类型都应按统一格式补充，至少包含以下字段：
+When adding a new `project_type`, add:
 
-1. 类型名称
-2. 类型含义
-3. AI 的默认行为
-4. 适用示例
-5. 是否要求 `ai_runtime_sop.md`
-6. 默认应进入哪些主文档
-7. 禁止误入的工作流
-
-建议使用以下结构：
-
-```md
-## <type_name>
-
-### <number>.1 含义
-
-说明该类型代表什么项目。
-
-### <number>.2 AI 的默认行为
-
-1. AI 进入项目后的第一动作
-2. 需要优先读取哪些文档
-3. 该类型下允许进入哪条正式工作流
-
-### <number>.3 适用示例
-
-- 示例项目 A
-- 示例项目 B
-```
-
-新增类型后，还应同步完成以下动作：
-
-1. 将新类型加入本文件“当前支持的项目类型”列表。
-2. 确保 `AGENTS.md` 继续从本文件读取类型，而不是内嵌固定枚举。
-3. 若新类型引入新的入口文件或前置条件，也应在本文件中写明。
+1. the type name
+2. its meaning
+3. its default entry contract
+4. typical examples
+5. any extra runtime requirements
 
 ---
 
-## 7. 可扩展基础配置参考
+## Conclusion
 
-后续若希望把 `project_type` 扩展为更完整的项目入口配置，可继续补充类似字段：
-
-- `project_type`
-- `runtime_required`
-- `runtime_entry_file`
-- `primary_sop_entry`
-- `facts_enabled`
-- `skill_enabled`
-
-当前版本先只正式使用：
-
-- `project_type`
-
-当前已建议同步维护的最小入口审计字段包括：
-
-- `project_type_selected_at`
-
-### 7.1 入口字段扩展规范
-
-若后续需要在 `AGENTS.md` 中增加新的入口字段，建议同时遵守以下规范：
-
-1. 新字段应放在 `AGENTS.md` 的“当前项目入口配置”区块。
-2. 新字段应使用单行格式：
-   - `- `<field_name>`: `<value>``
-3. 字段名应统一使用小写下划线风格。
-4. 新字段应支持以 `None` 作为清空后的还原值。
-5. 新字段的设计应保证 `ai_sop_clear.bat` 无需额外定制即可统一重置。
-
----
-
-## 8. 与其他文档的关系
-
-- 项目入口门见 `AGENTS.md`。
-- 主工作流总导航见 `ai_project_sop.md`。
-- 非 `sop_develop` 项目的流程型运行时补充见 `ai_runtime_sop.md`。
-- 非 `sop_develop` 项目的标准型运行时补充见 `ai_runtime_standards.md`。
-
----
-
-## 9. 当前结论
-
-`project_type` 的作用不是记录项目内容，而是决定 AI 进入项目后的第一条工作流。
-
-它是运行入口分流字段，不是执行层字段。
+This file is a registry, not an instance-state protocol.

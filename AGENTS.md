@@ -1,189 +1,87 @@
 # AGENTS
 
-- **版本**：v1.0
-- **状态**：正式入口
-- **定位**：本文件是 AI 进入当前项目后的第一入口，用于决定是否可以进入正式工作流。
-- **适用范围**：当前仓库内的所有 AI 工作会话。
+- **Version**: `v2.0`
+- **Status**: official entry
+- **Role**: fixed entry for the `ai_develop_sop` source repository itself
+- **Scope**: only this repository: `f:\ai_develop_sop`
 
 ---
 
-## 1. 文档目标
+## Purpose
 
-本文件用于回答以下问题：
+This file answers only:
 
-1. AI 进入当前项目后的第一步应该做什么。
-2. 当前项目属于哪种 `project_type`。
-3. 在不同项目类型下，应进入哪条正式工作流。
-
----
-
-## 2. 第一优先级规则
-
-AI 进入当前项目后，必须先读取本文件。
-
-在未通过本文件完成入口判定前，不允许直接进入：
-
-- 正式开发
-- 正式分析
-- 正式修改
-- 正式执行回答
-
-AI 只允许先完成“项目类型判定”。
+1. how this repository should be classified
+2. how this source repository differs from an injected host project
+3. where AI should continue after recognizing this repository
 
 ---
 
-## 3. 当前项目入口配置
+## Fixed Entry Result
 
-- `project_type`: `None`
-- `project_type_selected_at`: `None`
+This repository is fixed as:
 
-### 3.1 入口字段新增规范
+- `repository_role`: `sop_engine_source`
+- `project_type_behavior`: `fixed_sop_develop`
 
-后续若需要新增入口字段，必须同时满足以下要求：
+This means:
 
-1. 只能新增在“当前项目入口配置”区块内。
-2. 每个字段必须单独占一行。
-3. 必须使用统一格式：
-   - `- `<field_name>`: `<value>``
-4. `field_name` 应统一使用小写下划线风格。
-5. 所有入口字段都必须支持以 `None` 作为清空后的还原值。
-6. 若新增入口字段，则 `ai_sop_clear.bat` 应无需修改即可完成重置。
-
-这条规范的目标是确保：
-
-- 入口字段可读
-- 入口字段可自动回写
-- 入口字段可通过批处理统一还原到初始 SOP 状态
-
-项目类型的可选值、定义与扩展格式统一以 `ai_project_type.md` 为准。
+1. this repository always follows the `sop_develop` path
+2. this file does not handle project-type selection or host runtime state
+3. this repository does not use `runtime/entry_state.md` as its own entry state
 
 ---
 
-## 4. 项目类型判定规则
+## First-Priority Rule
 
-当 `project_type == None` 时，AI 必须立即暂停正式工作流，并执行以下动作：
+AI must read this file first when entering this repository.
 
-1. 明确告知当前项目尚未完成项目类型选择。
-2. 先读取 `ai_project_type.md` 中当前支持的项目类型。
-3. 请求用户从 `ai_project_type.md` 中定义的可选类型里选择当前项目类型。
-4. 在用户未完成选择前，不回答与正式开发、正式分析、正式修改相关的问题。
-5. 仅允许回答与“项目类型选择”本身直接相关的问题。
-6. 当用户完成选择后，必须自动改写本文件中的项目类型相关字段。
-7. 在项目类型相关字段完成写回前，不视为项目类型判定真正完成。
+Before confirming that this repository is the SOP engine source repository, AI must not jump into formal editing, analysis, or maintenance work.
 
-允许回答的内容仅包括：
+After confirmation, continue through:
 
-- 当前为何需要先选择项目类型
-- 各项目类型的区别
-- 选择后将进入哪条工作流
-
-### 4.1 类型选择后的自动回写规则
-
-当用户已明确选择项目类型时，AI 必须立即执行以下动作：
-
-1. 将 `AGENTS.md` 中的 `project_type` 改写为用户确认值。
-2. 同步写回最小入口审计信息：
-   - `project_type_selected_at`
-3. 若用户确认的项目类型不是 `sop_develop`，且仓库根目录存在 `README.md`，则应在完成类型写回后立即删除该文件。
-4. 以写回后的 `AGENTS.md` 作为后续工作流入口基准。
-5. 只有写回完成后，才允许进入对应的正式工作流。
-
-若用户后续重新指定项目类型，也应按同样规则再次改写 `AGENTS.md`。
-
-### 4.2 最小入口审计字段
-
-`AGENTS.md` 中的项目类型选择至少应记录以下字段：
-
-1. `project_type`
-2. `project_type_selected_at`
-
-这些字段用于回答：
-
-- 当前项目类型是什么
-- 是在什么时间戳确认的
-
-`project_type_selected_at` 应统一使用 `ISO 8601 with timezone` 时间戳格式，例如：
-
-- `2026-03-23T12:58:24+08:00`
+1. `ai_project_sop.md`
+2. the corresponding definitions, rules, facts, standards, templates, and child SOPs
 
 ---
 
-## 5. 进入 `sop_develop` 的规则
+## Boundary Against Injected Projects
 
-当 `project_type == sop_develop` 时，AI 应将当前项目视为：
+When `ai_develop_sop/` is injected into another repository:
 
-- SOP 制定项目
-- SOP 修改项目
-- 规则、模板、facts、skill 体系维护项目
+1. the host-project root `AGENTS.md` only bootstraps AI into `project_entry.md`
+2. host-project runtime state is defined by the host-project file `runtime/entry_state.md`
+3. the host low-token digest is defined by the host-project file `runtime/session_brief.md`
+4. host-project type selection and writeback are handled by `project_entry.md`, not by this file
 
-在该模式下：
+In short:
 
-1. 先以 `ai_project_sop.md` 作为总导航。
-2. 按 `ai_project_sop.md` 中定义的文档体系推进工作。
-3. 不要求存在 `ai_runtime_sop.md`。
-4. 不要求存在 `ai_runtime_standards.md`。
-5. 不将当前项目视为 `common` 类型的正式项目。
+- this file serves only the SOP engine source repository
+- injected host projects use `project_entry.md + runtime/*`
 
 ---
 
-## 6. 进入 `common` 的规则
+## Default Behavior In This Repository
 
-当 `project_type == common` 时，AI 应将当前项目视为已经开始使用 SOP 推进的正式项目。
+AI should treat this repository as:
 
-这意味着当前项目不再属于 `sop_develop`，而应进入通用项目开发路径。
-
-在该模式下，AI 必须按以下顺序执行：
-
-1. 先进入 `ai_project_sop.md`，并以其作为主规范文档。
-2. 先读取 `ai_runtime_sop.md` 与 `ai_runtime_standards.md`，建立当前项目运行时补充理解。
-3. 再按 `ai_project_sop.md` 中定义的读取链路进入正式工作流。
-4. 在真实项目运行过程中，将项目级新增流程与 SOP 待修改项沉淀到 `ai_runtime_sop.md`。
-5. 在真实项目运行过程中，将当前项目新增且必须遵循的标准沉淀到 `ai_runtime_standards.md`。
+1. an SOP design and maintenance repository
+2. a governance-system repository for rules, templates, facts, skills, and standards
+3. not a `common` host-project instance
 
 ---
 
-## 7. 与 `ai_project_sop.md` 的关系
+## Related Documents
 
-无论项目类型为何，只要进入正式工作流，AI 都应以 `ai_project_sop.md` 为总导航。
-
-默认使用顺序为：
-
-1. `AGENTS.md`
-2. 项目类型判定
-3. `ai_project_sop.md`
-4. 进入对应层级定义、模板、facts、rules、standards 与子 SOP
+- project type registry: `ai_project_type.md`
+- master navigation: `ai_project_sop.md`
+- injected-project entry: `project_entry.md`
+- injected-project instance entry: host-project `runtime/entry_state.md`
+- injected-project low-token digest: host-project `runtime/session_brief.md`
 
 ---
 
-## 8. 当前最小执行要求
+## Conclusion
 
-在正式进入工作流后，AI 仍应遵守以下要求：
-
-1. 先明确边界，再进入实现。
-2. 先明确验证，再推进执行。
-3. 稳定事实必须回写。
-4. 发现漂移必须先纠偏。
-5. 不同类型信息必须写入对应文档层级。
-
-这些要求的正式定义以 `ai_project_sop.md` 为准。
-
----
-
-## 9. 与其他文档的关系
-
-- 项目类型定义见 `ai_project_type.md`。
-- 主工作流与总导航见 `ai_project_sop.md`。
-- 非 `sop_develop` 项目的流程型运行时补充见 `ai_runtime_sop.md`。
-- 非 `sop_develop` 项目的标准型运行时补充见 `ai_runtime_standards.md`。
-
----
-
-## 10. 当前结论
-
-本文件当前只承担“项目入口门”的职责。
-
-它的第一目标不是指导具体开发细节，而是确保 AI 在进入项目后：
-
-1. 先判断当前项目属于哪种类型。
-2. 在项目类型未判定前，不进入正式工作流。
-3. 在项目类型已判定后，再进入正确的 SOP 路径。
+This file is only the source-repository entry gate.
+It does not store writable host-project `project_type` fields and does not handle injected-project type-selection protocol.

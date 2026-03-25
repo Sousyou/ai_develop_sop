@@ -1,52 +1,15 @@
-# 验证规则
+# Validation Rules
 
-- **版本**：v2.0
-- **状态**：正式规则
-- **定位**：固定“先定义完成标准与验证方式，再进入执行”的基本要求。
-- **适用范围**：适用于 `task`、`plan item` 与 `phase` 的完成判定和验证设计。
-
----
-
-## 1. 核心原则
-
-任何进入执行的项，都必须先明确完成判定方式。
-
-## 2. 验证至少要回答什么
-
-1. 什么算完成。
-2. 通过什么方式验证。
-3. 由什么标准判定为合格。
-
-## 3. 适用层级
-
-- `task`：必须明确完成标准和验证方式。
-- `plan item`：必须明确本项收口判据。
-- `phase`：必须明确阶段退出条件。
-
-## 4. 常见验证形式
-
-- 运行结果检查
-- 测试通过
-- 文档结构核对
-- 输入输出行为对比
-- 手工验证步骤
-
-## 5. 规则要求
-
-1. 不得先实现、后临时补验证。
-2. 验证方式不清晰时，不应继续推进复杂实现。
-3. 若项目缺少稳定验证样例，应考虑更新 `facts/golden_cases.md`。
+- **Version**: `v2.0`
+- **Status**: official rule
+- **Role**: requires explicit validation before a task is treated as complete
 
 ---
 
-## 6. 与其他文档的关系
+## Default Rules
 
-- 执行默认顺序见 `rules/workflow_rules.md`。
-- 关键验证样例见 `facts/golden_cases.md`。
-- `task` 退出相关定义见 `sop/core/task_layer.md`。
-
----
-
-## 7. 当前结论
-
-默认情况下，任何进入执行的对象都应先定义“什么算完成、如何验证、按什么标准判定合格”。
+1. define validation before execution
+2. do not treat implementation as completion without a validation method
+3. if validation cannot be run, state that explicitly
+4. task closure should return a result, remaining gaps, and known risks
+5. validation evidence should be stable enough to support writeback when needed

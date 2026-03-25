@@ -1,821 +1,139 @@
-# Phase 层定义
+# Phase Layer Definition
 
-- **版本**：v1.0
-- **状态**：正式定义
-- **所属层级**：决策层
-- **定位**：定义 `Project - phase - plan - task` 分层中的 `phase` 层职责、边界与判断标准。
-- **适用范围**：作为当前新版 SOP 中 `phase` 层的正式定义骨架。
-
----
-
-## 1. 文档目标
-
-本文件用于回答以下问题：
-
-1. `phase` 层在 `Project - phase - plan - task` 结构中负责什么。
-2. `phase` 与 `project` 的边界应如何划分。
-3. 什么样的内容适合定义为一个 `phase`，什么样的不适合。
-4. `phase` 为什么不是 task 列表，也不是执行计划。
-
-本文件当前只定义 `phase` 层本身，不展开 `plan` 与 `task` 的详细流程。
+- **Version**: `v2.0`
+- **Status**: official definition
+- **Layer**: decision layer
+- **Role**: defines the ownership and control behavior of the `phase` layer
 
 ---
 
-## 2. `phase` 层的定位
+## Purpose
 
-`phase` 层是 `project` 达成路径中的阶段性闭环单元。
+This file answers:
 
-在当前工作流中，`phase` 属于决策层，而不是执行层。
-
-它是决策层中当前阶段的唯一控制器，用于承接 `project` 的稳定目标，并对当前阶段的执行方向、阶段纠错、执行监督和阶段性沉淀上报负责。
-
-它的作用不是描述最终产品形态，也不是直接安排具体执行步骤，而是回答：
-
-- 当前正处于通往最终目标的哪一段路径上
-- 这一阶段要完成什么结果
-- 这一阶段明确不做什么
-- 这一阶段完成后，项目会进入什么新的状态
-
-可以将其理解为：
-
-> **`project` 定义终点与总方向，`phase` 定义通往终点过程中的阶段性结果。**
-
-进一步说：
-
-> **`project` 是低频权威定义，`phase` 是高频阶段控制器。**
+1. what the current `phase` owns and does not own
+2. how `phase` aligns the current project target with real execution
+3. how `phase` controls `main plan`
+4. when `phase` should continue, correct, pause, exit, or escalate
 
 ---
 
-## 3. `phase` 层负责什么
+## Position In The Model
 
-`phase` 层负责以下内容：
+`phase` is the current controller under `project`.
+It is the only active decision controller for the current stage.
 
-1. 定义当前阶段的目标结果。
-2. 定义当前阶段的非目标与交付边界。
-3. 说明当前阶段完成后，项目状态会发生什么变化。
-4. 说明当前阶段与前后阶段的衔接关系。
-5. 吸收 `project` 变更并判断当前阶段是否需要纠错。
-6. 发起并监管当前阶段下的 `main plan` 生命周期。
-7. 在每轮 `plan` 执行后做阶段审查，并决定下一步。
-8. 审查是否需要上报 `project` 事实、登记 `skill` 候选项或登记 `SOP` 调整候选项。
+The default chain is:
+
+`project -> current phase -> current main plan -> task`
+
+There must be only one active current phase at a time.
 
 ---
 
-## 4. `phase` 层不负责什么
+## What Phase Owns
 
-`phase` 层不负责以下内容：
+The `phase` layer owns:
 
-1. 定义项目最终产品目标与长期路径。
-2. 承担当前阶段内部的具体执行顺序。
-3. 直接展开为任务清单。
-4. 承担单个 task 的实现细节、review 细节与回滚细节。
-
-如果某项内容已经细到“先做哪个、后做哪个、如何一步步执行”，它通常已经进入 `plan` 层，而不是 `phase` 层。
-
----
-
-## 5. `phase` 与 `project` 的关系
-
-`phase` 是 `project` 达成路径中的组成单元，但不是 `project` 的缩小版。
-
-二者区别如下：
-
-### 5.1 `project` 回答什么
-
-- 最终产品是什么
-- 最终要解决什么问题
-- 长期做什么 / 不做什么
-- 顶层约束和总体路径是什么
-
-### 5.2 `phase` 回答什么
-
-- 当前在整个项目路径中处于哪一阶段
-- 当前阶段要形成什么阶段性结果
-- 当前阶段明确不做什么
-- 当前阶段完成后，项目会进入什么新的状态
-
-### 5.3 关系总结
-
-`project` 决定终点与高层达成路径。  
-`phase` 决定当前这一段路的阶段闭环。
+1. the current stage goal
+2. the current stage non-goals
+3. the current stage delivery boundary
+4. alignment with `runtime/current_target.md`
+5. the active `main plan`
+6. `Phase Review`
+7. the decision to continue, correct, pause, exit, or escalate
+8. the decision to register facts, skill candidates, or SOP candidates upward
 
 ---
 
-## 6. `phase` 的两类职责
+## What Phase Does Not Own
 
-为避免 `phase` 既过轻又过载，建议将其职责分成两类：
+`phase` does not own:
 
-### 6.1 `Phase Definition`
-
-负责：
-
-- 阶段目标
-- 阶段非目标
-- 阶段交付边界
-- 阶段完成后的状态变化
-- 与前后阶段的衔接关系
-
-### 6.2 `Phase Governance`
-
-负责：
-
-- 吸收并解释 `project` 变化
-- 纠正当前阶段定义与阶段内既有结论
-- 发起、监管和审查 `main plan`
-- 决定是否继续下一轮执行
-- 发起知识沉淀与上报建议
-
-这一区分的目的，是让 `phase` 既能承担阶段治理责任，又不退化为单纯说明文档或过载的大杂烩。
+1. long-term project definition
+2. top-level project constraints
+3. plan-item ordering details inside a single plan beyond its controller role
+4. single-task implementation details
 
 ---
 
-## 7. `phase` 作为唯一阶段控制器
+## Core Responsibilities
 
-在当前设计中，`phase` 不只是阶段说明对象，而是当前阶段的唯一控制器。
+### Stage Definition
 
-这意味着：
+A phase must define:
 
-- 当前阶段只有一个生效中的 `phase`
-- 所有执行层动作都必须挂载在当前 `phase` 之下
-- `phase` 对当前阶段的定义、纠错、推进与审查负责
-- `phase` 负责决定当前阶段是否继续、暂停、重试、退出或上报问题
+- what this stage is trying to achieve
+- what it explicitly will not do
+- what counts as delivery within this stage
 
-`phase` 的控制权只作用于当前阶段，不自动外溢到 `project` 的正式定义权。
+### Current Target Alignment
 
----
+`phase` is the place where high-frequency target changes are absorbed and made executable.
+If the target changes but remains local, phase should absorb it.
+If the change affects long-term direction, raise it upward to `project`.
 
-## 8. 一个健康的 `phase` 应具备什么
+### Main-Plan Control
 
-一个健康的 `phase` 应至少具备以下特征：
+A phase may start or accept one active `main plan`.
+It does not perform every execution detail itself, but it remains the controller of the mainline.
 
-### 8.1 有明确的阶段结果
+### Review And Decision
 
-`phase` 必须能够回答“这一阶段完成后，项目新增了什么明确状态”。
+After meaningful plan closure, phase should decide:
 
-例如：
-
-- 已完成最小开发基线
-- 已跑通最小可玩 MVP
-- 已具备基础视觉体验
-- 已形成差异化玩法能力
-- 已进入可产品化状态
-
-### 8.2 有明确边界
-
-每个 `phase` 都必须说明：
-
-- 当前阶段做什么
-- 当前阶段不做什么
-
-如果一个阶段几乎什么都能做，它就不是一个稳定的 `phase`。
-
-### 8.3 有阶段闭环
-
-`phase` 不是一个松散主题，而应是一个可验收的阶段性闭环。
-
-也就是说，阶段完成时应能明确判断：
-
-- 本阶段是否完成
-- 项目是否已进入下一种状态
-
-### 8.4 能为后续阶段铺路
-
-`phase` 不应只是孤立存在，它需要说明：
-
-- 本阶段输出会如何支撑后续阶段
-- 为什么当前不直接跳到下一阶段
+- continue in the same phase
+- correct the current phase
+- pause the phase
+- exit the phase
+- escalate a project-level change
 
 ---
 
-## 9. `phase` 的标准输入与标准输出
+## Main-Plan Rule
 
-为了让 `phase` 强而不乱，建议将其治理动作固定为“接收标准输入，产出标准输出”。
-
-### 9.1 `phase` 的标准输入
-
-`phase` 主要接收以下输入：
-
-- `project` 的稳定定义
-- `project` 的已确认变更
-- 当前阶段既有定义与阶段结论
-- 外部直接输入的候选 `plan`
-- 当前 `main plan` 的执行结果
-- 执行层上浮的问题、风险、阻塞与候选沉淀项
-
-### 9.2 `phase` 的标准输出
-
-`phase` 主要产出以下输出：
-
-- 当前阶段定义
-- 对当前阶段的一致性纠错结论
-- 对当前 `main plan` 的继续 / 重试 / 重建 / 暂停 / 取消决定
-- 对下一轮阶段动作的决定
-- 对 `project` 事实上报、`skill candidate`、`SOP candidate` 的审查结论
-
-这套输入输出模型的作用，是把 `phase` 的决策动作从“什么都管”收敛为“围绕当前阶段做标准治理”。
+A phase may have many candidate ideas, but only one active `main plan`.
+If the current mainline breaks, phase must explicitly correct, replace, or pause it instead of letting parallel mainlines silently form.
 
 ---
 
-## 10. `phase` 的标准决策动作
+## Phase Review
 
-`phase` 作为当前阶段控制器，建议只保留下列标准决策动作：
+A `Phase Review` should answer:
 
-1. `continue phase`
-2. `correct phase`
-3. `launch main plan`
-4. `retry current path`
-5. `rebuild main plan`
-6. `pause phase`
-7. `exit phase`
-8. `raise to project`
-9. `register candidate`
-10. `accept direct plan`
+1. what was achieved in the current mainline
+2. what remains unstable or blocked
+3. whether the current phase is still valid
+4. whether the phase should continue, change shape, or end
+5. whether anything must be written upward or outward
 
-其中：
-
-- `continue phase`：当前阶段定义继续成立
-- `correct phase`：修正当前阶段定义或阶段内既有结论
-- `launch main plan`：发起下一轮执行主线
-- `retry current path`：允许在当前阶段内重试既有路径
-- `rebuild main plan`：当前执行主线失效，需要重建
-- `pause phase`：当前阶段暂缓，等待更多输入或用户决策
-- `exit phase`：当前阶段完成，准备进入下一阶段
-- `raise to project`：问题已超出当前阶段，应上升到 `project`
-- `register candidate`：将稳定候选项登记为 `project fact` 上报、`skill candidate` 或 `SOP candidate`
-- `accept direct plan`：对外部直接输入的 `plan` 进行审阅并接入当前阶段执行
-
-如果一个治理动作不属于以上类型，通常需要先判断它是否真的应由 `phase` 决定。
+Use `sop/templates/phase_review_template.md`.
 
 ---
 
-## 11. `phase` 对 `project` 变更的吸收与纠错
+## Escalation Conditions
 
-当 `project` 出现已确认的全局改动时，当前 `phase` 不仅要判断“是否受影响”，还要负责对当前阶段做一致性纠错。
+Raise upward from `phase` when:
 
-纠错应至少覆盖以下三个层次：
-
-### 11.1 `phase` 定义纠错
-
-用于修正：
-
-- 当前阶段目标
-- 当前阶段非目标
-- 当前交付边界
-- 当前阶段完成判据
-
-### 11.2 `plan` 适配纠错
-
-用于判断：
-
-- 当前 `main plan` 是否仍然有效
-- 当前执行顺序是否仍然成立
-- 是否需要继续、冻结、取消或重建 `main plan`
-
-### 11.3 阶段结论纠错
-
-用于修正当前阶段内部已经形成的结论，例如：
-
-- 某些阶段前提已经失效
-- 某些阶段判断需要作废或被替代
-- 某些阶段事实需要标注为过期
-
-要求：
-
-- `phase` 只负责纠正当前阶段相关内容
-- 若问题已经上升到最终目标、长期边界或顶层约束，则应上报 `project`
+1. long-term project direction changed
+2. top-level constraints are now wrong or incomplete
+3. repeated plan failure shows a project-level mismatch
+4. stable cross-phase facts have formed
+5. a candidate skill or SOP upgrade has become clear
 
 ---
 
-## 12. `phase` 对 `main plan` 的治理责任
+## Main Risks
 
-`phase` 不是执行层入口，但它是当前 `main plan` 生命周期的拥有者。
-
-这意味着：
-
-- `phase` 决定何时发起一个新的 `main plan`
-- `phase` 决定是否接受一个外部直接输入的 `plan` 作为当前 `main plan`
-- `phase` 追踪每轮 `main plan` 的执行结果
-- `phase` 决定当前阶段是否继续下一轮执行
-- `phase` 决定是否需要重试、重建、暂停或上报问题
-
-一个 `main plan` 完成或收口后，`phase` 应至少得到以下结论之一：
-
-1. `completed`
-2. `partially_completed`
-3. `blocked`
-4. `failed`
-5. `cancelled`
-
-这些结果不是最终阶段结论，而是 `phase` 进一步审查和决策的输入。
-
-### 12.1 `main plan` 的两种进入方式
-
-当前设计中，`phase` 必须兼容两种 `main plan` 进入方式：
-
-1. `phase` 自发发起 `main plan`
-2. `phase` 直接接收外部输入的 `plan`
-
-无论哪种方式，都必须先经过 `phase` 审查，确认其：
-
-- 与当前阶段目标一致
-- 不突破当前阶段边界
-- 可以成为当前唯一生效执行主线
-
-未通过审查的外部输入 `plan`，不得直接成为当前 `main plan`。
+1. phase becomes too wide and tries to absorb unrelated large goals
+2. phase forgets to define non-goals and scope starts drifting
+3. phase allows multiple silent mainlines
+4. phase rewrites project definition instead of escalating
+5. phase keeps running after its boundary is already invalid
 
 ---
 
-## 13. `Phase Review`
+## Conclusion
 
-每一轮 `main plan` 收口后，当前 `phase` 都应执行一次标准化的 `Phase Review`。
-
-这一步是 `phase` 作为阶段治理层的核心动作。
-
-正式标注格式见：`sop/templates/phase_review_template.md`
-
-### 13.1 `Phase Review` 至少回答什么
-
-1. 当前 `phase` 目标是否更接近完成？
-2. 本轮 `main plan` 结果属于哪一类？
-3. 当前阶段边界或定义是否需要纠错？
-4. 当前阶段是否已经满足退出条件？
-5. 是否应发起下一轮 `main plan`？
-6. 是否应重试、重建、暂停或上报问题？
-7. 是否形成了需要沉淀或上报的结论？
-
-### 13.2 `Phase Review` 的输出类型
-
-`Phase Review` 至少应产出以下四类结论：
-
-1. `执行结论`
-2. `阶段结论`
-3. `下一步结论`
-4. `沉淀结论`
-
-其中：
-
-- `执行结论`：描述本轮 `main plan` 完成情况
-- `阶段结论`：描述当前 `phase` 是否继续、纠错、退出或升级问题
-- `下一步结论`：描述是否进入下一轮 `main plan`
-- `沉淀结论`：描述是否需要上报或登记稳定结论
-
----
-
-## 14. `phase` 作为知识审查与上报基础层
-
-`phase` 直接管理执行层，因此它应成为知识审查与上报的基础层。
-
-但 `phase` 不应直接取代上层正式落地动作，而应负责判断是否形成了候选沉淀项。
-
-### 14.1 `project` 事实审查
-
-当一次或多次 `plan` 执行形成了跨多个阶段持续有效的稳定事实时，`phase` 应判断是否需要上报 `project` 层。
-
-### 14.2 `skill` 候选项审查
-
-当某类流程已经重复出现、边界稳定、可验证且可复用时，`phase` 应判断是否登记为 `skill candidate`。
-
-### 14.3 `SOP` 候选项审查
-
-当某轮执行暴露出稳定的流程缺口、反复出现的治理问题或应被固化的流程改进时，`phase` 应判断是否登记为 `SOP candidate`。
-
-要求：
-
-- `phase` 负责审查和上报建议
-- 不要求 `phase` 直接改写正式 `project`、`skill` 或 `SOP`
-
----
-
-## 15. `phase` 的决策边界
-
-为了避免 `phase` 变强后越权，必须明确它的决策边界。
-
-`phase` 可以决定：
-
-- 当前阶段定义是否继续成立
-- 当前阶段是否需要纠错
-- 当前 `main plan` 是否继续、重试、重建、暂停或取消
-- 当前阶段是否满足退出条件
-- 哪些执行结果值得上报或登记为候选沉淀项
-
-`phase` 不直接决定：
-
-- `project` 的正式最终目标修改
-- 长期边界与顶层约束的正式改写
-- 正式发布 `skill`
-- 正式修改全局 `SOP`
-
-这意味着 `phase` 可以非常强，但它的强只作用于当前阶段治理，而不是全局制度发布。
-
----
-
-## 16. `phase` 生命周期设计原则
-
-`phase` 生命周期应按“设计完整，但避免过度设计”的原则落地。
-
-这意味着：
-
-- 必须覆盖开启、执行、审查、纠错、阻塞、完成和交接这些真实阶段动作
-- 必须能支撑范围锁定、执行监管、状态记录和下一阶段请求
-- 但不应引入过多低价值状态、复杂分支或平台化编排概念
-
-因此，`phase` 生命周期应追求：
-
-1. 状态完整
-2. 流转清晰
-3. 责任明确
-4. 记录充分
-5. 不做无必要的细碎拆分
-
----
-
-## 17. `phase` 的状态模型
-
-建议 `phase` 使用以下状态模型：
-
-1. `proposed`
-2. `ready`
-3. `active`
-4. `reviewing`
-5. `correcting`
-6. `blocked`
-7. `completed`
-8. `transition_pending`
-
-### 17.1 `proposed`
-
-表示：
-
-- 已基于 `project` 路径识别出一个候选 `phase`
-- 但尚未正式成为当前生效阶段
-
-### 17.2 `ready`
-
-表示：
-
-- 当前 `phase` 的目标、非目标、交付边界和退出条件已经明确
-- 可以进入正式执行
-- 但尚未启动当前 `main plan`
-
-### 17.3 `active`
-
-表示：
-
-- 当前 `phase` 已正式激活
-- 它是当前唯一生效阶段
-- 当前阶段正在推进 `main plan`
-
-### 17.4 `reviewing`
-
-表示：
-
-- 当前一轮 `main plan` 已收口
-- `phase` 正在执行 `Phase Review`
-- 尚未决定继续、纠错、重试、退出或上报
-
-### 17.5 `correcting`
-
-表示：
-
-- 当前阶段定义、阶段结论或执行主线适配关系需要一致性纠错
-- 纠错完成后再决定回到 `ready`、`active` 或进入其他状态
-
-### 17.6 `blocked`
-
-表示：
-
-- 当前阶段暂时无法继续推进
-- 需要等待前提恢复、用户决策或上层裁定
-
-### 17.7 `completed`
-
-表示：
-
-- 当前 `phase` 已满足退出条件
-- 当前阶段不再继续追加新的执行主线
-
-### 17.8 `transition_pending`
-
-表示：
-
-- 当前阶段已完成
-- 系统正在基于 `project` 路径和当前阶段产出生成下一个 `phase` 请求
-
----
-
-## 18. `phase` 的边界锁定规则
-
-为防止 scope 漂移，`phase` 生命周期必须配套边界锁机制。
-
-### 18.1 激活即锁定
-
-当 `phase` 进入 `active` 后，以下内容默认锁定：
-
-- 阶段目标
-- 阶段非目标
-- 阶段交付边界
-- 当前阶段退出条件
-
-### 18.2 执行层不得直接改边界
-
-在 `active` 状态下：
-
-- `main plan` 不得直接扩展 `phase` 范围
-- `sub plan` 不得直接扩展 `phase` 范围
-- `task` 新发现的问题不得自动并入当前 `phase`
-
-### 18.3 边界变化的唯一入口
-
-若边界确实需要调整，只能通过以下入口之一处理：
-
-1. `reviewing`
-2. `correcting`
-3. `raise to project`
-
-### 18.4 超出边界内容的默认处置
-
-执行中发现的边界外内容，默认只允许进入以下去向：
-
-- 记为 `out-of-scope candidate`
-- 留待当前 `Phase Review` 审查
-- 上浮为 `project` 级问题
-- 留给下一 `phase`
-
-不得直接并入当前阶段执行。
-
----
-
-## 19. `phase` 的标准状态流转
-
-建议采用以下标准流转：
-
-### 19.1 主流转
-
-`proposed -> ready -> active -> reviewing`
-
-表示：
-
-- 候选阶段被提出
-- 阶段定义准备完成
-- 阶段进入执行
-- 一轮执行主线收口后进入阶段审查
-
-### 19.2 继续推进流转
-
-`reviewing -> active`
-
-适用于：
-
-- 阶段尚未完成
-- 当前阶段定义仍成立
-- 决定继续下一轮 `main plan`
-
-### 19.3 纠错流转
-
-`active -> correcting -> ready`
-
-或
-
-`reviewing -> correcting -> ready`
-
-适用于：
-
-- 阶段定义失真
-- `project` 变更已确认影响当前阶段
-- 当前执行主线与阶段边界不再一致
-
-### 19.4 阻塞流转
-
-`active -> blocked`
-
-`reviewing -> blocked`
-
-`blocked -> active`
-
-`blocked -> correcting`
-
-`blocked -> transition_pending`
-
-适用于：
-
-- 当前阶段无法继续推进
-- 需等待前提恢复、用户决策或上层判断
-
-### 19.5 完成与交接流转
-
-`reviewing -> completed -> transition_pending`
-
-适用于：
-
-- 当前阶段满足退出条件
-- 当前阶段结束
-- 自动进入下一阶段请求生成
-
----
-
-## 20. `phase` 结束与下一阶段请求
-
-当前 `phase` 在进入 `completed` 后，不应直接自动激活下一个 `phase`，而应先进入 `transition_pending`。
-
-这是为了兼顾自动推进与流程可控。
-
-正式标注格式见：`sop/templates/next_phase_request_template.md`
-
-### 20.1 自动发起请求
-
-当 `phase` 进入 `transition_pending` 时，应自动生成 `next_phase_request`。
-
-### 20.2 `next_phase_request` 至少应包含
-
-1. 推荐下一个 `phase` 名称
-2. 推荐理由
-3. 与 `project` 路径的对应关系
-4. 当前阶段输出如何支撑下阶段
-5. 当前遗留问题
-6. 是否满足下阶段进入条件
-
-### 20.3 设计原则
-
-- 自动生成请求
-- 不自动跳过审查直接激活下一个 `phase`
-- 保持交接清晰而非机械串联
-
----
-
-## 21. `phase` 的最小记录要求
-
-`phase` 生命周期不仅要有当前状态，还要有完整的状态记录。
-
-建议至少记录以下内容：
-
-1. `phase id`
-2. `phase 名称`
-3. `所属 project`
-4. `当前状态`
-5. `状态变更历史`
-6. `阶段目标`
-7. `阶段非目标`
-8. `阶段交付边界`
-9. `阶段进入条件`
-10. `阶段退出条件`
-11. `当前 main plan`
-12. `main plan 历史`
-13. `阶段纠错记录`
-14. `Phase Review` 历史
-15. `阶段产出摘要`
-16. `候选沉淀项`
-17. `next_phase_request`
-
-其中至少不可缺少的是：
-
-- `当前状态`
-- `状态变更历史`
-- `阶段边界`
-- `阶段退出条件`
-- `Phase Review` 历史
-- `next_phase_request`
-
----
-
-## 22. 什么样的内容不适合直接作为 `phase`
-
-以下内容通常不适合作为 `phase`：
-
-### 22.1 纯工作类型分类
-
-例如：
-
-- 前端 phase
-- 后端 phase
-- 文档 phase
-- 测试 phase
-
-这类分类更像职能划分，不是达成路径中的阶段闭环。
-
-### 22.2 纯动作描述
-
-例如：
-
-- 写文档
-- 补资源
-- 做优化
-- 修问题
-
-如果只写动作，而不写阶段结果，`phase` 会退化为大号任务包。
-
-### 22.3 纯时间切片
-
-例如：
-
-- 第一周 phase
-- 第二周 phase
-
-时间可以帮助排期，但不能代替阶段定义。
-
-### 22.4 过大的模糊主题
-
-例如：
-
-- 把产品做好
-- 全面完善系统
-
-这种描述缺乏边界，无法支撑后续 `plan` 和 `task` 的收敛。
-
----
-
-## 23. 如何判断一个候选项是否应该成为 `phase`
-
-当考虑定义一个新 `phase` 时，可以用以下问题判断：
-
-1. 它是否代表项目路径中的一个明确阶段结果，而不只是一个动作集合？
-2. 它完成后，项目状态是否会发生可确认的变化？
-3. 它是否能明确说出本阶段不做什么？
-4. 它是否足够稳定，能容纳后续 `plan` 与 `task` 而不失控？
-
-如果答案大多为“是”，则它可以考虑成为一个 `phase`。
-
----
-
-## 24. 示例：贪吃蛇游戏的 `project` 与 `phase`
-
-以“制作一个贪吃蛇游戏产品”为例：
-
-### 24.1 `project`
-
-`project` 层回答的是：
-
-- 最终要做成一个什么样的贪吃蛇游戏产品
-- 它面向谁
-- 产品成熟后应具备哪些核心能力
-- 长期不做什么
-
-### 24.2 `phase`
-
-`phase` 层可以拆成类似路径：
-
-1. 建立最小开发基线：梳理需求、规则、代码规范与项目骨架。
-2. 跑通最小 MVP：完成最小可玩游戏流程。
-3. 建立基础体验：补充基础视觉与资源，使产品不再只是功能原型。
-4. 增强玩法层：增加特殊玩法与差异化内容。
-5. 进入产品化阶段：补齐稳定性、体验与产品化能力。
-
-这些 `phase` 的共同特点是：
-
-- 都服务于最终贪吃蛇产品目标
-- 每个阶段都有明确结果
-- 每个阶段完成后，项目状态都会提升到新的层级
-
----
-
-## 25. `phase` 层的风险点
-
-### 25.1 退化为大号任务清单
-
-如果 `phase` 直接写成一串待办项，它会侵占 `plan` 层职责。
-
-### 25.2 退化为职能分类
-
-如果按前端、后端、文档、测试来切 `phase`，项目主线会被拆散。
-
-### 25.3 边界不清
-
-如果一个 `phase` 既做 MVP，又做美术，又做产品化，还做玩法扩展，则后续执行会失控。
-
-### 25.4 无法验收
-
-如果阶段完成后无法说明“项目新增了什么状态”，这个 `phase` 设计通常有问题。
-
-### 25.5 过载为所有沉淀动作的最终落点
-
-如果 `phase` 既负责执行治理，又直接改写 `project`、发布 `skill`、修改 `SOP`，它会成为高频变更层并快速失稳。
-
-### 25.6 生命周期过度复杂
-
-如果为 `phase` 引入过多低价值状态和稀有分支，治理成本会反过来压垮阶段控制能力。
-
----
-
-## 26. 与其他文档的关系
-
-- `project` 层定义见 `sop/core/project_layer.md`。
-- 执行编排层定义见 `sop/core/plan_layer.md`。
-- 四层跨层流转规则见 `sop/core/workflow_transition_rules.md`。
-- 阶段审查模板见 `sop/templates/phase_review_template.md`。
-- 下一阶段请求模板见 `sop/templates/next_phase_request_template.md`。
-
----
-
-## 27. 当前结论
-
-`phase` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
-
-- 它是 `project` 达成路径中的阶段性闭环单元。
-- 它属于决策层，并且是当前阶段的唯一控制器。
-- 它既承担阶段定义责任，也承担阶段治理责任。
-- 它定义当前阶段的目标结果、非目标与交付边界，并吸收 `project` 改动对当前阶段做一致性纠错。
-- 它不直接承载执行细节，但负责发起和监管当前阶段下的 `main plan` 生命周期。
-- 它在每轮 `main plan` 收口后执行 `Phase Review`，并审查是否需要上报 `project` 事实、登记 `skill candidate` 或 `SOP candidate`。
-- 它通过完整但克制的生命周期设计，承担边界锁定、执行监管、阶段审查、完成交接和下一阶段请求生成。
-- 它的核心价值是把“最终目标”转化为可逐阶段推进、可逐阶段验收、可逐阶段治理的路径，并在不增加新层级的前提下承担当前阶段的大部分决策责任。
-
-后续若需演进，应在不破坏“唯一当前 `phase`、阶段治理归 `phase`、并行仅留在执行层”这三条基础原则的前提下继续细化。
+`phase` is the current-stage controller.
+It aligns current targets, owns the active mainline, reviews outcomes, and decides whether execution should continue, correct, pause, or rise upward.

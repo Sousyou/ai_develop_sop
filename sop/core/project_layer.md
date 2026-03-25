@@ -1,283 +1,160 @@
-# Project 层定义
+# Project Layer Definition
 
-- **版本**：v1.0
-- **状态**：正式定义
-- **所属层级**：决策层
-- **定位**：定义 `Project - phase - plan - task` 分层中的 `project` 层职责、信息结构与治理边界。
-- **适用范围**：作为当前新版 SOP 中 `project` 层的正式定义骨架。
-
----
-
-## 1. 文档目标
-
-本文件用于回答以下问题：
-
-1. `project` 层到底负责什么，不负责什么。
-2. AI 如何在执行过程中始终对齐最终项目目标，而不被局部 task 带偏。
-3. 当用户提出新的整体意见，或执行中出现全局冲突时，AI 何时应上升到 `project` 层发起调整建议。
-4. `project` 层应记录哪些信息，才能既稳定又能持续支撑执行判断。
-
-本文件当前只定义 `project` 层本身，不展开 `phase`、`plan`、`task` 的详细流程。
+- **Version**: `v2.0`
+- **Status**: official definition
+- **Layer**: decision layer
+- **Role**: defines the ownership, structure, and governance boundary of the `project` layer
 
 ---
 
-## 2. `project` 层的定位
+## Purpose
 
-`project` 层是整个工程的最高判断层。
+This file answers:
 
-在当前工作流中，整体框架分为两层：
-
-- 决策层：`project -> phase`
-- 执行层：`plan -> task`
-
-其中：
-
-- `project` 是决策层中的最高、最低频、最稳定的权威定义
-- `phase` 是决策层中当前阶段的唯一控制器
-- `plan` 与 `task` 负责在 `phase` 授权下推进执行并回传结果
-
-它的作用不是安排具体执行步骤，而是为整个项目提供：
-
-- 最终目标锚点
-- 长期边界
-- 顶层决策约束
-- 跨阶段稳定事实
-- 全局调整入口
-
-`project` 层的核心目标是：
-
-> **让 AI 在任何 phase、plan、task 中，都不会丢失最终目标、长期边界和顶层判断依据。**
+1. what the `project` layer owns and does not own
+2. how AI keeps alignment with long-term goals instead of being dragged by local tasks
+3. when a change must rise to `project`
+4. which information belongs to `project` versus `current_target`
 
 ---
 
-## 3. `project` 层负责什么
+## Position In The Model
 
-`project` 层负责以下五类事情：
+The full model is:
 
-1. 定义项目最终产品目标与高层路径。
-2. 定义项目长期有效的做什么 / 不做什么。
-3. 定义顶层约束与冲突时的决策偏好。
-4. 记录跨多个 phase 持续有效的全局事实。
-5. 当出现全局变化信号时，作为唯一升级入口承接项目级调整讨论。
+- decision layer: `project -> phase`
+- execution layer: `plan -> task`
 
----
+Within that model:
 
-## 4. `project` 层不负责什么
+- `project` is the highest, lowest-frequency authority
+- `phase` is the current controller under `project`
+- `plan` and `task` execute under the current phase
 
-`project` 层不负责以下内容：
+The job of `project` is not to schedule work. Its job is to preserve:
 
-1. 当前 phase 的具体交付清单。
-2. 当前 plan 的执行顺序与任务编排。
-3. 单个 task 的实现细节、review 细节与回滚细节。
-4. 临时性的局部讨论、一次性试验过程或短期中间状态。
-
-如果某项内容只影响当前阶段或当前一组执行步骤，则通常不应上升到 `project` 层。
+- `project_charter`
+- long-term boundary
+- top-level constraints
+- cross-phase stable facts
+- a single entry for project-level adjustment
 
 ---
 
-## 5. `project` 层的四类核心信息
+## What Project Owns
 
-`project` 层应以单一主入口承载四类信息，而不是分散在多个高层入口中并行定义。
+The `project` layer owns five categories:
 
-### 5.1 项目目标与高层路径
-
-这一部分回答：
-
-- 项目最终要做成什么产品形态
-- 产品面向谁、解决什么问题
-- 成功状态长什么样
-- 从当前状态到最终形态的大致阶段路径
-
-要求：
-
-- 只定义高层路径，不定义执行编排
-- 路径描述应能支撑 phase 划分，但不能替代 phase / plan
-- 不把当前局部优先级误写成最终产品目标
-
-### 5.2 项目边界
-
-这一部分回答：
-
-- 项目长期要做什么
-- 项目长期明确不做什么
-- 哪些方向不属于当前产品范畴
-
-要求：
-
-- 必须明确 `do` 与 `non-goals`
-- 必须区分长期非目标与阶段性非目标
-- 这里记录的是长期边界，不替代当前 phase 的边界文档
-
-### 5.3 项目约束
-
-这一部分回答：
-
-- 顶层最优先考虑什么
-- 多个方案冲突时按什么顺序裁决
-- 整体项目默认采用什么取舍策略
-
-示例：
-
-- 最快落地优先
-- 结果准确性优先
-- token 成本优先
-- 性能优先
-- 可维护性优先
-
-要求：
-
-- 不能只罗列约束，必须有优先级或裁决顺序
-- 约束应为跨 phase 持续有效的顶层偏好
-- 不把局部实现习惯误写成项目级约束
-
-### 5.4 项目事实
-
-这一部分回答：
-
-- 哪些全局能力已经完成并成为基线
-- 哪些关键方向已经尝试并确认不可行
-- 哪些外部限制已经被验证存在
-- 哪些事实会在后续多个 phase 中持续影响判断
-
-要求：
-
-- 只记录跨多个 phase 持续有效的全局事实
-- 不记录 task 级实现过程
-- 不记录一次性讨论噪音
-- 不把局部中间状态写成项目事实
-
-项目事实的一个重要作用是：
-
-> **避免子流程反复进入已经证明不可行、不可做或不符合项目方向的路径。**
+1. long-term stable `project_charter`
+2. long-term do / do-not-do boundary
+3. top-level constraints and tradeoff preferences
+4. cross-phase stable project facts
+5. project-level adjustment intake when local execution no longer matches the real direction
 
 ---
 
-## 6. 两种信息性质
+## What Project Does Not Own
 
-为避免 `project` 层过重，四类信息需要进一步区分为两种性质：
+The `project` layer does not own:
 
-### 6.1 稳定定义类
+1. current phase delivery details
+2. current plan ordering
+3. single-task implementation details
+4. temporary execution notes or one-off experiments
+5. high-frequency current goals and current validation targets
 
-包括：
-
-- 项目目标与高层路径
-- 项目边界
-- 项目约束
-
-特点：
-
-- 跨多个 phase 持续有效
-- 变化频率应较低
-- 一旦变化，会影响下游多个层级
-
-### 6.2 动态事实类
-
-包括：
-
-- 项目事实
-
-特点：
-
-- 可以持续更新
-- 但只允许收录高价值、跨阶段持续有效的事实
-- 不得退化为项目级流水账
+Those belong to `phase`, `plan`, `task`, or `runtime/current_target.md`.
 
 ---
 
-## 7. `project` 层的治理价值
+## Core Information Categories
 
-引入 `project` 层的目标不是增加一层文档，而是解决以下治理问题：
+### `project_charter`
 
-1. AI 在局部 task 执行中忘记最终目标。
-2. 用户提出新的整体意见后，变化无法被正确识别为全局级变化。
-3. 项目边界和顶层取舍标准未固定，导致 AI 在不同对话中使用不同判断逻辑。
-4. 某些方向已经验证不可行，但后续 task 仍反复进入同类尝试。
+Answers:
 
----
+- what the product is trying to become in the long run
+- who it serves and what problem it solves
+- what success looks like at a high level
+- what major route the project is taking
 
-## 8. 单入口原则
+### Long-Term Boundary
 
-`project` 层应遵守单入口原则：
+Answers:
 
-- `project` 层必须有唯一主定义入口
-- 其他文档可以引用、摘录或分发，但不应并行重定义
-- 当不同文档出现不一致时，应以 `project` 主入口为准
+- what the project is meant to do
+- what it is explicitly not meant to do
+- which directions are outside the long-term product scope
 
-本原则用于解决项目高层信息在多个入口中分散、冲突或互相覆盖的问题。
+### Top-Level Constraints
 
----
+Answers:
 
-## 9. `project` 层的调整触发器
+- what tradeoffs matter most
+- how conflicting options should be cut down
+- which top-level priorities stay valid across phases
 
-AI 不应频繁主动改写 `project` 层，但在以下情况出现时，应明确提出“是否进入 `project` 层调整”：
+### Cross-Phase Facts
 
-1. 用户明确提出新的整体产品意见、长期方向或长期约束。
-2. 某个变化会影响多个 phase，而不是只影响当前 phase。
-3. 当前执行反复与项目顶层目标、边界或约束发生冲突。
-4. 多个 plan 都因为缺乏统一顶层判断而出现返工或漂移。
+Answers:
 
-要求：
+- which capabilities are already stable enough to count as baseline
+- which directions were tried and proven not viable
+- which external constraints are confirmed to exist
+- which facts will keep affecting later decisions across multiple phases
 
-- AI 可以提出 `project` 层调整建议
-- AI 不应未经确认自动重写 `project` 定义
+### What Is Not Project
 
----
+The following should normally not be recorded as `project` content:
 
-## 10. `project` 层的风险点
+- current phase goals
+- current round validation targets
+- current temporary in-scope and out-of-scope
+- short-term urgency changes
 
-### 10.1 过于抽象
-
-如果只写愿景，不写边界、约束和事实，`project` 层将无法参与实际判断。
-
-### 10.2 过于频繁变动
-
-如果每次局部意见都上升为 `project` 层变化，下游 phase / plan / task 将持续失稳。
-
-### 10.3 多入口并行定义
-
-如果 `README.md`、`AGENTS.md`、facts 文档和对话都在并行定义项目目标，AI 将无法稳定判断。
-
-### 10.4 目标与执行混写
-
-如果把当前执行顺序、当前 task 安排直接写进 `project` 层，`project` 将侵占 `phase` 和 `plan` 的职责。
-
-### 10.5 事实层失控
-
-如果把所有过程性进度、局部试验和一次性讨论都记进 `project` 事实，`project` 层将退化为项目日志。
+Those belong to `current_target` and `phase`.
 
 ---
 
-## 11. `project` 层的最小判断标准
+## Single-Entry Rule
 
-当新增一条信息时，可用以下问题判断其是否属于 `project` 层：
+The `project` layer must follow a single-entry rule:
 
-1. 这条信息是否会在多个 phase 中持续影响方向判断？
-2. 这条信息是否属于最终目标、长期边界、顶层约束或跨阶段稳定事实？
-3. 如果缺失这条信息，AI 是否可能在后续多个 phase 中重复做出错误判断？
+1. it must have one authoritative primary entry
+2. other documents may reference or summarize it, but should not redefine it in parallel
+3. if documents conflict, the `project` primary entry wins
 
-如果答案大多为“是”，则这条信息可以考虑进入 `project` 层。
-
-如果它只影响当前阶段、当前执行路径或当前一步实现，则通常更适合放在 `phase`、`plan` 或 `task` 层。
+This rule prevents high-level project meaning from fragmenting across README, ad-hoc notes, facts, and conversation.
 
 ---
 
-## 12. 与其他文档的关系
+## Adjustment Triggers
 
-- 当前阶段控制与阶段纠错见 `sop/core/phase_layer.md`。
-- 执行编排层定义见 `sop/core/plan_layer.md`。
-- 最小执行单元定义见 `sop/core/task_layer.md`。
-- 跨层流转关系见 `sop/core/workflow_transition_rules.md`。
-- 项目范围事实入口见 `facts/project_scope.md`。
+AI should not rewrite the `project` layer casually.
+But AI should explicitly raise a project-level adjustment proposal when any of these happen:
+
+1. the user changes long-term product direction or long-term constraints
+2. the change affects multiple phases, not just the current phase
+3. current execution repeatedly conflicts with top-level goals or boundaries
+4. multiple plans are drifting because top-level judgment is missing
+5. the change has clearly moved beyond `current_target`
+
+AI may propose project-level adjustment.
+AI should not silently rewrite formal project definition without confirmation.
 
 ---
 
-## 13. 当前结论
+## Main Risks
 
-`project` 层在 `Project - phase - plan - task` 结构中的职责可以先按如下方式确定：
+1. if `project` is too abstract, it becomes useless for real decisions
+2. if `project` changes too often, downstream phases and plans lose stability
+3. if multiple documents redefine project meaning, AI judgment becomes inconsistent
+4. if execution details leak into `project`, it invades `phase` and `plan`
+5. if every note is promoted into project facts, the layer collapses into a project log
 
-- 它是全工程最高判断层，不是执行编排层。
-- 它以单一主入口维护四类核心信息：目标与高层路径、边界、约束、全局事实。
-- 它既要稳定，又必须保留全局调整入口。
-- 它的首要治理价值是让 AI 始终对齐最终目标，并避免跨阶段重复犯同类错误。
+---
 
-后续若需演进，应在不破坏当前四类核心信息与单入口原则的前提下继续细化。
+## Conclusion
+
+The `project` layer is the highest judgment layer, not the execution scheduler.
+It exists to keep long-term direction, long-term boundary, top-level constraints, and cross-phase facts stable enough that downstream execution does not forget what the project is actually trying to become.
