@@ -1,4 +1,19 @@
-runtime/*.md
-!runtime/README.md
-!runtime/templates/
-!runtime/templates/**
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+
+# Node
+node_modules/
+
+# Archives
+*.zip
+
+# Local tooling
+.tools/
