@@ -1,7 +1,7 @@
 # Dev SOP Version
 
 ## Current Version
-`0.4.0`
+`0.4.1`
 
 ## Release Date
 `2026-04-15`
@@ -13,8 +13,12 @@ This file is the source of truth for the current Dev SOP version in this reposit
 
 - the SOP namespace root is `.dev_sop/`
 - the recovery/control surface contains only `.dev_sop/control/CURRENT.md` and `.dev_sop/control/DOC_MAP.md`
+- the canonical singular Dev SOP roots are `.dev_sop/control`, `.dev_sop/doc`, and `.dev_sop/skill`
 - `.dev_sop/doc/specs/` keeps only `README.md`, starter-owned `example-*` reference specs, and project-owned real task specs
+- spec creation may be skipped only for task requests that are already effectively spec-complete and satisfy the explicit `trivially narrow` criteria in the workflow and specs guidance
 - version-targeted SOP upgrade notes live under `.dev_sop/upgrades/*`
+- the SOP upgrade prompt template may embed a repository-local source path default, but that path is editable and not part of the cross-platform Dev SOP contract
+- if an SOP upgrade changes `AGENTS.md`, adapters, or other AI entrypoints during Codex use, continue in a fresh Codex thread before relying on the new instructions
 
 ## Upgrade Use
 
