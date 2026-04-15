@@ -27,47 +27,67 @@ Use the repository layers as follows:
 - `CLAUDE.md`
   Lightweight adapter that defers to `AGENTS.md`.
 
-- `ai/README.md`
-  Namespace map for the `ai/` workflow namespace and its boundary rules.
+- `.dev_sop/README.md`
+  Namespace map for the `.dev_sop/` workflow namespace and its boundary rules.
 
-- `project/*`
-  Minimal human-facing control surface for current state, durable project-level decisions, and experiment summaries that help people recover context quickly.
+- `.dev_sop/VERSION.md`
+  Canonical current Dev SOP version and upgrade-use contract.
+
+- `.dev_sop/upgrades/*`
+  Version-targeted upgrade notes for copied-project SOP upgrades.
+
+- `.dev_sop/control/*`
+  Minimal recovery/control surface for current state and document routing that helps people recover context quickly.
 
 - `.cursor/rules/*`  
   Execution guardrails for Cursor.
 
-- `ai/doc/guides/*`  
+- `.dev_sop/doc/guides/*`  
   Practical workflow guidance.
 
-- `ai/doc/templates/*`  
+- `.dev_sop/doc/templates/*`  
   Reusable document skeletons used during work.
 
-- `ai/doc/specs/*`
+- `.dev_sop/doc/specs/*`
   Task specs that bridge plans and implementation.
 
-- `ai/doc/facts/*`  
+- `.dev_sop/doc/facts/*`  
   Stable context worth re-reading later.
 
-- `ai/skill/*`  
+- `.dev_sop/skill/*`  
   Reusable workflows that reduce repeated cognitive work.
 
-`ai/` is reserved for AI-managed workflow assets.
-Project-facing documentation should live outside `ai/` in whatever structure the project uses for its own docs.
-The canonical namespace roots are singular: use `ai/doc` and `ai/skill`, not parallel roots such as `ai/docs` or `ai/skills`.
+`.dev_sop/` is reserved for development SOP workflow assets and the repository's recovery/control surface.
+Project-facing documentation should live outside `.dev_sop/` in whatever structure the project uses for its own docs.
+The canonical namespace roots are singular: use `.dev_sop/control`, `.dev_sop/doc`, and `.dev_sop/skill`, not parallel roots such as `.dev_sop/controls`, `.dev_sop/docs`, or `.dev_sop/skills`.
 
 ## Entrypoint model
 
 - `README.md` is the human-facing and project-facing entrypoint.
-- `project/CURRENT.md` is the recovery-first entry for current human-facing project state when a project control surface exists.
+- `.dev_sop/control/CURRENT.md` is the recovery-first entry for current project state when the control surface is in use.
 - `AGENTS.md` is the canonical AI-tool entrypoint.
+- `Codex` should enter through `AGENTS.md` directly; no separate Codex adapter is required.
+- If `AGENTS.md`, adapters, or other AI entrypoints change during an active Codex thread, start a new Codex thread before relying on the updated instructions.
 - Adapter files such as `CLAUDE.md` should defer to `AGENTS.md`.
-- `ai/README.md` documents the `ai/*` namespace after the AI tool has entered through its adapter or `AGENTS.md`.
+- `.dev_sop/README.md` documents the `.dev_sop/*` namespace after the AI tool has entered through its adapter or `AGENTS.md`.
 
 When this starter is copied into a real project:
 - let `README.md` become the project's human-facing README
-- use a root-level `project/` control surface as the default recovery layer when human readers need current-state navigation
+- use `.dev_sop/control/*` as the default recovery layer when current-state navigation needs to stay separate from product docs and engineering directories
 - keep `AGENTS.md` and any adapters as AI-tool entrypoints
-- keep `ai/README.md` as the namespace map for AI workflow assets
+- keep `.dev_sop/README.md` as the namespace map for Dev SOP workflow assets
+- keep `.dev_sop/VERSION.md` and `.dev_sop/upgrades/*` so future SOP upgrades can be applied deliberately
+
+## SOP Upgrade Workflow
+
+- `.dev_sop/VERSION.md` is the source of truth for the current Dev SOP version.
+- `.dev_sop/upgrades/*` contains the version-targeted upgrade notes.
+- When upgrading SOP assets in a copied project:
+  1. read the project's `.dev_sop/VERSION.md`
+  2. compare it with the source starter's `.dev_sop/VERSION.md`
+  3. apply each newer upgrade note in ascending version order
+  4. preserve project-local SOP customizations unless an upgrade note explicitly replaces them
+  5. update the project's `.dev_sop/VERSION.md` only after the upgrade lands and validates
 
 ## Working model
 
@@ -82,7 +102,7 @@ Follow this operating sequence by default:
 
 When a plan or phase slice exists, the default execution path is `plan -> one or more task specs -> implementation -> validation`.
 A plan may come from an interactive planning session or a written plan document.
-Use `ai/doc/templates/plan-template.md` only when the plan should become a durable repo artifact worth re-reading, sharing, or handing off.
+Use `.dev_sop/doc/templates/plan-template.md` only when the plan should become a durable repo artifact worth re-reading, sharing, or handing off.
 Plans may remain temporary. The task spec is the default durable execution artifact for implementation and iteration.
 When work spans multiple phases, milestones, or long-running slices, keep the hierarchy explicit as `project_target -> current_target -> phase -> plan -> task`.
 Keep project and phase intent in the planning layer. Do not let task execution quietly redefine those boundaries.
@@ -116,11 +136,11 @@ Good write-back targets include:
 
 Route write-back to the right layer:
 
-- `ai/doc/facts/*` for stable reusable project context
-- `ai/skill/*` for repeatable workflows
+- `.dev_sop/doc/facts/*` for stable reusable project context
+- `.dev_sop/skill/*` for repeatable workflows
 - `AGENTS.md` or `.cursor/rules/*` only for repository-wide operating guidance
 
-When adding, removing, or renaming fact files, keep `ai/doc/facts/facts-index.md` in sync.
+When adding, removing, or renaming fact files, keep `.dev_sop/doc/facts/facts-index.md` in sync.
 
 Do not write back:
 
@@ -141,21 +161,20 @@ Facts are stable context, not an archive.
 
 ## Project control sync rule
 
-When a change produces a durable shift in current phase, active slice, frozen decision, or experiment status, update the appropriate file under `project/*` in the same change.
+When a change produces a durable shift in current phase, active slice, source-of-truth routing, or other current-state context, update the appropriate file under `.dev_sop/control/*` in the same change.
 
 Use:
 
-- `project/CURRENT.md` for current operating state
-- `project/DOC_MAP.md` when the reading order or document roles change
-- `project/decisions/*` for frozen project-level decisions worth re-reading later
-- `project/experiments/*` for experiment runs and readable summaries
+- `.dev_sop/control/CURRENT.md` for current operating state
+- `.dev_sop/control/DOC_MAP.md` when the reading order or document roles change
 
-Do not route temporary task chatter into `project/*`.
-Do not use `ai/doc/facts/*` as the project's current-status dashboard.
+Do not route temporary task chatter into `.dev_sop/control/*`.
+Route durable reusable decision or experiment outcomes to `.dev_sop/doc/facts/*`; otherwise keep them in the active spec or change summary.
+Do not use `.dev_sop/doc/facts/*` as the project's current-status dashboard.
 
 ## Skill promotion rule
 
-Promote a workflow into `ai/skill/*` when:
+Promote a workflow into `.dev_sop/skill/*` when:
 
 - it repeats across tasks
 - its inputs and outputs are recognizable
@@ -164,7 +183,7 @@ Promote a workflow into `ai/skill/*` when:
 - it can be described clearly enough to reuse
 
 Do not create a new skill for every useful prompt.
-When adding, removing, or renaming skills, keep `ai/skill/skill-registry.md` in sync.
+When adding, removing, or renaming skills, keep `.dev_sop/skill/skill-registry.md` in sync.
 
 ## Validation expectations
 

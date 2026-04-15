@@ -13,6 +13,6 @@ alwaysApply: true
 - If missing policy, dependency, or priority choices appear, return `needs_decision` or `replan_required` instead of inventing them locally.
 - Prefer existing structures over creating parallel systems.
 - Narrow ambiguous work instead of expanding design scope.
-- Keep AI-managed workflow assets under `ai/`.
-- Keep project-facing documentation outside `ai/`.
-- Use the canonical singular roots `ai/doc` and `ai/skill`; do not create parallel roots such as `ai/docs` or `ai/skills`.
+- Keep AI-managed workflow assets under `.dev_sop/`.
+- Keep project-facing documentation outside `.dev_sop/`.
+- Use the canonical singular roots `.dev_sop/control`, `.dev_sop/doc`, and `.dev_sop/skill`; do not create parallel roots such as `.dev_sop/controls`, `.dev_sop/docs`, or `.dev_sop/skills`.
