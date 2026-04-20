@@ -1,7 +1,6 @@
 # DOC MAP
 
 This file is the starter seed `DOC_MAP.md` for copied projects.
-In this repository it is authored under `product/control/DOC_MAP.md` and is installed into copied projects as `.dev_sop/control/DOC_MAP.md`.
 
 ## Start order
 

@@ -6,7 +6,8 @@ import shutil
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ASSET_ROOT = REPO_ROOT / "src" / "dev_sop_cli" / "assets" / "starter"
-PACKAGED_ROOT_README = Path(__file__).resolve().parent / "packaged-root-README.md"
+PACKAGED_AGENTS = Path(__file__).resolve().parent / "packaged-AGENTS.md"
+PACKAGED_CLAUDE = Path(__file__).resolve().parent / "packaged-CLAUDE.md"
 PRODUCT_ROOT = REPO_ROOT / "product"
 
 
@@ -16,10 +17,12 @@ def main() -> None:
 
     ASSET_ROOT.mkdir(parents=True, exist_ok=True)
 
-    for name in ("AGENTS.md", "CLAUDE.md", "README.md"):
-        source = REPO_ROOT / name
-        if name == "README.md":
-            source = PACKAGED_ROOT_README
+    source_map = {
+        "AGENTS.md": PACKAGED_AGENTS,
+        "CLAUDE.md": PACKAGED_CLAUDE,
+    }
+
+    for name, source in source_map.items():
         shutil.copyfile(source, ASSET_ROOT / name)
 
     shutil.copytree(PRODUCT_ROOT, ASSET_ROOT / "dev_sop")

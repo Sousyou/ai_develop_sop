@@ -10,4 +10,5 @@ This repository uses `CLAUDE.md` as the Claude Code entry adapter.
 ## Claude Code Notes
 
 - If `CLAUDE.md` or `AGENTS.md` changes during an active Claude Code session, restart from the updated entrypoint before relying on the new instructions.
+- Follow `facts/sop-maintenance-rules.md` before changing starter-managed SOP surfaces in this source repository.
 - Product documents may describe installed paths as `.dev_sop/*`; in this source repository, use the corresponding file under `product/*`.

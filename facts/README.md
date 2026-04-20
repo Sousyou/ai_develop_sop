@@ -13,3 +13,4 @@ This directory is not part of the packaged starter surface and should not be cop
 ## Current Files
 
 - `repository-model.md`
+- `sop-maintenance-rules.md`

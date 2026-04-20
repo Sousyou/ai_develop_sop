@@ -24,3 +24,4 @@ This source repository keeps a light root and stores the SOP product source in o
 - If the file is part of the reusable SOP product, it belongs in `product/*`.
 - If the file is a lightweight root fact for orientation, it belongs in `facts/*`.
 - If the file is packaging or CLI code, it belongs in `src/` or `scripts/`.
+- If the file documents how this source repository must maintain the packaged SOP contract, keep it in `facts/*` rather than in the packaged starter tree.

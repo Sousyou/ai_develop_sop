@@ -1,9 +1,8 @@
-# Dev SOP Product
+# Dev SOP Namespace
 
-This directory is the source tree for the packaged SOP starter.
+This directory defines the installed SOP namespace for copied projects.
 
-In this repository the source lives under `product/*`.
-When copied or installed into another project, the same tree is materialized as `.dev_sop/*`.
+When the starter is adopted in a project, this tree is materialized as `.dev_sop/*`.
 
 ## Namespace Map
 
@@ -55,10 +54,11 @@ Choose the destination by the question the file answers:
 
 - Put it in `core/*` when it is starter-owned and cross-project reusable.
 - Put it in `control/*` or `project-*` only when it is part of the packaged starter seed surface.
-- Put it outside `product/*` when it documents repository-level facts, packaging code, or source-repo implementation.
+- Put it outside the installed SOP namespace when it documents repository-level facts, packaging code, or product implementation.
 
 ## Maintenance Rule
 
 - When starter-owned reusable skills under `core/skills/` change, update `core/skills/skill-registry.md`.
 - When starter-owned example files under `core/examples/` change, update the matching example-surface `README.md`.
 - If the starter package contract changes, update the root entry docs, `VERSION.md`, and the matching upgrade note in the same change.
+- Once a version is published as a standardized CLI baseline, any later starter-managed change must bump `VERSION.md` and add a new upgrade note.

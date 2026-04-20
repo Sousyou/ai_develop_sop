@@ -14,6 +14,8 @@ Use this as the copied-project quickstart:
 6. bind that spec to the applicable baseline and project rules plus validation gates
 7. validate explicitly and write back only stable reusable context
 
+For future upgrades, keep `AGENTS.md` and `CLAUDE.md` on the shipped heading structure and place repository-specific entrypoint additions under `## Project Local Notes` when possible.
+
 The starter should stay lightweight on day one.
 Do not create every optional artifact up front.
 

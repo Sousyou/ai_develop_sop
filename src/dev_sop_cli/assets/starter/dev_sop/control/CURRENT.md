@@ -1,7 +1,6 @@
 # CURRENT
 
 This file is the starter seed `CURRENT.md` for copied projects.
-In this repository it is authored under `product/control/CURRENT.md` and is installed into copied projects as `.dev_sop/control/CURRENT.md`.
 
 ## Current phase
 Bootstrap the current project onto the starter without mixing starter-owned core assets and project outputs.

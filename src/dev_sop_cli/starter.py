@@ -12,19 +12,37 @@ ASSET_ROOT = Path(__file__).resolve().parent / "assets" / "starter"
 PACKAGED_DEV_SOP_DIR = PurePosixPath("dev_sop")
 VERSION_FILE = PurePosixPath(".dev_sop/VERSION.md")
 
+ENTRYPOINT_SECTION_RULES = {
+    PurePosixPath("AGENTS.md"): {
+        "managed": [
+            "## Codex Reading Order",
+            "## Precedence Contract",
+            "## Source Of Truth",
+            "## Codex Notes",
+        ],
+        "local": "## Project Local Notes",
+    },
+    PurePosixPath("CLAUDE.md"): {
+        "managed": [
+            "## Claude Code Reading Order",
+            "## Claude Code Notes",
+        ],
+        "local": "## Project Local Notes",
+    },
+}
+
 SEED_ONLY_FILES = {
-    PurePosixPath("README.md"),
     PurePosixPath(".dev_sop/control/CURRENT.md"),
     PurePosixPath(".dev_sop/control/DOC_MAP.md"),
-    PurePosixPath(".dev_sop/project-rules/README.md"),
     PurePosixPath(".dev_sop/project-rules/rule-index.md"),
     PurePosixPath(".dev_sop/project-rules/exceptions.md"),
+}
+MANAGED_SURFACE_FILES = {
+    PurePosixPath(".dev_sop/project-rules/README.md"),
     PurePosixPath(".dev_sop/project-specs/README.md"),
     PurePosixPath(".dev_sop/project-facts/README.md"),
 }
 MANAGED_ROOT_FILES = {
-    PurePosixPath("AGENTS.md"),
-    PurePosixPath("CLAUDE.md"),
     PurePosixPath(".dev_sop/README.md"),
 }
 MANAGED_DIR_PREFIXES = (
@@ -33,6 +51,7 @@ MANAGED_DIR_PREFIXES = (
 )
 VERSION_RE = re.compile(r"`(\d+\.\d+\.\d+)`")
 UPGRADE_RE = re.compile(r"v(\d+\.\d+\.\d+)\.md$")
+HEADING_RE = re.compile(r"^## .+$", re.MULTILINE)
 
 
 @dataclass
@@ -43,6 +62,7 @@ class OperationReport:
     target_version: str | None = None
     created: list[str] = field(default_factory=list)
     updated: list[str] = field(default_factory=list)
+    removed: list[str] = field(default_factory=list)
     unchanged: list[str] = field(default_factory=list)
     skipped: list[str] = field(default_factory=list)
     conflicts: list[str] = field(default_factory=list)
@@ -127,8 +147,12 @@ def applicable_upgrade_notes(target_version: str | None, starter_version: str) -
 def classify_update_path(relative_path: PurePosixPath) -> str:
     if relative_path == VERSION_FILE:
         return "version"
+    if relative_path in ENTRYPOINT_SECTION_RULES:
+        return "entrypoint"
     if relative_path in SEED_ONLY_FILES:
         return "seed"
+    if relative_path in MANAGED_SURFACE_FILES:
+        return "managed"
     if relative_path in MANAGED_ROOT_FILES:
         return "managed"
     if any(_is_relative_to(relative_path, prefix) for prefix in MANAGED_DIR_PREFIXES):
@@ -206,11 +230,35 @@ def update_target(
                 report.skipped.append(relative_path.as_posix())
             continue
 
-        if force:
-            _write_file(source, destination, dry_run=dry_run)
-            report.updated.append(relative_path.as_posix())
-        else:
-            report.conflicts.append(relative_path.as_posix())
+        if classification == "entrypoint":
+            merged_text = merge_entrypoint_text(
+                relative_path,
+                source.read_text(encoding="utf-8"),
+                destination.read_text(encoding="utf-8"),
+            )
+            if merged_text is None:
+                if force:
+                    _write_file(source, destination, dry_run=dry_run)
+                    report.updated.append(relative_path.as_posix())
+                else:
+                    report.conflicts.append(relative_path.as_posix())
+                continue
+            if merged_text == destination.read_text(encoding="utf-8"):
+                report.unchanged.append(relative_path.as_posix())
+            else:
+                _write_text(merged_text, destination, dry_run=dry_run)
+                report.updated.append(relative_path.as_posix())
+            continue
+
+        _write_file(source, destination, dry_run=dry_run)
+        report.updated.append(relative_path.as_posix())
+
+    removed_paths = remove_obsolete_managed_files(
+        target_root,
+        expected_paths=set(iter_starter_files()),
+        dry_run=dry_run,
+    )
+    report.removed.extend(removed_paths)
 
     if not report.has_conflicts or force:
         source = _source_path(VERSION_FILE)
@@ -244,6 +292,7 @@ def format_report(report: OperationReport) -> str:
         [
             f"created: {len(report.created)}",
             f"updated: {len(report.updated)}",
+            f"removed: {len(report.removed)}",
             f"unchanged: {len(report.unchanged)}",
             f"skipped: {len(report.skipped)}",
             f"conflicts: {len(report.conflicts)}",
@@ -276,6 +325,13 @@ def _write_file(source: Path, destination: Path, *, dry_run: bool) -> None:
     shutil.copyfile(source, destination)
 
 
+def _write_text(text: str, destination: Path, *, dry_run: bool) -> None:
+    if dry_run:
+        return
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(text, encoding="utf-8")
+
+
 def _same_file(source: Path, destination: Path) -> bool:
     return source.read_bytes() == destination.read_bytes()
 
@@ -304,3 +360,106 @@ def _target_relative_from_asset(relative_path: PurePosixPath) -> PurePosixPath:
         suffix = relative_path.relative_to(PACKAGED_DEV_SOP_DIR)
         return PurePosixPath(".dev_sop") / suffix
     return relative_path
+
+
+def parse_markdown_sections(text: str) -> tuple[str, list[tuple[str, str]]]:
+    matches = list(HEADING_RE.finditer(text))
+    if not matches:
+        return text, []
+    preamble = text[: matches[0].start()]
+    sections: list[tuple[str, str]] = []
+    for index, match in enumerate(matches):
+        start = match.start()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        block = text[start:end]
+        heading = match.group(0).strip()
+        sections.append((heading, block))
+    return preamble, sections
+
+
+def merge_entrypoint_text(relative_path: PurePosixPath, canonical_text: str, target_text: str) -> str | None:
+    rules = ENTRYPOINT_SECTION_RULES[relative_path]
+    canonical_preamble, canonical_sections = parse_markdown_sections(canonical_text)
+    target_preamble, target_sections = parse_markdown_sections(target_text)
+    if not canonical_sections or not target_sections:
+        return None
+
+    canonical_map = {heading: block for heading, block in canonical_sections}
+    target_map = {heading: block for heading, block in target_sections}
+    managed_headings = set(rules["managed"])
+    local_heading = rules["local"]
+
+    merged_blocks: list[str] = []
+    preamble = canonical_preamble
+    if target_preamble.strip() and canonical_preamble.strip() == target_preamble.strip():
+        preamble = target_preamble
+    merged_blocks.append(preamble.rstrip())
+
+    for heading, canonical_block in canonical_sections:
+        if heading == local_heading:
+            merged_blocks.append(target_map.get(heading, canonical_block).rstrip())
+            continue
+        if heading in managed_headings:
+            merged_blocks.append(canonical_block.rstrip())
+            continue
+        merged_blocks.append(target_map.get(heading, canonical_block).rstrip())
+
+    unknown_blocks = [
+        block.rstrip()
+        for heading, block in target_sections
+        if heading not in canonical_map
+    ]
+    merged_blocks.extend(block for block in unknown_blocks if block)
+
+    merged_text = "\n\n".join(block for block in merged_blocks if block) + "\n"
+    return merged_text
+
+
+def remove_obsolete_managed_files(
+    target_root: Path,
+    *,
+    expected_paths: set[PurePosixPath],
+    dry_run: bool,
+) -> list[str]:
+    expected_managed = {
+        path
+        for path in expected_paths
+        if path in ENTRYPOINT_SECTION_RULES
+        or path in MANAGED_SURFACE_FILES
+        or path in MANAGED_ROOT_FILES
+        or any(_is_relative_to(path, prefix) for prefix in MANAGED_DIR_PREFIXES)
+    }
+
+    removable_prefixes = MANAGED_DIR_PREFIXES
+    removable_files = MANAGED_ROOT_FILES | MANAGED_SURFACE_FILES
+    removed: list[str] = []
+
+    for path in sorted(target_root.rglob("*")):
+        if not path.is_file():
+            continue
+        relative_path = PurePosixPath(path.relative_to(target_root).as_posix())
+        if relative_path in expected_managed:
+            continue
+        if relative_path in removable_files:
+            if not dry_run:
+                path.unlink()
+            removed.append(relative_path.as_posix())
+            continue
+        if any(_is_relative_to(relative_path, prefix) for prefix in removable_prefixes):
+            if not dry_run:
+                path.unlink()
+            removed.append(relative_path.as_posix())
+
+    if not dry_run:
+        for prefix in removable_prefixes:
+            prefix_path = target_root / Path(prefix.as_posix())
+            if prefix_path.exists():
+                _remove_empty_dirs(prefix_path)
+
+    return removed
+
+
+def _remove_empty_dirs(root: Path) -> None:
+    for directory in sorted(root.rglob("*"), reverse=True):
+        if directory.is_dir() and not any(directory.iterdir()):
+            directory.rmdir()

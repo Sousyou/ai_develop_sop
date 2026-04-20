@@ -5,11 +5,12 @@ This repository keeps the SOP product source under `product/`.
 ## Start Order
 
 1. Read `facts/README.md` for repository-level orientation.
-2. Read `product/README.md` for the SOP product map.
-3. Read `product/core/rules/rule-index.md` for baseline rules.
-4. Read `product/project-rules/rule-index.md` for the seed project-rule layer.
-5. Read `product/control/CURRENT.md` for recovery state.
-6. Read the active task spec in `product/project-specs/*.md` before implementation work.
+2. Read `facts/sop-maintenance-rules.md` for source-repository SOP maintenance constraints.
+3. Read `product/README.md` for the SOP product map.
+4. Read `product/core/rules/rule-index.md` for baseline rules.
+5. Read `product/project-rules/rule-index.md` for the seed project-rule layer.
+6. Read `product/control/CURRENT.md` for recovery state.
+7. Read the active task spec in `product/project-specs/*.md` before implementation work.
 
 ## Surface Meanings
 
@@ -25,5 +26,6 @@ This repository keeps the SOP product source under `product/`.
 ## Notes
 
 - `Codex` should enter through this file directly.
+- This source repository owns the maintenance contract for the packaged SOP. Follow `facts/sop-maintenance-rules.md` before changing starter-managed surfaces.
 - Product documents may describe installed paths as `.dev_sop/*`; in this source repository, edit the corresponding file under `product/*`.
 - Ignore `build/*` and other generated packaging artifacts unless you are validating packaging behavior.

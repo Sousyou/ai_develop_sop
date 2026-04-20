@@ -29,12 +29,12 @@ def build_parser() -> argparse.ArgumentParser:
     update_parser.add_argument(
         "--force",
         action="store_true",
-        help="Overwrite conflicting starter-owned files such as AGENTS.md or files under .dev_sop/core/.",
+        help="Fallback to full overwrite when a standardized entrypoint merge cannot be applied cleanly.",
     )
     update_parser.add_argument(
         "--force-seed",
         action="store_true",
-        help="Also overwrite seed files such as control and project-surface README files.",
+        help="Also overwrite project-owned seed files such as control files and project rule indexes.",
     )
     update_parser.add_argument("--dry-run", action="store_true", help="Show what would happen without writing files.")
     update_parser.set_defaults(handler=handle_update)

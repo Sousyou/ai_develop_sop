@@ -2,8 +2,6 @@
 
 This directory is the starter seed project-fact surface for copied projects.
 
-In this source repository, live product facts should go under `../product/facts/*` instead.
-
 ## Boundary
 
 - keep copied-project fact files here after adoption
