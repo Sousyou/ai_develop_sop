@@ -63,7 +63,23 @@ dev-sop init /path/to/project
 dev-sop update /path/to/project
 ```
 
+For non-interactive use:
+
+```bash
+dev-sop init /path/to/project --yes
+dev-sop update /path/to/project --yes
+```
+
 `init` copies the packaged starter surface into the target directory and materializes it as `.dev_sop/*`. It also installs root `AGENTS.md` and `CLAUDE.md`. It does not create or overwrite the target project's root `README.md` by default.
+
+Before `init` writes anything, it shows:
+
+- the target path
+- the packaged starter SOP version
+- the target project's current SOP version, if one already exists
+- whether `--force` or `--dry-run` is active
+
+Then it requires an explicit confirmation unless `--yes` is provided.
 
 `update` is safe by default:
 
@@ -74,6 +90,15 @@ dev-sop update /path/to/project
 - it leaves project-owned seed files such as `.dev_sop/control/*`, `.dev_sop/project-rules/rule-index.md`, and `.dev_sop/project-rules/exceptions.md` in place unless `--force-seed` is provided
 - it uses `--force` only as a fallback when entrypoint merge cannot be applied cleanly
 - it does not update the target project's `.dev_sop/VERSION.md` when entrypoint conflicts remain
+
+Before `update` runs, it shows:
+
+- the target path
+- the packaged starter SOP version
+- the target project's current SOP version
+- whether `--force`, `--force-seed`, or `--dry-run` is active
+
+Then it requires an explicit confirmation unless `--yes` is provided.
 
 The pure command-line update guarantee applies to standardized projects only:
 
