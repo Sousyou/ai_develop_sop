@@ -56,6 +56,23 @@ Choose the destination by the question the file answers:
 - Put it in `control/*` or `project-*` only when it is part of the packaged starter seed surface.
 - Put it outside the installed SOP namespace when it documents repository-level facts, packaging code, or product implementation.
 
+## Copied Project Workspace Convention
+
+The installed SOP namespace still lives under `.dev_sop/*`, but copied-project working directories stay at the repository root:
+
+- `product/`
+  Final product outputs, deliverables, or reviewed release-ready artifacts.
+
+- `dev/`
+  In-progress development outputs, drafts, notes, and intermediate build artifacts.
+
+- `sandbox/`
+  Optional isolated workspace for disposable tests, experiments, or temporary validation environments.
+
+`dev-sop init` and `dev-sop update` ensure that root `product/` and `dev/` exist.
+Use `--with-sandbox` when the copied project also needs a root `sandbox/`.
+When isolated filesystem testing is needed during development, route it into `sandbox/` instead of creating ad hoc root `test*`, `tmp*`, or `playground*` directories.
+
 ## Maintenance Rule
 
 - When starter-owned reusable skills under `core/skills/` change, update `core/skills/skill-registry.md`.

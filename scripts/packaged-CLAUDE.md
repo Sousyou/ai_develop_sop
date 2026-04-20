@@ -15,6 +15,9 @@ This repository uses `CLAUDE.md` as the Claude Code entry adapter for the Dev SO
 
 - Claude Code should enter through this file or through `AGENTS.md`.
 - If `CLAUDE.md`, `AGENTS.md`, `.dev_sop/core/rules/*`, or `.dev_sop/project-rules/*` changes during an active Claude Code session, start a fresh Claude Code session before relying on the updated instructions.
+- In copied projects, use root `product/` for final outputs and root `dev/` for in-progress development artifacts.
+- Use root `sandbox/` only when disposable tests or experiments need an isolated workspace.
+- When isolated test directories are needed, route them into `sandbox/` instead of creating ad hoc root `test*` directories.
 - When documents overlap, apply the precedence contract described in `AGENTS.md` before inventing a local interpretation.
 
 ## Project Local Notes

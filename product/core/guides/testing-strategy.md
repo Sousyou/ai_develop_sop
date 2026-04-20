@@ -57,6 +57,13 @@ Prefer protecting:
 - regression-prone paths
 - high-risk branches
 
+## Test workspace routing
+
+If a task needs an isolated filesystem workspace for manual testing, disposable fixtures, or temporary experiments:
+- use the copied project's root `sandbox/`
+- do not create ad hoc root `test*`, `tmp*`, or `playground*` directories for the same purpose
+- keep durable automated tests in the project's real test surfaces; `sandbox/` is for isolated transient work
+
 ## 3. Batch-level release checks
 
 Do not turn every task spec into a release checklist.

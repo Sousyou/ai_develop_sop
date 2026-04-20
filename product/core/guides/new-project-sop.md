@@ -16,6 +16,10 @@ Use this as the copied-project quickstart:
 
 For future upgrades, keep `AGENTS.md` and `CLAUDE.md` on the shipped heading structure and place repository-specific entrypoint additions under `## Project Local Notes` when possible.
 
+For copied-project workspace layout, keep root `product/` for final outputs and root `dev/` for in-progress outputs.
+Create root `sandbox/` only when tests or experiments need an isolated disposable area.
+When that need appears, use `sandbox/` instead of inventing new root `test*` directories.
+
 The starter should stay lightweight on day one.
 Do not create every optional artifact up front.
 
@@ -23,6 +27,8 @@ Do not create every optional artifact up front.
 
 The smallest practical copied-project set is:
 
+- `product/`
+- `dev/`
 - `AGENTS.md`
 - `CLAUDE.md`
 - `.dev_sop/README.md`
@@ -38,6 +44,8 @@ The smallest practical copied-project set is:
 - `.dev_sop/project-facts/README.md`
 - `.dev_sop/core/skills/plan-to-spec.md`
 - `.dev_sop/core/skills/design-whitebox-tests.md`
+
+Create root `sandbox/` only when the copied project actually needs a disposable test surface.
 
 Add `.dev_sop/core/examples/*` only when the copied project wants bundled writing references.
 
@@ -76,6 +84,7 @@ For the first copied-project slice:
 
 - use black-box validation by default
 - add white-box validation when internal complexity or regression sensitivity demands it
+- if a task needs an isolated filesystem test area, use root `sandbox/` instead of creating ad hoc root `test*` directories
 - apply any local gates declared in the active project-rule files
 - update `.dev_sop/control/*` only for durable recovery-state changes
 - write stable reusable context to `.dev_sop/project-facts/*`

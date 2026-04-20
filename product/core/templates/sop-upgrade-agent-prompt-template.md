@@ -48,6 +48,9 @@ Follow this procedure:
 10. Keep edits scoped to SOP assets and required entrypoint or reference updates. Do not modify product or application code.
 11. Validate:
     - the current project's `.dev_sop/VERSION.md` exists and matches the latest source version after the upgrade
+    - root `product/` and `dev/` exist as directories
+    - if the applicable upgrade note requires a sandbox, root `sandbox/` exists as a directory
+    - isolated test work is routed into `sandbox/` rather than ad hoc root `test*` directories when the upgrade note requires that normalization
     - required upgrade files and directories exist
     - live SOP path references match the target structure
     - preserved project-owned specs and local customizations are still intact

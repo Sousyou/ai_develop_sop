@@ -38,6 +38,9 @@ This repository uses `AGENTS.md` as the Codex entry adapter for the Dev SOP.
 
 - Codex should enter through this file directly.
 - If `AGENTS.md`, `CLAUDE.md`, `.dev_sop/core/rules/*`, or `.dev_sop/project-rules/*` changes during an active Codex thread, start a fresh Codex thread before relying on the updated instructions.
+- In copied projects, use root `product/` for final outputs and root `dev/` for in-progress development artifacts.
+- Use root `sandbox/` only when disposable tests or experiments need an isolated workspace.
+- When isolated test directories are needed, route them into `sandbox/` instead of creating ad hoc root `test*` directories.
 - When documents overlap, apply the precedence contract before inventing a local interpretation.
 
 ## Project Local Notes

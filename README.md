@@ -61,6 +61,7 @@ After installation, use:
 dev-sop version
 dev-sop init /path/to/project
 dev-sop update /path/to/project
+dev-sop init /path/to/project --with-sandbox
 ```
 
 For non-interactive use:
@@ -68,21 +69,25 @@ For non-interactive use:
 ```bash
 dev-sop init /path/to/project --yes
 dev-sop update /path/to/project --yes
+dev-sop update /path/to/project --yes --with-sandbox
 ```
 
-`init` copies the packaged starter surface into the target directory and materializes it as `.dev_sop/*`. It also installs root `AGENTS.md` and `CLAUDE.md`. It does not create or overwrite the target project's root `README.md` by default.
+`init` copies the packaged starter surface into the target directory and materializes it as `.dev_sop/*`. It also installs root `AGENTS.md` and `CLAUDE.md`, and ensures root `product/` plus `dev/` exist. It does not create or overwrite the target project's root `README.md` by default. Use `--with-sandbox` when the target project needs a root `sandbox/` for isolated tests or experiments.
 
 Before `init` writes anything, it shows:
 
 - the target path
 - the packaged starter SOP version
 - the target project's current SOP version, if one already exists
+- the workspace directories it will ensure
 - whether `--force` or `--dry-run` is active
 
 Then it requires an explicit confirmation unless `--yes` is provided.
 
 `update` is safe by default:
 
+- it backfills missing root `product/` and `dev/` directories
+- it backfills root `sandbox/` when `--with-sandbox` is provided
 - it creates missing starter files
 - it replaces starter-owned files under `.dev_sop/README.md`, `.dev_sop/core/*`, and `.dev_sop/upgrades/*`
 - it replaces starter-owned project-surface guides such as `.dev_sop/project-rules/README.md`, `.dev_sop/project-specs/README.md`, and `.dev_sop/project-facts/README.md`
@@ -96,9 +101,13 @@ Before `update` runs, it shows:
 - the target path
 - the packaged starter SOP version
 - the target project's current SOP version
+- the workspace directories it will ensure
 - whether `--force`, `--force-seed`, or `--dry-run` is active
 
 Then it requires an explicit confirmation unless `--yes` is provided.
+
+In this source repository, root `product/*` is still the SOP package source tree.
+The copied-project workspace directories created by the CLI are the target project's own root `product/`, `dev/`, and optional `sandbox/`.
 
 The pure command-line update guarantee applies to standardized projects only:
 

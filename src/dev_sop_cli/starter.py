@@ -11,6 +11,11 @@ from . import __version__
 ASSET_ROOT = Path(__file__).resolve().parent / "assets" / "starter"
 PACKAGED_DEV_SOP_DIR = PurePosixPath("dev_sop")
 VERSION_FILE = PurePosixPath(".dev_sop/VERSION.md")
+DEFAULT_WORKSPACE_DIRS = (
+    PurePosixPath("product"),
+    PurePosixPath("dev"),
+)
+OPTIONAL_SANDBOX_DIR = PurePosixPath("sandbox")
 
 ENTRYPOINT_SECTION_RULES = {
     PurePosixPath("AGENTS.md"): {
@@ -66,12 +71,15 @@ class OperationReport:
     unchanged: list[str] = field(default_factory=list)
     skipped: list[str] = field(default_factory=list)
     conflicts: list[str] = field(default_factory=list)
+    workspace_directories: list[str] = field(default_factory=list)
+    created_workspace_directories: list[str] = field(default_factory=list)
+    workspace_directory_conflicts: list[str] = field(default_factory=list)
     version_updated: bool = False
     applicable_upgrades: list[str] = field(default_factory=list)
 
     @property
     def has_conflicts(self) -> bool:
-        return bool(self.conflicts)
+        return bool(self.conflicts or self.workspace_directory_conflicts)
 
 
 def starter_root() -> Path:
@@ -160,7 +168,13 @@ def classify_update_path(relative_path: PurePosixPath) -> str:
     raise ValueError(f"Unhandled starter path in update manifest: {relative_path}")
 
 
-def init_target(target_root: Path, *, force: bool = False, dry_run: bool = False) -> OperationReport:
+def init_target(
+    target_root: Path,
+    *,
+    force: bool = False,
+    dry_run: bool = False,
+    with_sandbox: bool = False,
+) -> OperationReport:
     starter_version = read_starter_version()
     target_root.mkdir(parents=True, exist_ok=True)
     report = OperationReport(
@@ -168,6 +182,12 @@ def init_target(target_root: Path, *, force: bool = False, dry_run: bool = False
         target=target_root,
         starter_version=starter_version,
         target_version=read_target_version(target_root),
+    )
+    _populate_workspace_directories(
+        report,
+        target_root,
+        dry_run=dry_run,
+        with_sandbox=with_sandbox,
     )
     for relative_path in iter_starter_files():
         source = _source_path(relative_path)
@@ -193,6 +213,7 @@ def update_target(
     force: bool = False,
     force_seed: bool = False,
     dry_run: bool = False,
+    with_sandbox: bool = False,
 ) -> OperationReport:
     starter_version = read_starter_version()
     target_root.mkdir(parents=True, exist_ok=True)
@@ -203,6 +224,12 @@ def update_target(
         starter_version=starter_version,
         target_version=current_version,
         applicable_upgrades=applicable_upgrade_notes(current_version, starter_version),
+    )
+    _populate_workspace_directories(
+        report,
+        target_root,
+        dry_run=dry_run,
+        with_sandbox=with_sandbox,
     )
 
     for relative_path in iter_starter_files():
@@ -260,7 +287,7 @@ def update_target(
     )
     report.removed.extend(removed_paths)
 
-    if not report.has_conflicts or force:
+    if not report.has_conflicts:
         source = _source_path(VERSION_FILE)
         destination = target_root / Path(VERSION_FILE.as_posix())
         if not destination.exists():
@@ -281,6 +308,8 @@ def format_report(report: OperationReport) -> str:
         f"{report.command} target: {report.target}",
         f"starter version: {report.starter_version}",
     ]
+    if report.workspace_directories:
+        lines.append("workspace directories: " + ", ".join(report.workspace_directories))
     if report.command == "update":
         lines.append(f"target version: {report.target_version or 'unversioned'}")
         if report.applicable_upgrades:
@@ -295,7 +324,8 @@ def format_report(report: OperationReport) -> str:
             f"removed: {len(report.removed)}",
             f"unchanged: {len(report.unchanged)}",
             f"skipped: {len(report.skipped)}",
-            f"conflicts: {len(report.conflicts)}",
+            f"file conflicts: {len(report.conflicts)}",
+            f"workspace conflicts: {len(report.workspace_directory_conflicts)}",
         ]
     )
 
@@ -305,15 +335,24 @@ def format_report(report: OperationReport) -> str:
         if len(report.skipped) > 20:
             lines.append(f"  - ... and {len(report.skipped) - 20} more")
 
+    if report.created_workspace_directories:
+        lines.append("created workspace directories:")
+        lines.extend(f"  - {path}" for path in report.created_workspace_directories)
+
     if report.conflicts:
-        lines.append("conflicting starter-owned files:")
+        lines.append("starter-owned file conflicts:")
         lines.extend(f"  - {path}" for path in report.conflicts[:20])
         if len(report.conflicts) > 20:
             lines.append(f"  - ... and {len(report.conflicts) - 20} more")
         lines.append("rerun with --force to overwrite starter-owned files.")
 
+    if report.workspace_directory_conflicts:
+        lines.append("workspace directory conflicts:")
+        lines.extend(f"  - {path}" for path in report.workspace_directory_conflicts)
+        lines.append("remove or rename the blocking path, then rerun the command.")
+
     if report.command == "update" and not report.version_updated:
-        lines.append("VERSION.md was not updated because starter-owned conflicts remain.")
+        lines.append("VERSION.md was not updated because unresolved conflicts remain.")
 
     return "\n".join(lines)
 
@@ -334,6 +373,36 @@ def _write_text(text: str, destination: Path, *, dry_run: bool) -> None:
 
 def _same_file(source: Path, destination: Path) -> bool:
     return source.read_bytes() == destination.read_bytes()
+
+
+def workspace_directories(*, with_sandbox: bool) -> tuple[PurePosixPath, ...]:
+    directories = list(DEFAULT_WORKSPACE_DIRS)
+    if with_sandbox:
+        directories.append(OPTIONAL_SANDBOX_DIR)
+    return tuple(directories)
+
+
+def _populate_workspace_directories(
+    report: OperationReport,
+    target_root: Path,
+    *,
+    dry_run: bool,
+    with_sandbox: bool,
+) -> None:
+    requested = workspace_directories(with_sandbox=with_sandbox)
+    report.workspace_directories.extend(_directory_label(path) for path in requested)
+
+    for relative_path in requested:
+        destination = target_root / Path(relative_path.as_posix())
+        label = _directory_label(relative_path)
+        if destination.exists():
+            if destination.is_dir():
+                continue
+            report.workspace_directory_conflicts.append(label)
+            continue
+        if not dry_run:
+            destination.mkdir(parents=True, exist_ok=True)
+        report.created_workspace_directories.append(label)
 
 
 def _is_relative_to(path: PurePosixPath, prefix: PurePosixPath) -> bool:
@@ -463,3 +532,7 @@ def _remove_empty_dirs(root: Path) -> None:
     for directory in sorted(root.rglob("*"), reverse=True):
         if directory.is_dir() and not any(directory.iterdir()):
             directory.rmdir()
+
+
+def _directory_label(relative_path: PurePosixPath) -> str:
+    return relative_path.as_posix().rstrip("/") + "/"
