@@ -1,52 +1,72 @@
 # CURRENT
 
 ## Current phase
-Operate with the control surface rehomed into `.dev_sop/control/*` and keep the layout stable.
+Bootstrap or refine the SOP inside the current project without losing the starter's shared operating model.
 
 ## Current target
-Keep a recovery-first control surface inside `.dev_sop/` while preserving the spec-first execution model.
+Use the starter as a copyable baseline with:
+- baseline rules under `.dev_sop/core/rules/*`
+- starter-owned templates, guides, examples, and skills under `.dev_sop/core/*`
+- a project-local rule surface under `.dev_sop/project-rules/*`
+- real task specs under `.dev_sop/project-specs/*`
+- real stable facts under `.dev_sop/project-facts/*`
 
 ## Active slice
-Use `.dev_sop/control/*` as the default recovery path and keep it small as later work lands.
+Establish or maintain the smallest working plan -> spec -> implementation -> validation loop for the current project.
 
 ## In scope now
-- Keep `.dev_sop/control/CURRENT.md` as the recovery-first artifact
-- Keep `.dev_sop/control/DOC_MAP.md` role-based and short
-- Route durable reusable decisions and experiment takeaways to `.dev_sop/doc/facts/*`
-- Maintain the supporting templates, worked example, and `session-closeout` workflow as lightweight sustaining assets
-- Support optional batch-level release readiness without turning it into the default task path
+
+- keep `.dev_sop/core/*` as starter-owned cross-project reusable SOP content
+- keep `AGENTS.md` and `CLAUDE.md` as the only tool-entry adapters
+- keep `.dev_sop/project-rules/*` for current-project operating rules only
+- keep `.dev_sop/control/*` recovery-first and small
+- keep `.dev_sop/project-specs/*` and `.dev_sop/project-facts/*` for real project outputs
+- keep `.dev_sop/upgrades/*` explicit enough for copied-project migrations from older layouts
+- keep `.dev_sop/_backup/*` non-canonical and repository-local
 
 ## Out of scope now
-- `reports/` or `archive/`
-- Broad reporting, dashboard, or ADR systems
+
+- reintroducing removed legacy adapters into the mainline package
+- putting shipped-system or product docs under `.dev_sop/`
 - turning `.dev_sop/control/*` into a project board or work log
-- duplicating execution detail that already belongs in specs, facts, or skills
+- treating repository-local backup as part of the copyable starter package
 
 ## Current source of truth
+
 - `.dev_sop/control/DOC_MAP.md`
+- `.dev_sop/core/rules/rule-index.md`
+- `.dev_sop/project-rules/rule-index.md`
+- `.dev_sop/README.md`
 - `.dev_sop/VERSION.md`
-- `AGENTS.md`
-- `.dev_sop/doc/facts/project-scope.md` for stable scope and boundary context
-- the current active task spec in `.dev_sop/doc/specs/*`, if implementation work is underway
+- `AGENTS.md` for Codex entry
+- `CLAUDE.md` for Claude Code entry
+- the active task spec in `.dev_sop/project-specs/*.md`, if implementation work is underway
 
 ## Frozen decisions
-- `.dev_sop/control/` is the default recovery/control surface location.
-- `.dev_sop/control/CURRENT.md` is the recovery-first artifact.
-- `.dev_sop/control/` contains only `CURRENT.md` and `DOC_MAP.md`.
-- `.dev_sop/VERSION.md` is the source of truth for the current Dev SOP version.
-- The control surface stays intentionally narrow and does not become a broad documentation hub.
-- Durable decision rationale and reusable experiment outcomes belong in facts rather than separate control ledgers.
+
+- `.dev_sop/` remains the namespace root.
+- Starter-owned baseline rules live under `.dev_sop/core/rules/*`.
+- Starter-owned reusable assets live under `.dev_sop/core/*`.
+- Project-generated rules live under `.dev_sop/project-rules/*`.
+- Project-generated specs live under `.dev_sop/project-specs/*`.
+- Project-generated facts live under `.dev_sop/project-facts/*`.
+- Repository-local backup and non-copyable project artifacts may be retained under `.dev_sop/_backup/*`, but `_backup` is non-canonical.
+- `AGENTS.md` is the Codex entry adapter and `CLAUDE.md` is the Claude Code entry adapter.
+- The precedence contract is `approved exceptions > active task spec > project rules > core rules > entry adapter notes`.
+- Hard rules may be relaxed only through `.dev_sop/project-rules/exceptions.md` plus an explicit spec reference.
 
 ## Latest experiment
-None yet. Reusable experiment outcomes should be routed to facts; task-local runs stay in specs or change summaries.
+None. Keep experiments task-local unless they become stable enough to deserve facts, rules, or reusable starter assets.
 
 ## Next 3 actions
-1. Keep `.dev_sop/control/CURRENT.md` and `.dev_sop/control/DOC_MAP.md` small as later changes land.
-2. Use `session-closeout` when future slices may affect current state, decisions, experiments, facts, or skills.
-3. Add new control-surface artifacts only when a repeated recovery problem appears.
+
+1. Keep root entry docs and layer docs aligned whenever the namespace contract changes.
+2. Keep starter-owned reusable assets under `.dev_sop/core/*` and keep current-project outputs under the project surfaces.
+3. Keep copied-project upgrade notes explicit enough that older layouts still have a clear migration path.
 
 ## Risks to watch
-- `.dev_sop/control/DOC_MAP.md` could grow into a duplicate navigation layer.
-- `.dev_sop/control/CURRENT.md` could drift into a project board instead of staying recovery-focused.
-- Entry wording could blur the boundary between project control and SOP execution assets.
-- `.dev_sop/doc/facts/project-scope.md` could be treated like a live status file instead of a slower-moving scope fact.
+
+- repo-specific project artifacts could reappear under `.dev_sop/core/*` and muddy the starter boundary
+- repository-local backup could be mistaken for copyable starter content
+- `.dev_sop/project-rules/*` could drift from `.dev_sop/core/rules/*` and make precedence ambiguous
+- `.dev_sop/control/*` could still drift into status reporting instead of recovery routing

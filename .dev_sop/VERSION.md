@@ -1,24 +1,34 @@
 # Dev SOP Version
 
 ## Current Version
-`0.4.1`
+`1.6.0`
 
 ## Release Date
-`2026-04-15`
+`2026-04-20`
 
 ## Source Of Truth
-This file is the source of truth for the current Dev SOP version in this repository or in a copied project.
+
+This file is the source of truth for the current Dev SOP package version in this repository or in a copied project.
 
 ## Current Contract
 
 - the SOP namespace root is `.dev_sop/`
-- the recovery/control surface contains only `.dev_sop/control/CURRENT.md` and `.dev_sop/control/DOC_MAP.md`
-- the canonical singular Dev SOP roots are `.dev_sop/control`, `.dev_sop/doc`, and `.dev_sop/skill`
-- `.dev_sop/doc/specs/` keeps only `README.md`, starter-owned `example-*` reference specs, and project-owned real task specs
-- spec creation may be skipped only for task requests that are already effectively spec-complete and satisfy the explicit `trivially narrow` criteria in the workflow and specs guidance
-- version-targeted SOP upgrade notes live under `.dev_sop/upgrades/*`
-- the SOP upgrade prompt template may embed a repository-local source path default, but that path is editable and not part of the cross-platform Dev SOP contract
-- if an SOP upgrade changes `AGENTS.md`, adapters, or other AI entrypoints during Codex use, continue in a fresh Codex thread before relying on the new instructions
+- starter-owned baseline rules live under `.dev_sop/core/rules/*`
+- starter-owned templates live under `.dev_sop/core/templates/*`
+- starter-owned guides live under `.dev_sop/core/guides/*`
+- starter-owned examples live under `.dev_sop/core/examples/*`
+- starter-owned reusable skills live under `.dev_sop/core/skills/*`
+- project-generated rule files live under `.dev_sop/project-rules/*`
+- project-generated task specs live under `.dev_sop/project-specs/*`
+- project-generated facts live under `.dev_sop/project-facts/*`
+- upgrade notes live under `.dev_sop/upgrades/*`
+- repository-local backup and non-copyable project-produced artifacts may be retained under `.dev_sop/_backup/*`, but `_backup` is not part of the canonical starter surface
+- tool-entry notes live only in `AGENTS.md` and `CLAUDE.md`
+- the precedence contract is `approved exceptions > active task spec > project rules > core rules > entry adapter notes`
+- a task spec may narrow work, but it may not silently relax hard rules
+- any rule exception must be recorded in `.dev_sop/project-rules/exceptions.md` and referenced from the active spec
+- if the shared SOP package itself changes, update `.dev_sop/core/*`; if the current project changes, update the project directories
+- if an SOP upgrade changes `AGENTS.md`, `CLAUDE.md`, `.dev_sop/core/rules/*`, or `.dev_sop/project-rules/*`, continue in a fresh Codex or Claude Code thread before relying on the new instructions
 
 ## Upgrade Use
 
@@ -34,3 +44,4 @@ When upgrading SOP assets in a copied project:
 
 - this version tracks the SOP package, not the product or application
 - upgrade notes describe SOP asset changes, not application-code changes
+- `1.6.0` restores starter-owned cross-project reusable assets to `.dev_sop/core/*` and reserves `.dev_sop/_backup/*` for repository-local backup or non-copyable project artifacts

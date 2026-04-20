@@ -1,13 +1,18 @@
 # CLAUDE.md
 
-This repository uses `AGENTS.md` as the canonical source of repository-level guidance.
+This repository uses `CLAUDE.md` as the Claude Code entry adapter for the Dev SOP.
 
-## Source of truth
+## Claude Code Reading Order
 
-- Use `AGENTS.md` as the primary AI-tool entrypoint for repository-level behavior.
-- Use `.dev_sop/README.md` for the `.dev_sop/*` namespace map and boundary rules.
-- Use `.dev_sop/VERSION.md` and `.dev_sop/upgrades/*` when upgrading SOP assets in a copied project.
-- Follow `.cursor/rules/*`, `.dev_sop/doc/*`, and `.dev_sop/skill/*` as referenced by `AGENTS.md`.
-- If `CLAUDE.md` and `AGENTS.md` differ, `AGENTS.md` wins.
+1. Read `AGENTS.md` for the shared operating contract.
+2. Read `.dev_sop/control/CURRENT.md` if you are recovering active work.
+3. Read the active task spec in `.dev_sop/project-specs/*.md` before implementation work.
+4. Read `.dev_sop/core/*` only when the current slice needs a rule, template, guide, example, or reusable skill.
 
-This file is an adapter entry point, not a second rule system.
+## Claude Code Notes
+
+- Claude Code should enter through this file, then follow `AGENTS.md` and the `.dev_sop/*` package.
+- Use the same precedence contract defined in `AGENTS.md`.
+- If `CLAUDE.md` or `AGENTS.md` changes during an active Claude Code session, restart from the updated entrypoint before relying on the new instructions.
+- If `CLAUDE.md` and `AGENTS.md` diverge, fix the adapter drift in the same change and treat `.dev_sop/core/rules/*` plus `.dev_sop/project-rules/*` as authoritative.
+- Ignore `.dev_sop/_backup/*` unless you are intentionally recovering repository-local backup material.

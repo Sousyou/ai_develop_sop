@@ -1,206 +1,42 @@
 # AGENTS.md
 
-## Repository purpose
+This repository uses `AGENTS.md` as the Codex entry adapter for the Dev SOP.
 
-This repository is a reusable SOP starter for AI-assisted engineering work.
+## Codex Reading Order
 
-Its purpose is to provide a practical operating model for:
+1. Read `.dev_sop/README.md` for the namespace map and layer boundaries.
+2. Read `.dev_sop/core/rules/rule-index.md` for the starter-owned baseline rules.
+3. Read `.dev_sop/project-rules/rule-index.md` for the project-generated rule layer.
+4. Read `.dev_sop/control/CURRENT.md` for the current recovery state.
+5. Read the active task spec in `.dev_sop/project-specs/*.md` before implementation work.
+6. Read `.dev_sop/core/templates/*`, `.dev_sop/core/guides/*`, `.dev_sop/core/examples/*`, or `.dev_sop/core/skills/*` only when the current slice needs them.
 
-- plan-first engineering
-- task-spec-driven execution
-- explicit validation
-- stable fact write-back
-- reusable skill promotion
+## Precedence Contract
 
-This repository is workflow-oriented and tool-neutral. It is not tied to a specific application stack.
+- `approved exceptions > active task spec > project rules > core rules > entry adapter notes`
+- The active task spec may narrow work inside the rule set, but it must not silently relax hard rules.
+- Any rule relaxation must be recorded in `.dev_sop/project-rules/exceptions.md` and referenced from the active spec.
 
-## Canonical structure
-
-Use the repository layers as follows:
+## Source Of Truth
 
 - `README.md`
-  Repository entry point and adoption guide.
-
-- `AGENTS.md`
-  Canonical repository-level operating rules.
-
-- `CLAUDE.md`
-  Lightweight adapter that defers to `AGENTS.md`.
+  Human-facing project entrypoint.
 
 - `.dev_sop/README.md`
-  Namespace map for the `.dev_sop/` workflow namespace and its boundary rules.
+  Canonical namespace map for the SOP package.
 
 - `.dev_sop/VERSION.md`
-  Canonical current Dev SOP version and upgrade-use contract.
+  Source of truth for the current SOP package contract.
 
 - `.dev_sop/upgrades/*`
-  Version-targeted upgrade notes for copied-project SOP upgrades.
+  Version-targeted SOP upgrade procedures.
 
-- `.dev_sop/control/*`
-  Minimal recovery/control surface for current state and document routing that helps people recover context quickly.
+- `CLAUDE.md`
+  Claude Code entry adapter.
 
-- `.cursor/rules/*`  
-  Execution guardrails for Cursor.
+## Codex Notes
 
-- `.dev_sop/doc/guides/*`  
-  Practical workflow guidance.
-
-- `.dev_sop/doc/templates/*`  
-  Reusable document skeletons used during work.
-
-- `.dev_sop/doc/specs/*`
-  Task specs that bridge plans and implementation.
-
-- `.dev_sop/doc/facts/*`  
-  Stable context worth re-reading later.
-
-- `.dev_sop/skill/*`  
-  Reusable workflows that reduce repeated cognitive work.
-
-`.dev_sop/` is reserved for development SOP workflow assets and the repository's recovery/control surface.
-Project-facing documentation should live outside `.dev_sop/` in whatever structure the project uses for its own docs.
-The canonical namespace roots are singular: use `.dev_sop/control`, `.dev_sop/doc`, and `.dev_sop/skill`, not parallel roots such as `.dev_sop/controls`, `.dev_sop/docs`, or `.dev_sop/skills`.
-
-## Entrypoint model
-
-- `README.md` is the human-facing and project-facing entrypoint.
-- `.dev_sop/control/CURRENT.md` is the recovery-first entry for current project state when the control surface is in use.
-- `AGENTS.md` is the canonical AI-tool entrypoint.
-- `Codex` should enter through `AGENTS.md` directly; no separate Codex adapter is required.
-- If `AGENTS.md`, adapters, or other AI entrypoints change during an active Codex thread, start a new Codex thread before relying on the updated instructions.
-- Adapter files such as `CLAUDE.md` should defer to `AGENTS.md`.
-- `.dev_sop/README.md` documents the `.dev_sop/*` namespace after the AI tool has entered through its adapter or `AGENTS.md`.
-
-When this starter is copied into a real project:
-- let `README.md` become the project's human-facing README
-- use `.dev_sop/control/*` as the default recovery layer when current-state navigation needs to stay separate from product docs and engineering directories
-- keep `AGENTS.md` and any adapters as AI-tool entrypoints
-- keep `.dev_sop/README.md` as the namespace map for Dev SOP workflow assets
-- keep `.dev_sop/VERSION.md` and `.dev_sop/upgrades/*` so future SOP upgrades can be applied deliberately
-
-## SOP Upgrade Workflow
-
-- `.dev_sop/VERSION.md` is the source of truth for the current Dev SOP version.
-- `.dev_sop/upgrades/*` contains the version-targeted upgrade notes.
-- When upgrading SOP assets in a copied project:
-  1. read the project's `.dev_sop/VERSION.md`
-  2. compare it with the source starter's `.dev_sop/VERSION.md`
-  3. apply each newer upgrade note in ascending version order
-  4. preserve project-local SOP customizations unless an upgrade note explicitly replaces them
-  5. update the project's `.dev_sop/VERSION.md` only after the upgrade lands and validates
-
-## Working model
-
-Follow this operating sequence by default:
-
-1. start from a plan, a phase slice, or a clearly scoped existing task request
-2. derive or refine one or more narrow task specs before implementation
-3. implement the smallest coherent change
-4. validate explicitly
-5. write back stable facts when justified
-6. promote repeated workflows into skills when they stabilize
-
-When a plan or phase slice exists, the default execution path is `plan -> one or more task specs -> implementation -> validation`.
-A plan may come from an interactive planning session or a written plan document.
-Use `.dev_sop/doc/templates/plan-template.md` only when the plan should become a durable repo artifact worth re-reading, sharing, or handing off.
-Plans may remain temporary. The task spec is the default durable execution artifact for implementation and iteration.
-When work spans multiple phases, milestones, or long-running slices, keep the hierarchy explicit as `project_target -> current_target -> phase -> plan -> task`.
-Keep project and phase intent in the planning layer. Do not let task execution quietly redefine those boundaries.
-If iterating within the same reviewable slice, refine the existing spec.
-If the primary outcome, boundary, or validation path changes, create a new dated spec first.
-Only tiny task requests that are already effectively spec-complete and trivially narrow may skip spec creation.
-
-Use change summaries for task-local delivery notes. Do not turn them into permanent facts.
-
-## Boundaries
-
-- Prefer the smallest coherent change.
-- Do not add speculative abstractions.
-- Do not expand a task because a broader redesign seems attractive.
-- Do not let task or sub-plan execution expand project or phase scope without an explicit replan or decision.
-- Do not turn temporary reasoning into permanent documentation.
-- Do not duplicate the same explanation across many files.
-- Do not let facts become an archive of every conversation.
-
-## Write-back policy
-
-Write back only when the information is both stable and reusable.
-
-Good write-back targets include:
-
-- current project scope and boundaries
-- stable validation references
-- stable workflow rules
-- reusable decision patterns
-- repeatable skills
-
-Route write-back to the right layer:
-
-- `.dev_sop/doc/facts/*` for stable reusable project context
-- `.dev_sop/skill/*` for repeatable workflows
-- `AGENTS.md` or `.cursor/rules/*` only for repository-wide operating guidance
-
-When adding, removing, or renaming fact files, keep `.dev_sop/doc/facts/facts-index.md` in sync.
-
-Do not write back:
-
-- temporary debugging chatter
-- unstable exploration
-- one-off implementation details
-- task-local reasoning with no future reuse value
-
-Use this rule before writing back:
-
-1. Will this still matter later?
-2. Can this be reused later?
-3. Does it have a clear destination file?
-
-If the answer is not clearly yes, do not write it back.
-
-Facts are stable context, not an archive.
-
-## Project control sync rule
-
-When a change produces a durable shift in current phase, active slice, source-of-truth routing, or other current-state context, update the appropriate file under `.dev_sop/control/*` in the same change.
-
-Use:
-
-- `.dev_sop/control/CURRENT.md` for current operating state
-- `.dev_sop/control/DOC_MAP.md` when the reading order or document roles change
-
-Do not route temporary task chatter into `.dev_sop/control/*`.
-Route durable reusable decision or experiment outcomes to `.dev_sop/doc/facts/*`; otherwise keep them in the active spec or change summary.
-Do not use `.dev_sop/doc/facts/*` as the project's current-status dashboard.
-
-## Skill promotion rule
-
-Promote a workflow into `.dev_sop/skill/*` when:
-
-- it repeats across tasks
-- its inputs and outputs are recognizable
-- its value is not tied to a single one-off task
-- it reduces repeated reasoning effort
-- it can be described clearly enough to reuse
-
-Do not create a new skill for every useful prompt.
-When adding, removing, or renaming skills, keep `.dev_sop/skill/skill-registry.md` in sync.
-
-## Validation expectations
-
-- Black-box validation is the default acceptance mechanism.
-- White-box validation is conditional.
-- Add white-box validation when logic is regression-sensitive, stateful, branch-heavy, internally fragile, or protected by an important internal contract.
-- A deterministic bugfix regression path is a strong trigger for white-box protection when black-box checks alone will not reliably hold the fix in place.
-- White-box validation should protect meaningful logic, not incidental implementation trivia.
-- Validation must be concrete enough to review.
-- Do not turn validation into a coverage-chasing workflow.
-
-## Editing expectations
-
-When changing this repository itself:
-
-- keep changes narrow
-- keep terminology consistent
-- reinforce the right layer instead of repeating the same rule everywhere
-- update the right layer instead of appending notes everywhere
-- prefer refinement over expansion
+- Codex should enter through this file directly.
+- If `AGENTS.md`, `CLAUDE.md`, `.dev_sop/core/rules/*`, or `.dev_sop/project-rules/*` changes during an active Codex thread, start a fresh Codex thread before relying on the updated instructions.
+- When documents overlap, apply the precedence contract before inventing a local interpretation.
+- Ignore `.dev_sop/_backup/*` unless you are intentionally recovering repository-local backup material.
