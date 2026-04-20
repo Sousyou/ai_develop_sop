@@ -1,185 +1,76 @@
 # AI Engineering SOP Starter
 
-A reusable SOP starter for AI-assisted engineering with `Codex` and `Claude Code` as the mainline entry surfaces.
+This repository is the source repository for a reusable SOP starter.
 
-This repository is meant to be copied into real projects.
-The starter distinguishes between:
+The source tree is intentionally split so the repository root stays light:
 
-- starter-owned cross-project reusable assets under `.dev_sop/core/*`
-- project-generated rule/spec/fact surfaces under `.dev_sop/project-*`
-- the control surface under `.dev_sop/control/*`
-- upgrade notes under `.dev_sop/upgrades/*`
+- `AGENTS.md`, `CLAUDE.md`
+  Lightweight AI entrypoints.
 
-The only material that belongs in `.dev_sop/_backup/*` is repository-local backup or project-produced content that should not ship as part of the starter surface.
+- `facts/*`
+  Source-repository facts for fast orientation.
 
-## Starter Surface
+- `product/*`
+  The SOP product source tree. This is the content that gets packaged and copied into other projects as `.dev_sop/*`.
 
-- `README.md`
-- `AGENTS.md`
-- `CLAUDE.md`
-- `.dev_sop/README.md`
-- `.dev_sop/VERSION.md`
-- `.dev_sop/control/CURRENT.md`
-- `.dev_sop/control/DOC_MAP.md`
-- `.dev_sop/core/rules/*`
-- `.dev_sop/core/templates/*`
-- `.dev_sop/core/guides/*`
-- `.dev_sop/core/examples/*`
-- `.dev_sop/core/skills/*`
-- `.dev_sop/project-rules/README.md`
-- `.dev_sop/project-rules/rule-index.md`
-- `.dev_sop/project-rules/exceptions.md`
-- `.dev_sop/project-specs/README.md`
-- `.dev_sop/project-facts/README.md`
-- `.dev_sop/upgrades/*`
+- `src/`, `scripts/`, `pyproject.toml`
+  The pip-installable CLI implementation.
 
-## Active Surfaces
+## Product Layout
 
-- `.dev_sop/core/rules/*`
-  Starter-owned baseline operating rules.
+`product/*` is the canonical source for the SOP package and contains:
 
-- `.dev_sop/core/templates/*`
-  Starter-owned reusable templates.
+- `product/README.md`
+- `product/VERSION.md`
+- `product/core/*`
+- `product/control/*`
+- `product/project-rules/*`
+- `product/project-specs/*`
+- `product/project-facts/*`
+- `product/upgrades/*`
 
-- `.dev_sop/core/guides/*`
-  Starter-owned workflow guidance.
+When the starter is copied into a real project, `product/*` is installed as `.dev_sop/*`.
 
-- `.dev_sop/core/examples/*`
-  Starter-owned reference examples.
+## CLI Install
 
-- `.dev_sop/core/skills/*`
-  Starter-owned reusable workflows.
+This repository can be packaged as a pip-installable CLI for bootstrapping or updating the starter in other projects.
 
-- `.dev_sop/project-rules/*`
-  The project rule surface.
-  Add project-local rules here only when the copied project actually needs them.
+Install locally from this repository:
 
-- `.dev_sop/project-specs/*`
-  The project spec surface.
-  This should contain only `README.md` until real specs exist.
+```bash
+python -m pip install .
+```
 
-- `.dev_sop/project-facts/*`
-  The project fact surface.
-  This should contain only `README.md` until real facts exist.
+Or install editable while developing the CLI itself:
 
-- `.dev_sop/control/*`
-  Recovery-first current state and document routing.
+```bash
+python -m pip install -e .
+```
 
-- `.dev_sop/upgrades/*`
-  SOP package upgrade notes.
+After installation, use:
 
-- `.dev_sop/_backup/*`
-  Non-canonical backup storage for repository-local snapshots and project-produced artifacts removed from the starter surface.
-  Do not treat this directory as part of the copyable starter package.
+```bash
+dev-sop version
+dev-sop init /path/to/project
+dev-sop update /path/to/project
+```
 
-## Default Flow
+`init` copies the packaged starter surface into the target directory and materializes it as `.dev_sop/*`. Existing files are skipped unless `--force` is provided.
 
-1. Start from a plan, a phase slice, or a clearly scoped task request.
-2. Derive one or more narrow task specs in `.dev_sop/project-specs/`.
-3. Implement the smallest coherent change.
-4. Validate explicitly.
-5. Write back only stable reusable context.
-6. Update core assets only when the shared SOP package itself changed.
+`update` is safe by default:
 
-## Where To Start
-
-- If you are returning to active work, read `.dev_sop/control/CURRENT.md`.
-- If you are entering from Codex, read `AGENTS.md`.
-- If you are entering from Claude Code, read `CLAUDE.md`.
-- If you need the full namespace map, read `.dev_sop/README.md`.
-- If you need baseline rules, read `.dev_sop/core/rules/rule-index.md`.
-- If you need reusable templates, guides, examples, or skills, read `.dev_sop/core/*`.
-- If you need the current SOP package contract or upgrade path, read `.dev_sop/VERSION.md` and `.dev_sop/upgrades/*`.
-- Ignore `.dev_sop/_backup/*` unless you are intentionally recovering repository-local backup material.
-
-## Canonical Structure
-
-- `README.md`
-  Human-facing project entrypoint.
-
-- `AGENTS.md`
-  Codex entry adapter.
-
-- `CLAUDE.md`
-  Claude Code entry adapter.
-
-- `.dev_sop/README.md`
-  Namespace map and layer boundaries.
-
-- `.dev_sop/VERSION.md`
-  Current SOP package contract.
-
-- `.dev_sop/core/rules/*`
-  Starter-owned baseline rules.
-
-- `.dev_sop/core/templates/*`
-  Starter-owned templates.
-
-- `.dev_sop/core/guides/*`
-  Starter-owned guides.
-
-- `.dev_sop/core/examples/*`
-  Starter-owned examples.
-
-- `.dev_sop/core/skills/*`
-  Starter-owned reusable workflows.
-
-- `.dev_sop/project-rules/*`
-  Project-generated rule files.
-
-- `.dev_sop/control/*`
-  Recovery-first current state and document routing.
-
-- `.dev_sop/project-specs/*`
-  Project-generated task specs.
-
-- `.dev_sop/project-facts/*`
-  Project-generated stable facts.
-
-- `.dev_sop/upgrades/*`
-  Version-targeted SOP upgrade notes.
-
-- `.dev_sop/_backup/*`
-  Repository-local backup storage, not part of the copyable starter surface.
+- it creates missing starter files
+- it updates starter-owned files only when there is no conflict
+- it leaves conflicting starter-owned files in place unless `--force` is provided
+- it leaves seed files such as control files and project-surface `README.md` files in place unless `--force-seed` is provided
+- it does not update the target project's `.dev_sop/VERSION.md` when starter-owned conflicts remain
 
 ## Copy Into A Real Project
 
-Keep the split entrypoints:
+When using this repository as the source of a copied project or a packaged install:
 
-- root `README.md` for humans
-- `AGENTS.md` for Codex
-- `CLAUDE.md` for Claude Code
-- `.dev_sop/README.md` for the SOP namespace
+- copy the packaged starter surface into the target project's `.dev_sop/`
+- do not copy root `facts/*`
+- do not copy packaging implementation files unless you are intentionally embedding the CLI source
 
-By default, copy the full starter surface and omit `.dev_sop/_backup/*`.
-
-For a lean adoption set, keep at minimum:
-
-1. `AGENTS.md`
-2. `CLAUDE.md`
-3. `.dev_sop/README.md`
-4. `.dev_sop/VERSION.md`
-5. `.dev_sop/upgrades/*`
-6. `.dev_sop/core/rules/*`
-7. `.dev_sop/core/templates/task-spec-template.md`
-8. `.dev_sop/project-rules/README.md`
-9. `.dev_sop/project-rules/rule-index.md`
-10. `.dev_sop/project-rules/exceptions.md`
-11. `.dev_sop/control/*`
-12. `.dev_sop/project-specs/README.md`
-13. `.dev_sop/project-facts/README.md`
-
-The rest of `.dev_sop/core/*` remains cross-project useful starter content and is safe to keep when the copied project wants the fuller package.
-
-## Current Mainline
-
-- The mainline entry surfaces are `Codex` and `Claude Code` via the root adapters only.
-- Cross-project reusable templates, guides, examples, and skills stay on the mainline starter surface.
-- Legacy adapter migrations are documented only in `.dev_sop/upgrades/*`.
-- `_backup` content is intentionally non-canonical.
-
-## Versioning
-
-- Current SOP package contract: `.dev_sop/VERSION.md`
-- Upgrade notes: `.dev_sop/upgrades/*`
-- Upgrade prompt scaffold: `.dev_sop/core/templates/sop-upgrade-agent-prompt-template.md`
+The packaged CLI already follows this rule: it distributes only the starter surface.
