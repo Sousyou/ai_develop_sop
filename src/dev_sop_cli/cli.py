@@ -8,8 +8,19 @@ from . import __version__
 from .starter import format_report, init_target, read_starter_version, read_target_version, update_target
 
 
+class DevSopArgumentParser(argparse.ArgumentParser):
+    def error(self, message: str) -> None:
+        if "--with-sanbox" in message:
+            message = (
+                f"{message}\n"
+                "The legacy typo '--with-sanbox' is no longer supported.\n"
+                "Use '--with-sandbox' instead."
+            )
+        super().error(message)
+
+
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
+    parser = DevSopArgumentParser(
         prog="dev-sop",
         description="Initialize or update the AI Engineering SOP starter in a target directory.",
     )
@@ -23,7 +34,6 @@ def build_parser() -> argparse.ArgumentParser:
     init_parser.add_argument("--force", action="store_true", help="Overwrite existing files instead of skipping them.")
     init_parser.add_argument(
         "--with-sandbox",
-        "--with-sanbox",
         dest="with_sandbox",
         action="store_true",
         help="Also create a root sandbox/ directory for isolated tests or experiments.",
@@ -46,7 +56,6 @@ def build_parser() -> argparse.ArgumentParser:
     )
     update_parser.add_argument(
         "--with-sandbox",
-        "--with-sanbox",
         dest="with_sandbox",
         action="store_true",
         help="Also create a root sandbox/ directory for isolated tests or experiments.",

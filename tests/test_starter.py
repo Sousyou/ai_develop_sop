@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import contextlib
+import io
 from pathlib import Path
 import sys
 import tempfile
@@ -56,14 +58,28 @@ class StarterWorkspaceLayoutTests(unittest.TestCase):
             self.assertIn("product/", report.workspace_directory_conflicts)
             self.assertTrue(report.has_conflicts)
 
-    def test_cli_accepts_canonical_and_legacy_sandbox_flags(self) -> None:
+    def test_cli_accepts_canonical_sandbox_flag(self) -> None:
         parser = build_parser()
 
         init_args = parser.parse_args(["init", ".", "--with-sandbox"])
-        legacy_args = parser.parse_args(["init", ".", "--with-sanbox"])
+        update_args = parser.parse_args(["update", ".", "--with-sandbox"])
 
         self.assertTrue(init_args.with_sandbox)
-        self.assertTrue(legacy_args.with_sandbox)
+        self.assertTrue(update_args.with_sandbox)
+
+    def test_cli_rejects_legacy_flag_with_migration_hint(self) -> None:
+        parser = build_parser()
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            with self.assertRaises(SystemExit) as context:
+                parser.parse_args(["init", ".", "--with-sanbox"])
+
+        self.assertEqual(context.exception.code, 2)
+        message = stderr.getvalue()
+        self.assertIn("--with-sanbox", message)
+        self.assertIn("--with-sandbox", message)
+        self.assertIn("no longer supported", message)
 
 
 if __name__ == "__main__":

@@ -1,10 +1,10 @@
 # Dev SOP Version
 
 ## Current Version
-`1.1.2`
+`1.1.3`
 
 ## Release Date
-`2026-04-20`
+`2026-04-21`
 
 ## Source Of Truth
 
@@ -27,7 +27,6 @@ This file is the source of truth for the current installed Dev SOP package versi
 - copied projects may add root `sandbox/` for disposable tests or experiments
 - `dev-sop init` and `dev-sop update` ensure root `product/` and `dev/` exist
 - `dev-sop init --with-sandbox` and `dev-sop update --with-sandbox` also ensure root `sandbox/` exists
-- the CLI still accepts the legacy typo alias `--with-sanbox` for compatibility
 - when isolated filesystem testing is needed, use root `sandbox/` rather than scattering ad hoc root `test*` directories
 - tool-entry notes live only in `AGENTS.md` and `CLAUDE.md`
 - the precedence contract is `approved exceptions > active task spec > project rules > core rules > entry adapter notes`
@@ -44,7 +43,7 @@ The pure command-line update path assumes:
 - `AGENTS.md` and `CLAUDE.md` are updated by section merge, preserving `Project Local Notes`
 - `AGENTS.md` and `CLAUDE.md` still use the canonical heading structure shipped by the starter
 - root `product/` and `dev/` are project-owned workspace directories that may be created or backfilled by the CLI
-- root `sandbox/` is an optional project-owned workspace directory created when `--with-sandbox` or the legacy alias `--with-sanbox` is requested
+- root `sandbox/` is an optional project-owned workspace directory created when `--with-sandbox` is requested
 - `.dev_sop/README.md`, `.dev_sop/core/*`, and `.dev_sop/upgrades/*` are starter-managed and may be replaced by the CLI
 - `.dev_sop/project-rules/README.md`, `.dev_sop/project-specs/README.md`, and `.dev_sop/project-facts/README.md` are starter-managed surface guides
 - `.dev_sop/control/*`, `.dev_sop/project-rules/rule-index.md`, and `.dev_sop/project-rules/exceptions.md` are project-owned after adoption and are not rewritten by default
@@ -66,4 +65,4 @@ When upgrading SOP assets in a copied project:
 
 - this version tracks the SOP package, not the product or application
 - upgrade notes describe SOP asset changes, not application-code changes
-- `1.1.2` corrects the isolated test workspace name back to `sandbox/` after the `1.1.1` typo
+- `1.1.3` keeps `--with-sandbox` as the only supported sandbox workspace flag
